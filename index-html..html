@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6f533d">
+<title>FLEMS CENTER – WEDDING PLANNER</title>
+<style>
+:root{--fond:#f6f0e7;--brun:#49382d;--or:#b58a45;--blanc:#fffdf9;--bord:#e5d8c7}
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:var(--fond);color:var(--brun);font-family:Georgia,serif}
+header{background:linear-gradient(135deg,#49382d,#806344);color:#fff;padding:28px 18px;text-align:center;border-radius:18px;margin-bottom:18px}
+header h1{margin:0 0 8px;font-size:clamp(22px,5vw,34px);letter-spacing:1px}
+header p{margin:6px 0}
+main{max-width:1000px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}
+section,.stat{background:var(--blanc);border:1px solid var(--bord);border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 3px 12px #49382d0c}
+h2{font-size:20px;margin:0 0 14px;color:#765638}
+label{display:block;font-size:14px;margin:10px 0 5px}
+input,select{width:100%;padding:11px;border:1px solid var(--bord);border-radius:8px;background:white;color:var(--brun);font:15px Arial}
+button{border:0;border-radius:8px;padding:11px 15px;background:var(--or);color:white;font-weight:bold;cursor:pointer;margin-top:12px}
+button:hover{filter:brightness(.95)}
+button.secondary{background:#806f60}
+ul{padding-left:20px}
+li{margin:9px 0;overflow-wrap:anywhere}
+.small{font-size:13px;color:#806f60}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:15px}
+.stat{text-align:center;margin:0;padding:14px}
+.stat strong{display:block;font-size:25px;color:#9a7135}
+.item{padding:10px 0;border-bottom:1px solid var(--bord)}
+.item:last-child{border-bottom:0}
+.item button{margin:5px 5px 0 0;padding:7px 10px;font-size:12px}
+.empty{color:#8c7c6c;font-style:italic}
+footer{text-align:center;color:#806f60;padding:18px;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <h1>FLEMS CENTER</h1>
+  <p><strong>WEDDING PLANNER</strong></p>
+  <p><em>L'élégance au cœur de chaque célébration.</em></p>
+  <p>Bienvenue chez Flems Center, créons ensemble des souvenirs inoubliables.</p>
+</header>
+<main>
+  <div class="stats">
+    <div class="stat"><strong id="statCouples">0</strong>Couples</div>
+    <div class="stat"><strong id="statInvites">0</strong>Invités</div>
+    <div class="stat"><strong id="statTaches">0</strong>Tâches</div>
+    <div class="stat"><strong id="statEvenements">0</strong>Événements</div>
+  </div>
+
+  <section>
+    <h2>1. Nos couples</h2>
+    <label for="couple">Nom du couple</label><input id="couple" placeholder="Ex. Marie et Jean">
+    <label for="dateMariage">Date du mariage</label><input type="date" id="dateMariage">
+    <label for="telephoneCouple">Téléphone des mariés</label><input type="tel" id="telephoneCouple" placeholder="+243...">
+    <label for="emailCouple">Email des mariés</label><input type="email" id="emailCouple" placeholder="Adresse email">
+    <label for="lieuMariage">Lieu du mariage</label><input id="lieuMariage" placeholder="Lieu de la cérémonie">
+    <button onclick="ajouterCouple()">Ajouter un couple</button>
+    <div id="listeCouples"></div>
+  </section>
+
+  <div class="grid">
+    <section>
+      <h2>2. Liste des invités</h2>
+      <label for="choixCouple">Choisir un couple</label><select id="choixCouple"></select>
+      <label for="nomInvite">Nom de l'invité</label><input id="nomInvite" placeholder="Nom et prénom">
+      <label for="telephone">Téléphone</label><input id="telephone" type="tel" placeholder="+243...">
+      <label for="reponse">Réponse à l'invitation</label>
+      <select id="reponse"><option value="En attente">En attente</option><option value="Présent">Présent</option><option value="Absent">Absent</option></select>
+      <button onclick="ajouterInvite()">Ajouter l'invité</button>
+      <div id="listeInvites"></div>
+    </section>
+
+    <section>
+      <h2>3. Budget du mariage</h2>
+      <label for="budgetCouple">Choisir un couple</label><select id="budgetCouple"></select>
+      <label for="devise">Devise</label><select id="devise"><option value="USD">Dollar américain (USD)</option><option value="CDF">Franc congolais (CDF)</option></select>
+      <label for="budgetPrevu">Budget prévu</label><input id="budgetPrevu" type="number" min="0" placeholder="Ex. 5000">
+      <button onclick="enregistrerBudget()">Enregistrer le budget</button>
+      <hr style="border:0;border-top:1px solid #e5d8c7;margin:16px 0">
+      <label for="nomDepense">Nom de la dépense</label><input id="nomDepense" placeholder="Ex. Décoration">
+      <label for="montantDepense">Montant</label><input id="montantDepense" type="number" min="0" placeholder="Montant">
+      <button onclick="ajouterDepense()">Ajouter une dépense</button>
+      <div id="affichageBudget"></div>
+    </section>
+  </div>
+
+  <section>
+    <h2>4. Gestion des tâches et employés</h2>
+    <label for="tacheCouple">Couple concerné</label><select id="tacheCouple"></select>
+    <label for="nomTache">Nom de la tâche</label><input id="nomTache" placeholder="Ex. Réserver la salle">
+    <label for="employe">Employé responsable</label><input id="employe" placeholder="Nom de l'employé">
+    <label for="dateTache">Date limite</label><input id="dateTache" type="date">
+    <button onclick="ajouterTache()">Ajouter la tâche</button>
+    <div id="listeTaches"></div>
+  </section>
+
+  <section>
+    <h2>5. Calendrier et rappels</h2>
+    <label for="calCouple">Couple concerné</label><select id="calCouple"></select>
+    <label for="calType">Type d'événement</label><input id="calType" placeholder="Ex. Rendez-vous client">
+    <label for="calDate">Date</label><input id="calDate" type="date">
+    <label for="calHeure">Heure</label><input id="calHeure" type="time">
+    <label for="calLieu">Lieu</label><input id="calLieu" placeholder="Adresse ou lieu">
+    <label for="calRappel">Rappel souhaité</label><select id="calRappel"><option value="La veille">La veille</option><option value="Le jour même">Le jour même</option><option value="Aucun">Aucun</option></select>
+    <button onclick="ajouterEvenement()">Ajouter au calendrier</button>
+    <div id="listeCalendrier"></div>
+    <p class="small">Les rappels sont enregistrés dans cette version. Les notifications automatiques sur téléphone seront ajoutées lors de la mise en ligne.</p>
+  </section>
+</main>
+<footer>Flems Center – L'élégance au cœur de chaque célébration.</footer>
+
+<script>
+"use strict";
+function lireCle(cle, defaut) {
+  try { const v = localStorage.getItem(cle); return v ? JSON.parse(v) : defaut; }
+  catch(e) { return defaut; }
+}
+let couples = lireCle("flemsCouples", []);
+let invites = lireCle("flemsInvites", {});
+let budgets = lireCle("flemsBudgets", {});
+let taches = lireCle("flemsTaches", []);
+let calendrier = lireCle("flemsCalendrier", []);
+let detailsCouples = lireCle("flemsDetailsCouples", {});
+if (!Array.isArray(couples)) couples = [];
+if (!invites || typeof invites !== "object") invites = {};
+if (!budgets || typeof budgets !== "object") budgets = {};
+if (!Array.isArray(taches)) taches = [];
+if (!Array.isArray(calendrier)) calendrier = [];
+if (!detailsCouples || typeof detailsCouples !== "object") detailsCouples = {};
+
+function sauvegarder() {
+  localStorage.setItem("flemsCouples", JSON.stringify(couples));
+  localStorage.setItem("flemsInvites", JSON.stringify(invites));
+  localStorage.setItem("flemsBudgets", JSON.stringify(budgets));
+  localStorage.setItem("flemsTaches", JSON.stringify(taches));
+  localStorage.setItem("flemsCalendrier", JSON.stringify(calendrier));
+  localStorage.setItem("flemsDetailsCouples", JSON.stringify(detailsCouples));
+}
+function nomCouple(index) { return couples[index] || "Couple"; }
+function remplirSelecteurs() {
+  ["choixCouple","budgetCouple","tacheCouple","calCouple"].forEach(id => {
+    const s = document.getElementById(id); if (!s) return;
+    const ancienne = s.value;
+    s.innerHTML = '<option value="">Choisir un couple</option>';
+    couples.forEach((nom,i) => {
+      const o = document.createElement("option"); o.value = String(i); o.textContent = nom; s.appendChild(o);
+    });
+    if (ancienne !== "" && Number(ancienne) < couples.length) s.value = ancienne;
+  });
+}
+function actualiserCouples() {
+  const zone = document.getElementById("listeCouples");
+  zone.innerHTML = "";
+  if (!couples.length) zone.innerHTML = '<p class="empty">Aucun couple enregistré pour le moment.</p>';
+  couples.forEach((nom,i) => {
+    const d = detailsCouples[i] || {};
+    const div = document.createElement("div"); div.className = "item";
+    const titre = document.createElement("strong"); titre.textContent = nom; div.appendChild(titre);
+    const infos = document.createElement("p"); infos.className = "small";
+    infos.textContent = [d.date ? "Mariage : "+d.date : "",d.telephone || "",d.email || "",d.lieu || ""].filter(Boolean).join(" · ");
+    div.appendChild(infos); zone.appendChild(div);
+  });
+  remplirSelecteurs(); actualiserTableauBord();
+}
+function ajouterCouple() {
+  const nom = document.getElementById("couple").value.trim();
+  if (!nom) { alert("Veuillez saisir le nom du couple."); return; }
+  const i = couples.length; couples.push(nom);
+  detailsCouples[i] = {
+    date: document.getElementById("dateMariage").value,
+    telephone: document.getElementById("telephoneCouple").value.trim(),
+    email: document.getElementById("emailCouple").value.trim(),
+    lieu: document.getElementById("lieuMariage").value.trim()
+  };
+  sauvegarder(); actualiserCouples();
+  ["couple","dateMariage","telephoneCouple","emailCouple","lieuMariage"].forEach(id => document.getElementById(id).value = "");
+  alert("Couple ajouté avec succès.");
+}
+function ajouterInvite() {
+  const i = document.getElementById("choixCouple").value;
+  const nom = document.getElementById("nomInvite").value.trim();
+  if (i === "" || !nom) { alert("Choisissez un couple et saisissez le nom de l'invité."); return; }
+  if (!Array.isArray(invites[i])) invites[i] = [];
+  invites[i].push({nom, telephone:document.getElementById("telephone").value.trim(), reponse:document.getElementById("reponse").value});
+  sauvegarder(); afficherInvites(); actualiserTableauBord();
+  document.getElementById("nomInvite").value = ""; document.getElementById("telephone").value = "";
+}
+function afficherInvites() {
+  const zone = document.getElementById("listeInvites"); zone.innerHTML = "";
+  const i = document.getElementById("choixCouple").value;
+  if (i === "") { zone.innerHTML = '<p class="empty">Choisissez un couple pour afficher ses invités.</p>'; return; }
+  const liste = Array.isArray(invites[i]) ? invites[i] : [];
+  if (!liste.length) zone.innerHTML = '<p class="empty">Aucun invité pour ce couple.</p>';
+  liste.forEach((v,n) => {
+    const div = document.createElement("div"); div.className = "item";
+    const p = document.createElement("p"); p.textContent = v.nom + " — " + (v.reponse || "En attente") + (v.telephone ? " — "+v.telephone : "");
+    div.appendChild(p);
+    const b = document.createElement("button"); b.className="secondary"; b.textContent="Supprimer";
+    b.onclick=()=>{ if(confirm("Supprimer cet invité ?")){liste.splice(n,1);sauvegarder();afficherInvites();actualiserTableauBord();} };
+    div.appendChild(b); zone.appendChild(div);
+  });
+}
+function obtenirBudget(i) {
+  let b = budgets[i];
+  if (!b || typeof b !== "object" || Array.isArray(b)) b = {devise:"USD",prevu:0,depenses:[]};
+  if (!Array.isArray(b.depenses)) b.depenses = [];
+  if (typeof b.prevu !== "number") b.prevu = Number(b.prevu) || 0;
+  if (!b.devise) b.devise = "USD";
+  budgets[i] = b; return b;
+}
+function enregistrerBudget() {
+  const i = document.getElementById("budgetCouple").value;
+  const montant = Number(document.getElementById("budgetPrevu").value);
+  if (i === "" || !Number.isFinite(montant) || montant < 0) { alert("Choisissez un couple et saisissez un budget valide."); return; }
+  const b = obtenirBudget(i); b.prevu = montant; b.devise = document.getElementById("devise").value;
+  sauvegarder(); afficherBudget(); alert("Budget enregistré.");
+}
+function ajouterDepense() {
+  const i = document.getElementById("budgetCouple").value;
+  const nom = document.getElementById("nomDepense").value.trim();
+  const montant = Number(document.getElementById("montantDepense").value);
+  if (i === "" || !nom || !Number.isFinite(montant) || montant <= 0) { alert("Choisissez un couple, un nom et un montant valide."); return; }
+  obtenirBudget(i).depenses.push({nom,montant});
+  sauvegarder(); afficherBudget();
+  document.getElementById("nomDepense").value=""; document.getElementById("montantDepense").value="";
+}
+function afficherBudget() {
+  const zone = document.getElementById("affichageBudget"); zone.innerHTML="";
+  const i = document.getElementById("budgetCouple").value;
+  if (i === "") { zone.innerHTML='<p class="empty">Choisissez un couple pour voir son budget.</p>'; return; }
+  const b = obtenirBudget(i); const total = b.depenses.reduce((s,d)=>s+(Number(d.montant)||0),0);
+  const fmt = n => Number(n).toLocaleString("fr-FR")+" "+b.devise;
+  const p = document.createElement("p"); p.innerHTML = "<strong>Budget prévu :</strong> "+fmt(b.prevu)+"<br><strong>Dépenses :</strong> "+fmt(total)+"<br><strong>Solde :</strong> "+fmt(b.prevu-total);
+  zone.appendChild(p);
+  b.depenses.forEach((d,n)=>{
+    const div=document.createElement("div");div.className="item";div.textContent=d.nom+" : "+fmt(d.montant);
+    const btn=document.createElement("button");btn.className="secondary";btn.textContent="Supprimer";
+    btn.onclick=()=>{b.depenses.splice(n,1);sauvegarder();afficherBudget();};
+    div.appendChild(document.createElement("br"));div.appendChild(btn);zone.appendChild(div);
+  });
+}
+function ajouterTache() {
+  const i=document.getElementById("tacheCouple").value;
+  const nom=document.getElementById("nomTache").value.trim();
+  if(i==="" || !nom){alert("Choisissez un couple et saisissez la tâche.");return;}
+  taches.push({couple:Number(i),nom,employe:document.getElementById("employe").value.trim(),date:document.getElementById("dateTache").value,terminee:false});
+  sauvegarder();afficherTaches();actualiserTableauBord();
+  ["nomTache","employe","dateTache"].forEach(id=>document.getElementById(id).value="");
+}
+function afficherTaches() {
+  const zone=document.getElementById("listeTaches");zone.innerHTML="";
+  if(!taches.length){zone.innerHTML='<p class="empty">Aucune tâche enregistrée.</p>';return;}
+  taches.forEach((t,i)=>{
+    const div=document.createElement("div");div.className="item";
+    const p=document.createElement("p");p.textContent=(t.terminee?"✓ ":"○ ")+t.nom+" — "+nomCouple(t.couple)+(t.employe?" — Responsable : "+t.employe:"")+(t.date?" — Échéance : "+t.date:"");
+    if(t.terminee)p.style.textDecoration="line-through";
+    div.appendChild(p);
+    const b=document.createElement("button");b.textContent=t.terminee?"Réouvrir":"Terminer";b.onclick=()=>{t.terminee=!t.terminee;sauvegarder();afficherTaches();actualiserTableauBord();};div.appendChild(b);
+    const sup=document.createElement("button");sup.className="secondary";sup.textContent="Supprimer";sup.onclick=()=>{if(confirm("Supprimer cette tâche ?")){taches.splice(i,1);sauvegarder();afficherTaches();actualiserTableauBord();}};div.appendChild(sup);
+    zone.appendChild(div);
+  });
+}
+function ajouterEvenement() {
+  const i=document.getElementById("calCouple").value;
+  const type=document.getElementById("calType").value.trim();
+  const date=document.getElementById("calDate").value;
+  if(i==="" || !type || !date){alert("Choisissez un couple, un type d'événement et une date.");return;}
+  calendrier.push({couple:Number(i),type,date,heure:document.getElementById("calHeure").value,lieu:document.getElementById("calLieu").value.trim(),rappel:document.getElementById("calRappel").value});
+  sauvegarder();afficherCalendrier();actualiserTableauBord();
+  ["calType","calDate","calHeure","calLieu"].forEach(id=>document.getElementById(id).value="");
+}
+function afficherCalendrier() {
+  const zone=document.getElementById("listeCalendrier");zone.innerHTML="";
+  if(!calendrier.length){zone.innerHTML='<p class="empty">Aucun événement enregistré.</p>';return;}
+  calendrier.forEach((e,i)=>{
+    const div=document.createElement("div");div.className="item";
+    const p=document.createElement("p");p.textContent=e.type+" — "+nomCouple(e.couple)+" — "+e.date+(e.heure?" à "+e.heure:"")+(e.lieu?" — "+e.lieu:"")+" — Rappel : "+(e.rappel||"Aucun");
+    div.appendChild(p);
+    const b=document.createElement("button");b.className="secondary";b.textContent="Supprimer";b.onclick=()=>{if(confirm("Supprimer cet événement ?")){calendrier.splice(i,1);sauvegarder();afficherCalendrier();actualiserTableauBord();}};div.appendChild(b);zone.appendChild(div);
+  });
+}
+function actualiserTableauBord() {
+  document.getElementById("statCouples").textContent=couples.length;
+  document.getElementById("statInvites").textContent=Object.values(invites).reduce((s,l)=>s+(Array.isArray(l)?l.length:0),0);
+  document.getElementById("statTaches").textContent=taches.filter(t=>!t.terminee).length;
+  document.getElementById("statEvenements").textContent=calendrier.length;
+}
+document.getElementById("choixCouple").addEventListener("change",afficherInvites);
+document.getElementById("budgetCouple").addEventListener("change",()=>{
+  const i=document.getElementById("budgetCouple").value;
+  if(i!==""){const b=obtenirBudget(i);document.getElementById("budgetPrevu").value=b.prevu||"";document.getElementById("devise").value=b.devise||"USD";}
+  afficherBudget();
+});
+document.getElementById("devise").addEventListener("change",afficherBudget);
+actualiserCouples();
+afficherInvites();
+afficherBudget();
+afficherTaches();
+afficherCalendrier();
+sauvegarder();
+</script>
+</body>
+</html>
