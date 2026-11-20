@@ -101,6 +101,13 @@
     <p id="invitationGuestName"></p>
     <p id="invitationMeta" class="small"></p>
     <div id="invitationCountdown" class="item" aria-live="polite">Compte à rebours en préparation…</div>
+    <section class="item" aria-label="Rappels du mariage">
+      <h3>Recevoir les rappels du mariage</h3>
+      <p class="small">Avec votre accord, Flems Center vous enverra un rappel à J−7, J−2 et J−1, à 8 h (heure de Kinshasa). Vous pouvez désactiver ces rappels à tout moment.</p>
+      <div id="invitationReminderMessage" class="message" aria-live="polite"></div>
+      <button id="invitationEnableReminders" type="button">Activer les rappels automatiques</button>
+      <button id="invitationDisableReminders" type="button" class="secondary hidden">Désactiver les rappels sur cet appareil</button>
+    </section>
     <div id="invitationPhotos" class="public-gallery"></div>
   </section>
   <section><h2>Choisir votre boisson</h2>
@@ -155,6 +162,7 @@ const SUPABASE_URL="https://wbqymhkugvsyfbpblhed.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_7Rqg0CbTxWqiglYUPFMzcA_KAD4jnUr";
 const configured=SUPABASE_URL.startsWith("https://")&&SUPABASE_URL.endsWith(".supabase.co")&&SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_");
 let sb,user,role,couples=[],currentClientCouple=null,currentBudget=null,publicGuestbookToken=null;
+const FLEMS_VAPID_PUBLIC_KEY="BJDbXJ2qeTLmCxRkzW7p-Ep8gxgOHc-mb-RqmyHpLWl9rgOmlAXPi5RmWReHpYq_DMWO0L_OemNo2tp0_83MxSY";
 let pendingEditorSave=null;
 let activeQrScanner=null;
 const $=id=>document.getElementById(id);
@@ -708,6 +716,63 @@ async function deleteCouplePhoto(photo,coupleId,targetId){if(!confirm("Supprimer
 async function loadManagerGuestbookMessages(coupleId,targetId){const host=$(targetId);if(!host)return;host.innerHTML="";const {data,error}=await sb.from("guestbook_messages").select("id,guest_name,message,approved,created_at").eq("couple_id",coupleId).order("created_at",{ascending:false}).limit(100);if(error){listMessage(targetId,"Messages indisponibles : "+error.message);return;}if(!data?.length){listMessage(targetId,"Aucun message reçu pour le moment.");return;}data.forEach(item=>{const card=document.createElement("div");card.className="item";const title=document.createElement("strong");title.textContent=item.guest_name+" · "+(item.approved?"Publié":"En attente de validation");card.appendChild(title);const msg=document.createElement("p");msg.className="guestbook-message-text";msg.textContent=item.message;card.appendChild(msg);const actions=document.createElement("div");actions.className="actions";if(!item.approved)actions.appendChild(actionButton("Publier dans le livre d’or","",()=>moderateGuestbookMessage(item,true,coupleId,targetId)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteGuestbookMessage(item,coupleId,targetId)));card.appendChild(actions);host.appendChild(card);});}
 async function moderateGuestbookMessage(item,approved,coupleId,targetId){const {error}=await sb.from("guestbook_messages").update({approved}).eq("id",item.id);if(error){say("appMsg","Validation impossible : "+error.message,"error");return;}say("appMsg","Message publié dans le livre d’or.");await loadManagerGuestbookMessages(coupleId,targetId);}
 async function deleteGuestbookMessage(item,coupleId,targetId){if(!confirm("Supprimer le message de "+item.guest_name+" ?"))return;const {error}=await sb.from("guestbook_messages").delete().eq("id",item.id);if(error){say("appMsg","Suppression impossible : "+error.message,"error");return;}say("appMsg","Message supprimé.");await loadManagerGuestbookMessages(coupleId,targetId);}
+function base64UrlToUint8Array(value){
+ const padding="=".repeat((4-value.length%4)%4);
+ const base64=(value+padding).replace(/-/g,"+").replace(/_/g,"/");
+ const raw=atob(base64);return Uint8Array.from(raw,char=>char.charCodeAt(0));
+}
+function bufferToBase64Url(value){
+ const bytes=new Uint8Array(value);let binary="";
+ bytes.forEach(byte=>binary+=String.fromCharCode(byte));
+ return btoa(binary).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"");
+}
+async function enableGuestWeddingReminders(token){
+ const status=$("invitationReminderMessage"),button=$("invitationEnableReminders");
+ if(!("serviceWorker" in navigator)||!("PushManager" in window)||!("Notification" in window)){
+  say("invitationReminderMessage","Ce navigateur ne prend pas en charge les notifications web. Ouvrez l’invitation dans un navigateur compatible.","error");return;
+ }
+ const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ const isStandalone=window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true;
+ if(isIOS&&!isStandalone){
+  say("invitationReminderMessage","Sur iPhone ou iPad, ajoutez d’abord Flems Center à l’écran d’accueil, puis ouvrez l’application depuis son icône pour activer les notifications.","error");return;
+ }
+ if(location.protocol!=="https:"){say("invitationReminderMessage","Les notifications nécessitent une connexion HTTPS sécurisée.","error");return;}
+ button.disabled=true;
+ try{
+  let permission=Notification.permission;
+  if(permission!=="granted")permission=await Notification.requestPermission();
+  if(permission!=="granted"){say("invitationReminderMessage","Vous n’avez pas autorisé les notifications. Aucun rappel ne sera envoyé sans votre accord.","error");return;}
+  const registration=await navigator.serviceWorker.ready;
+  let subscription=await registration.pushManager.getSubscription();
+  if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:base64UrlToUint8Array(FLEMS_VAPID_PUBLIC_KEY)});
+  const p256dh=subscription.getKey("p256dh"),auth=subscription.getKey("auth");
+  if(!p256dh||!auth)throw new Error("Le navigateur n’a pas fourni les clés de notification nécessaires.");
+  const {data,error}=await sb.rpc("register_guest_push_subscription",{
+   p_invitation_token:token,p_endpoint:subscription.endpoint,
+   p_p256dh:bufferToBase64Url(p256dh),p_auth:bufferToBase64Url(auth)
+  });
+  if(error||!data?.ok)throw new Error(error?.message||data?.message||"Impossible d’enregistrer votre autorisation.");
+  say("invitationReminderMessage","Vos rappels sont activés : J−7, J−2 et J−1 à 8 h, heure de Kinshasa. Merci !");
+  $("invitationDisableReminders").classList.remove("hidden");
+ }catch(error){say("invitationReminderMessage",error.message||"Activation impossible. Réessayez plus tard.","error");}
+ finally{button.disabled=false;}
+}
+async function disableGuestWeddingReminders(token){
+ const status=$("invitationReminderMessage"),button=$("invitationDisableReminders");
+ button.disabled=true;
+ try{
+  const registration=await navigator.serviceWorker.ready;
+  const subscription=await registration.pushManager.getSubscription();
+  if(subscription){
+   const {error}=await sb.rpc("unregister_guest_push_subscription",{p_invitation_token:token,p_endpoint:subscription.endpoint});
+   if(error)throw error;
+   await subscription.unsubscribe();
+  }
+  say("invitationReminderMessage","Les rappels ont été désactivés sur cet appareil.");
+  button.classList.add("hidden");
+ }catch(error){say("invitationReminderMessage",error.message||"Désactivation impossible.","error");}
+ finally{button.disabled=false;}
+}
 async function loadPublicInvitation(token){
  const msg=$("invitationMessage");msg.textContent="Chargement de votre invitation…";msg.className="message ok";
  const {data,error}=await sb.rpc("get_guest_invitation",{p_token:token});
@@ -720,6 +785,10 @@ async function loadPublicInvitation(token){
  if(offlineCopy){msg.textContent="Mode hors connexion : voici la dernière version enregistrée de votre invitation. Les choix et messages seront disponibles au retour d’Internet.";msg.className="message";} 
  $("invitationCoupleName").textContent="Le mariage de "+(result.couple_name||"nos mariés");
  $("invitationGuestName").textContent="Bienvenue, "+(result.guest_name||"cher invité")+" !";
+ $("invitationEnableReminders").disabled=offlineCopy;
+ $("invitationEnableReminders").textContent=offlineCopy?"Connexion requise pour activer les rappels":"Activer les rappels automatiques";
+ $("invitationEnableReminders").onclick=()=>enableGuestWeddingReminders(token);
+ $("invitationDisableReminders").onclick=()=>disableGuestWeddingReminders(token);
  $("invitationBookName").value=result.guest_name||"";
  $("invitationBookSend").onclick=async()=>{
   const guestName=$("invitationBookName").value.trim(), message=$("invitationBookText").value.trim(), status=$("invitationGuestbookMessage");
