@@ -1,4 +1,3 @@
-import { createClient } from "npm:@supabase/supabase-js@2.119.2";
 import { send } from "jsr:@daaku/webpush@0.2.0";
 
 type Reminder = {
@@ -18,22 +17,34 @@ Deno.serve(async (request: Request) => {
   if (request.method !== "POST") return json({ error: "Méthode non autorisée." }, 405);
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-  let secretKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-  if (!secretKey) {
-    try {
-      const keyMap = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") ?? "{}");
-      secretKey = keyMap.default ?? "";
-    } catch {
-      secretKey = "";
-    }
+  let secretKey = "";
+  try {
+    const secretKeys = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") ?? "{}");
+    secretKey = secretKeys.default ?? "";
+  } catch {
+    secretKey = "";
   }
-  if (!supabaseUrl || !secretKey) return json({ error: "Les identifiants serveur Supabase sont indisponibles." }, 503);
+  if (!supabaseUrl || !secretKey) return json({ error: "La clé serveur Supabase n’est pas disponible." }, 503);
 
-  const supabase = createClient(supabaseUrl, secretKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
-  const { data: secrets, error: secretsError } = await supabase.rpc("get_flems_push_secrets");
-  if (secretsError || !secrets?.cron_secret || !secrets?.vapid_private_jwk) {
+  // Secret API keys must be sent in the apikey header only (not Authorization: Bearer).
+  async function rpc<T>(name: string, args: Record<string, unknown> = {}): Promise<T> {
+    const response = await fetch(`${supabaseUrl}/rest/v1/rpc/${name}`, {
+      method: "POST",
+      headers: { "apikey": secretKey, "Content-Type": "application/json" },
+      body: JSON.stringify(args),
+    });
+    const text = await response.text();
+    if (!response.ok) throw new Error(`${name}: ${response.status} ${text}`);
+    return text ? JSON.parse(text) as T : null as T;
+  }
+
+  let secrets: { cron_secret?: string; vapid_private_jwk?: string };
+  try {
+    secrets = await rpc("get_flems_push_secrets");
+  } catch (error) {
+    return json({ error: "Lecture du coffre sécurisé impossible.", details: String(error) }, 503);
+  }
+  if (!secrets?.cron_secret || !secrets?.vapid_private_jwk) {
     return json({ error: "Configuration sécurisée des rappels indisponible." }, 503);
   }
   if ((request.headers.get("x-cron-secret") ?? "") !== secrets.cron_secret) {
@@ -48,10 +59,14 @@ Deno.serve(async (request: Request) => {
   }
 
   const today = kinshasaDate();
-  const { data, error } = await supabase.rpc("get_due_wedding_reminders", { p_today: today });
-  if (error) return json({ error: "Lecture des rappels impossible.", details: error.message }, 500);
+  let reminders: Reminder[];
+  try {
+    const result = await rpc<Reminder[]>("get_due_wedding_reminders", { p_today: today });
+    reminders = Array.isArray(result) ? result : [];
+  } catch (error) {
+    return json({ error: "Lecture des rappels impossible.", details: String(error) }, 500);
+  }
 
-  const reminders = (Array.isArray(data) ? data : []) as Reminder[];
   let sent = 0, disabled = 0, failed = 0;
   for (const reminder of reminders) {
     const message = JSON.stringify({
@@ -68,19 +83,21 @@ Deno.serve(async (request: Request) => {
         message,
         { vapid: vapidPrivateKey, subscriber: supabaseUrl, ttl: 86400 },
       );
-      const { error: markError } = await supabase.rpc("mark_guest_reminder_sent", {
+      await rpc("mark_guest_reminder_sent", {
         p_subscription_id: reminder.subscription_id, p_guest_id: reminder.guest_id,
         p_reminder_days: reminder.reminder_days, p_wedding_date: reminder.wedding_date,
       });
-      if (markError) failed++; else sent++;
+      sent++;
     } catch (error) {
       const e = error as { statusCode?: number; response?: { status?: number }; permanent?: boolean };
       const statusCode = Number(e?.statusCode ?? e?.response?.status ?? 0);
       if (statusCode === 404 || statusCode === 410 || e?.permanent) {
-        const { error: disableError } = await supabase.rpc("disable_guest_push_subscription", {
-          p_subscription_id: reminder.subscription_id,
-        });
-        if (!disableError) disabled++;
+        try {
+          await rpc("disable_guest_push_subscription", { p_subscription_id: reminder.subscription_id });
+          disabled++;
+        } catch {
+          failed++;
+        }
       } else failed++;
     }
   }
