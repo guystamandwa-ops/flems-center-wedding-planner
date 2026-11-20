@@ -168,7 +168,7 @@ function renderEmployeeWeddingInfo(items){
   const title=document.createElement("h3");title.textContent=c.couple_name||"Mariage";card.appendChild(title);
   const meta=document.createElement("p");meta.textContent="Date : "+(c.wedding_date||"à définir")+" · Lieu : "+(c.venue||"à définir");card.appendChild(meta);
   const guest=document.createElement("p");guest.textContent="Invités : "+(item.guests||[]).length;card.appendChild(guest);
-  const task=document.createElement("p");task.textContent="Tâches affectées : "+(item.tasks||[]).length+" · Terminées : "+(item.tasks||[]).filter(t=>t.is_done).length;card.appendChild(task);
+  const task=document.createElement("p");task.textContent="Tâches du mariage : "+(item.tasks||[]).length+" · Terminées : "+(item.tasks||[]).filter(t=>t.is_done).length;card.appendChild(task);
   if(item.budget){const expenses=(item.expenses||[]).reduce((sum,e)=>sum+Number(e.amount||0),0);const budget=document.createElement("p");budget.textContent="Budget : "+cash(item.budget.planned_amount,item.budget.currency)+" · Dépenses : "+cash(expenses,item.budget.currency);card.appendChild(budget);}
   const events=document.createElement("p");events.textContent="Événements au calendrier : "+(item.events||[]).length;card.appendChild(events);
   const drinks=document.createElement("p");drinks.textContent="Boissons proposées : "+(item.beverages||[]).map(b=>b.name).join(", ");card.appendChild(drinks);
