@@ -724,7 +724,7 @@ function base64UrlToUint8Array(value){
 function bufferToBase64Url(value){
  const bytes=new Uint8Array(value);let binary="";
  bytes.forEach(byte=>binary+=String.fromCharCode(byte));
- return btoa(binary).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"");
+ return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
 async function enableGuestWeddingReminders(token){
  const status=$("invitationReminderMessage"),button=$("invitationEnableReminders");
