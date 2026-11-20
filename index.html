@@ -63,6 +63,7 @@
     </div>
   </div>
   <h3>Employés enregistrés</h3><div id="employeeAccounts"><p class="small">Chargement des employés…</p></div>
+  <h3>Fiches clients</h3><p class="small">Consulte les coordonnées, modifie les fiches et active ou désactive les accès privés.</p><button id="refreshClientAccounts" type="button" class="secondary">Actualiser les fiches clients</button><div id="clientAccounts"><p class="small">Chargement des clients…</p></div>
 </section>
 <section><h2>6. Tâches des employés</h2><label for="tCouple">Couple concerné</label><select id="tCouple"></select><label for="tTitle">Nom de la tâche</label><input id="tTitle" placeholder="Ex. Réserver la salle"><label for="tDate">Date limite</label><input id="tDate" type="date"><label for="tEmployee">Attribuer à un employé (facultatif)</label><select id="tEmployee"><option value="">Aucun employé</option></select><button id="addTask">Ajouter la tâche</button><p class="small">Dès qu’un employé reçoit une tâche sur un mariage, il voit toutes les tâches et les informations de ce mariage. Tu peux lui attribuer des tâches sur plusieurs mariages.</p><div id="tasks"></div></section>
 <section><h2>7. Calendrier et rappels</h2><label for="vCouple">Couple concerné</label><select id="vCouple"></select><label for="vTitle">Type d'événement</label><input id="vTitle" placeholder="Ex. Rendez-vous avec les mariés"><label for="vDate">Date</label><input id="vDate" type="date"><label for="vTime">Heure</label><input id="vTime" type="time"><label for="vPlace">Lieu</label><input id="vPlace"><label for="vReminder">Rappel souhaité</label><select id="vReminder"><option>La veille</option><option>Le jour même</option><option>Aucun</option></select><button id="addEvent">Ajouter au calendrier</button><div id="events"></div><p class="small">Le rappel est enregistré, mais les notifications automatiques sur téléphone seront ajoutées plus tard.</p></section>
@@ -513,9 +514,47 @@ async function enter(u){user=u;page("loading");let {data:p,error}=await sb.from(
 async function logout(){const {error}=await sb.auth.signOut();if(error)say("appMsg",error.message,"error");}
 function fillCoupleMenus(){["gCouple","bCouple","drinkCouple","tCouple","vCouple","designCouple","accessClientCouple"].forEach(id=>{const s=$(id),old=s.value;s.innerHTML="";opt(s,"","Choisir un couple");couples.forEach(c=>opt(s,c.id,c.couple_name));if(couples.some(c=>c.id===old))s.value=old;});}
 async function loadEmployeeAccounts(){const host=$("employeeAccounts");if(!host)return;const {data,error}=await sb.functions.invoke("manage-flems-users",{body:{action:"list_employees"}});if(error||!data?.ok){employees=[];host.textContent="La liste des employés ne peut pas être chargée : "+(error?.message||data?.error||"Erreur inconnue.");return;}employees=Array.isArray(data.employees)?data.employees:[];const select=$("tEmployee");if(select){const selected=select.value;select.innerHTML="";opt(select,"","Aucun employé");employees.forEach(employee=>opt(select,employee.id,employee.full_name||"Employé"));if(employees.some(employee=>employee.id===selected))select.value=selected;}host.innerHTML="";if(!employees.length){listMessage("employeeAccounts","Aucun employé invité pour le moment.");return;}employees.forEach(employee=>{const row=document.createElement("div");row.className="item";const name=document.createElement("strong");name.textContent=employee.full_name||"Employé sans nom";const id=document.createElement("p");id.className="small";id.textContent="Compte employé actif dans la liste des accès. Attribue-lui une tâche pour lui donner accès au mariage concerné.";row.append(name,id);host.appendChild(row);});}
+async function loadClientAccounts(){
+ const host=$("clientAccounts");if(!host)return;host.textContent="Chargement des fiches clients…";
+ const {data,error}=await sb.functions.invoke("manage-flems-users",{body:{action:"list_clients"}});
+ if(error||!data?.ok){host.textContent="Impossible de charger les clients : "+(error?.message||data?.error||"Erreur inconnue.");return;}
+ const clients=Array.isArray(data.clients)?data.clients:[];host.innerHTML="";
+ if(!clients.length){listMessage("clientAccounts","Aucun compte client associé à un mariage pour le moment.");return;}
+ clients.forEach(client=>{
+  const row=document.createElement("div");row.className="item";
+  const name=document.createElement("strong");name.textContent=client.full_name||client.couple_name||"Client";
+  const details=document.createElement("p");details.className="small";details.textContent=[client.email,client.phone,client.couple_name,client.wedding_date?"Mariage : "+client.wedding_date:"",client.venue].filter(Boolean).join(" · ");
+  const status=document.createElement("p");status.className="small";status.textContent=client.access_active?"Accès actif":"Accès désactivé";
+  const actions=document.createElement("div");actions.className="actions";
+  actions.appendChild(actionButton("Modifier la fiche","edit",()=>editClientAccount(client)));
+  actions.appendChild(actionButton(client.access_active?"Désactiver l’accès":"Réactiver l’accès",client.access_active?"danger":"",()=>changeClientAccess(client)));
+  row.append(name,details,status,actions);host.appendChild(row);
+ });
+}
+function editClientAccount(client){
+ openEditor("Modifier la fiche client",[
+  {key:"full_name",label:"Nom du client",value:client.full_name||"",required:true},
+  {key:"email",label:"Adresse e-mail de connexion",type:"email",value:client.email||"",required:true},
+  {key:"phone",label:"Téléphone",type:"tel",value:client.phone||""},
+  {key:"couple_name",label:"Nom du couple",value:client.couple_name||"",required:true},
+  {key:"wedding_date",label:"Date du mariage",type:"date",value:client.wedding_date||""},
+  {key:"venue",label:"Lieu du mariage",value:client.venue||""}
+ ],async values=>{
+  const {data,error}=await sb.functions.invoke("manage-flems-users",{body:{action:"update_client",user_id:client.user_id,couple_id:client.couple_id,...values}});
+  if(error||!data?.ok){say("appMsg",error?.message||data?.error||"Modification impossible.","error");return false;}
+  say("appMsg","Fiche client mise à jour.");await loadOwner();return true;
+ });
+}
+async function changeClientAccess(client){
+ const enabled=!client.access_active,verb=enabled?"réactiver":"désactiver";
+ if(!confirm("Confirmer : "+verb+" l’accès de "+(client.full_name||"ce client")+" à son espace privé ?"))return;
+ const {data,error}=await sb.functions.invoke("manage-flems-users",{body:{action:"set_client_access",user_id:client.user_id,enabled}});
+ if(error||!data?.ok){say("appMsg",error?.message||data?.error||"Modification de l’accès impossible.","error");return;}
+ say("appMsg",data.message||"Accès client mis à jour.");await loadClientAccounts();
+}
 async function inviteClientAccount(){const coupleId=$("accessClientCouple").value,full_name=$("accessClientName").value.trim(),email=$("accessClientEmail").value.trim();if(!coupleId||!full_name||!email){say("accessClientMessage","Choisis un mariage et indique le nom et l’adresse e-mail du client.","error");return;}const button=$("inviteClientButton");button.disabled=true;button.textContent="Envoi de l’invitation…";try{const {data,error}=await sb.functions.invoke("manage-flems-users",{body:{action:"invite_client",couple_id:coupleId,full_name,email}});if(error||!data?.ok){say("accessClientMessage",error?.message||data?.error||"L’invitation n’a pas pu être envoyée.","error");return;}say("accessClientMessage",data.message||"Invitation envoyée.");$("accessClientName").value="";$("accessClientEmail").value="";}finally{button.disabled=false;button.textContent="Envoyer l’invitation au client";}}
 async function inviteEmployeeAccount(){const full_name=$("accessEmployeeName").value.trim(),email=$("accessEmployeeEmail").value.trim();if(!full_name||!email){say("accessEmployeeMessage","Indique le nom et l’adresse e-mail de l’employé.","error");return;}const button=$("inviteEmployeeButton");button.disabled=true;button.textContent="Envoi de l’invitation…";try{const {data,error}=await sb.functions.invoke("manage-flems-users",{body:{action:"invite_employee",full_name,email}});if(error||!data?.ok){say("accessEmployeeMessage",error?.message||data?.error||"L’invitation n’a pas pu être envoyée.","error");return;}say("accessEmployeeMessage",data.message||"Invitation envoyée.");$("accessEmployeeName").value="";$("accessEmployeeEmail").value="";await loadEmployeeAccounts();}finally{button.disabled=false;button.textContent="Envoyer l’invitation à l’employé";}}
-async function loadOwner(){clear("appMsg");const {data,error}=await sb.from("couples").select("id,couple_name,wedding_date,phone,email,venue,theme_color,guestbook_token").order("created_at",{ascending:false});if(error){say("appMsg","Chargement des couples impossible : "+error.message,"error");return;}couples=data||[];fillCoupleMenus();await loadEmployeeAccounts();renderCouples();await Promise.all([loadGuests(),loadBudget(),loadTasks(),loadEvents(),loadDrinkOptions($("drinkCouple").value,"drinkOptions",false)]);if($("designCouple").value)await loadDesignPanel($("designCouple").value,"owner");}
+async function loadOwner(){clear("appMsg");const {data,error}=await sb.from("couples").select("id,couple_name,wedding_date,phone,email,venue,theme_color,guestbook_token").order("created_at",{ascending:false});if(error){say("appMsg","Chargement des couples impossible : "+error.message,"error");return;}couples=data||[];fillCoupleMenus();await loadEmployeeAccounts();await loadClientAccounts();renderCouples();await Promise.all([loadGuests(),loadBudget(),loadTasks(),loadEvents(),loadDrinkOptions($("drinkCouple").value,"drinkOptions",false)]);if($("designCouple").value)await loadDesignPanel($("designCouple").value,"owner");}
 function renderCouples(){const z=$("couples");z.innerHTML="";if(!couples.length)listMessage("couples","Aucun couple enregistré.");couples.forEach(c=>{const d=document.createElement("div");d.className="item";const b=document.createElement("strong");b.textContent=c.couple_name;d.appendChild(b);const p=document.createElement("p");p.className="small";p.textContent=[c.wedding_date?"Mariage : "+c.wedding_date:"",c.phone,c.email,c.venue].filter(Boolean).join(" · ");d.appendChild(p);const actions=document.createElement("div");actions.className="actions";actions.appendChild(actionButton("Modifier","edit",()=>editCouple(c)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteCouple(c)));d.appendChild(actions);z.appendChild(d);});$("nCouples").textContent=couples.length;}
 function editCouple(c){openEditor("Modifier le couple",[
   {key:"couple_name",label:"Nom du couple",value:c.couple_name,required:true},
@@ -904,7 +943,7 @@ if($("ownerPhotoUpload"))$("ownerPhotoUpload").addEventListener("change",()=>upl
 if($("clientPhotoUpload"))$("clientPhotoUpload").addEventListener("change",()=>uploadCouplePhotos("clientPhotoUpload","client"));if($("ownerMusicUpload"))$("ownerMusicUpload").addEventListener("change",uploadGuestbookMusic);
 
 $("login").addEventListener("click",login);$("forgot").addEventListener("click",forgot);$("savePass").addEventListener("click",savePassword);$("logout").addEventListener("click",logout);
-$("inviteClientButton")?.addEventListener("click",inviteClientAccount);$("inviteEmployeeButton")?.addEventListener("click",inviteEmployeeAccount);
+$("inviteClientButton")?.addEventListener("click",inviteClientAccount);$("inviteEmployeeButton")?.addEventListener("click",inviteEmployeeAccount);$("refreshClientAccounts")?.addEventListener("click",loadClientAccounts);
 $("startOwnerQrScan")?.addEventListener("click",()=>startQrScanner("ownerQrVideo","ownerQrResult"));
 $("stopOwnerQrScan")?.addEventListener("click",stopQrScanner);
 $("startClientQrScan")?.addEventListener("click",()=>startQrScanner("clientQrVideo","clientQrResult"));
