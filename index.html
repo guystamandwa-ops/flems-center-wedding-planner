@@ -582,7 +582,7 @@ async function loadDrinkSummary(coupleId,targetId){
 async function loadGuests(){const id=$("gCouple").value,z=$("guests");z.innerHTML="";if(!id){listMessage("guests","Choisis un couple pour voir ses invités.");listMessage("drinkSummary","Choisis un couple pour afficher le récapitulatif.");$("nGuests").textContent="0";return;}const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,beverage_option_id,invitation_token,table_number,checked_in_at").eq("couple_id",id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}cacheGuestsForOffline(id,data);$("nGuests").textContent=data.length;renderGuests(z,await attachDrinkOptions(data,id),true);await loadDrinkSummary(id,"drinkSummary");}
 function sendGuestInvitationWhatsApp(g){
  const rawPhone=String(g.phone||"").trim();
- let phone=rawPhone.replace(/\\D/g,"");
+ let phone=rawPhone.replace(/\D/g,"");
  if(phone.startsWith("00"))phone=phone.slice(2);
  if(phone.startsWith("0"))phone="243"+phone.slice(1);
  else if(phone.length===9)phone="243"+phone;
@@ -592,7 +592,7 @@ function sendGuestInvitationWhatsApp(g){
  const date=couple?.wedding_date?dateForPdf(couple.wedding_date):"à confirmer";
  const venue=couple?.venue||"communiqué prochainement";
  const coupleName=couple?.couple_name||"les mariés";
- const message="Bonjour "+g.full_name+" ! 💐\\n\\n"+coupleName+" ont le plaisir de vous inviter à leur mariage.\\nDate : "+date+"\\nLieu : "+venue+"\\n\\nVoici votre invitation personnelle : "+inviteUrl+"\\n\\nAu plaisir de vous compter parmi nous !\\nFLEMS CENTER – WEDDING PLANNER";
+ const message="Bonjour "+g.full_name+" ! 💐\n\n"+coupleName+" ont le plaisir de vous inviter à leur mariage.\nDate : "+date+"\nLieu : "+venue+"\n\nVoici votre invitation personnelle : "+inviteUrl+"\n\nAu plaisir de vous compter parmi nous !\nFLEMS CENTER – WEDDING PLANNER";
  const link=document.createElement("a");link.href="https://wa.me/"+phone+"?text="+encodeURIComponent(message);link.target="_blank";link.rel="noopener noreferrer";link.click();
  say("appMsg","WhatsApp s’ouvre avec l’invitation personnelle de "+g.full_name+". Vérifie le message puis appuie sur Envoyer dans WhatsApp.");
 }
