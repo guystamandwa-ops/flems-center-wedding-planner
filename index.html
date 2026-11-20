@@ -4,20 +4,12 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#6f533d">
 <title>FLEMS CENTER – WEDDING PLANNER</title>
 <style>
-:root{--bg:#f6f0e7;--brown:#49382d;--gold:#b58a45;--white:#fffdf9;--border:#e5d8c7;--muted:#806f60}*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--bg);color:var(--brown);font-family:Georgia,serif}header{max-width:1050px;margin:0 auto 18px;background:linear-gradient(135deg,#49382d,#806344);color:white;padding:25px 18px;text-align:center;border-radius:18px}header h1{margin:0 0 7px;font-size:clamp(22px,5vw,34px)}header p{margin:6px 0}main{max-width:1050px;margin:auto}section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 3px 12px #49382d0c}h2{font-size:20px;margin:0 0 14px;color:#765638}label{display:block;font-size:14px;margin:10px 0 5px}input,select{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:white;color:var(--brown);font:15px Arial}button{border:0;border-radius:8px;padding:11px 15px;background:var(--gold);color:white;font-weight:bold;cursor:pointer;margin-top:12px}button.secondary{background:#806f60}button.danger{background:#9b3d32}button.edit{background:#806f60}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{margin-top:6px}.item .actions{margin-top:4px}dialog{width:min(560px,calc(100% - 28px));border:1px solid var(--border);border-radius:14px;padding:20px;background:var(--white);color:var(--brown);box-shadow:0 18px 60px #21180f55}dialog::backdrop{background:#21180f88}dialog h2{margin-top:0}dialog .dialog-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:12px}dialog .dialog-actions button{margin-top:0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:15px}.stat{background:var(--white);border:1px solid var(--border);border-radius:12px;text-align:center;padding:13px}.stat strong{display:block;font-size:25px;color:#9a7135}.item{padding:10px 0;border-bottom:1px solid var(--border);overflow-wrap:anywhere}.item:last-child{border-bottom:0}.small{font-size:13px;color:var(--muted)}.empty{color:var(--muted);font-style:italic}.message{padding:11px;border-radius:9px;margin:10px 0;font:14px Arial;line-height:1.45;display:none}.message.ok{display:block;background:#e8f4eb;color:#205b37}.message.error{display:block;background:#fae9e6;color:#8a2e25}.hidden{display:none!important}.auth{max-width:460px;margin:22px auto}footer{text-align:center;color:var(--muted);padding:18px;font-size:13px}.drink-choice{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);padding:12px;border-radius:9px;margin:8px 0}.drink-choice input{width:auto;min-width:18px}.drink-help{background:#f4ead9;padding:12px;border-radius:9px;font-size:14px;line-height:1.5}.guest-invite{max-width:620px;margin:24px auto}.copy-link{background:#806f60}
+:root{--bg:#f6f0e7;--brown:#49382d;--gold:#b58a45;--white:#fffdf9;--border:#e5d8c7;--muted:#806f60}*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--bg);color:var(--brown);font-family:Georgia,serif}header{max-width:1050px;margin:0 auto 18px;background:linear-gradient(135deg,#49382d,#806344);color:white;padding:25px 18px;text-align:center;border-radius:18px}header h1{margin:0 0 7px;font-size:clamp(22px,5vw,34px)}header p{margin:6px 0}main{max-width:1050px;margin:auto}section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 3px 12px #49382d0c}h2{font-size:20px;margin:0 0 14px;color:#765638}label{display:block;font-size:14px;margin:10px 0 5px}input,select{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:white;color:var(--brown);font:15px Arial}button{border:0;border-radius:8px;padding:11px 15px;background:var(--gold);color:white;font-weight:bold;cursor:pointer;margin-top:12px}button.secondary{background:#806f60}button.danger{background:#9b3d32}button.edit{background:#806f60}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{margin-top:6px}.item .actions{margin-top:4px}dialog{width:min(560px,calc(100% - 28px));border:1px solid var(--border);border-radius:14px;padding:20px;background:var(--white);color:var(--brown);box-shadow:0 18px 60px #21180f55}dialog::backdrop{background:#21180f88}dialog h2{margin-top:0}dialog .dialog-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:12px}dialog .dialog-actions button{margin-top:0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:15px}.stat{background:var(--white);border:1px solid var(--border);border-radius:12px;text-align:center;padding:13px}.stat strong{display:block;font-size:25px;color:#9a7135}.item{padding:10px 0;border-bottom:1px solid var(--border);overflow-wrap:anywhere}.item:last-child{border-bottom:0}.small{font-size:13px;color:var(--muted)}.empty{color:var(--muted);font-style:italic}.message{padding:11px;border-radius:9px;margin:10px 0;font:14px Arial;line-height:1.45;display:none}.message.ok{display:block;background:#e8f4eb;color:#205b37}.message.error{display:block;background:#fae9e6;color:#8a2e25}.hidden{display:none!important}.auth{max-width:460px;margin:22px auto}footer{text-align:center;color:var(--muted);padding:18px;font-size:13px}.drink-choice{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);padding:12px;border-radius:9px;margin:8px 0}.drink-choice input{width:auto;min-width:18px}.drink-help{background:#f4ead9;padding:12px;border-radius:9px;font-size:14px;line-height:1.5}.guest-drink-list{margin-top:8px}.guest-drink-list .drink-choice{margin:6px 0}.drink-status{font-size:13px;color:var(--muted);margin:8px 0}
 </style></head>
 <body>
 <header><h1>FLEMS CENTER</h1><p><strong>WEDDING PLANNER</strong></p><p><em>L'élégance au cœur de chaque célébration.</em></p><p>Bienvenue chez Flems Center, créons ensemble des souvenirs inoubliables.</p></header>
 <main>
 <section id="auth" class="auth"><h2>Connexion à Flems Center</h2><p class="small">Connecte-toi avec l'adresse e-mail et le mot de passe de ton compte.</p><div id="authMsg" class="message"></div><div id="loginForm"><label for="email">Adresse e-mail</label><input id="email" type="email" autocomplete="username" placeholder="Votre adresse e-mail"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" placeholder="Votre mot de passe"><button id="login" style="width:100%">Se connecter</button><button id="forgot" class="secondary" style="width:100%">J'ai oublié mon mot de passe</button></div><div id="newPassForm" class="hidden"><h3>Créer un nouveau mot de passe</h3><label for="newPass">Nouveau mot de passe (8 caractères minimum)</label><input id="newPass" type="password" autocomplete="new-password"><button id="savePass" style="width:100%">Enregistrer le mot de passe</button></div></section>
-<section id="guestInvite" class="guest-invite hidden">
-  <h2>Choisissez votre boisson</h2>
-  <p id="guestInviteWelcome" class="small">Invitation personnelle Flems Center</p>
-  <div id="guestInviteMsg" class="message"></div>
-  <div id="guestInviteChoices"></div>
-  <button id="saveGuestDrink" style="width:100%">Enregistrer mon choix</button>
-  <p class="small">Un seul choix est possible. Vous pourrez revenir sur ce lien pour modifier votre réponse si nécessaire.</p>
-</section>
 <section id="loading" class="hidden">Chargement de ton espace…</section>
 <div id="app" class="hidden">
 <section><div class="row"><div><h2 id="welcome">Mon espace Flems Center</h2><p class="small" id="roleText"></p></div><button class="secondary" id="logout">Se déconnecter</button></div><div id="appMsg" class="message"></div></section>
@@ -27,7 +19,7 @@
 <div class="grid"><section><h2>2. Liste des invités</h2><label for="gCouple">Choisir un couple</label><select id="gCouple"></select><label for="gName">Nom de l'invité</label><input id="gName" placeholder="Nom et prénom"><label for="gPhone">Téléphone</label><input id="gPhone" type="tel"><label for="gRsvp">Réponse</label><select id="gRsvp"><option>En attente</option><option>Présent</option><option>Absent</option></select><button id="addGuest">Ajouter l'invité</button><div id="guests"></div></section>
 <section><h2>3. Budget du mariage</h2><label for="bCouple">Choisir un couple</label><select id="bCouple"></select><label for="bCurrency">Devise</label><select id="bCurrency"><option value="USD">Dollar américain (USD)</option><option value="CDF">Franc congolais (CDF)</option></select><label for="bAmount">Budget prévu</label><input id="bAmount" type="number" min="0"><button id="saveBudget">Enregistrer le budget</button><hr><label for="eName">Nom de la dépense</label><input id="eName" placeholder="Ex. Décoration"><label for="eAmount">Montant</label><input id="eAmount" type="number" min="0"><button id="addExpense">Ajouter une dépense</button><div id="budget"></div></section></div>
 <section><h2>4. Boissons proposées aux invités</h2>
-  <p class="small">Choisis un mariage puis ajoute les boissons que les mariés souhaitent proposer. Chaque invité recevra son propre lien pour cocher une boisson.</p>
+  <p class="small">Choisis un mariage puis ajoute les boissons que les mariés souhaitent proposer. Les choix se cochent directement sur la fiche de chaque invité. Le choix est enregistré sur la fiche de l’invité et visible directement dans la liste.</p>
   <label for="drinkCouple">Choisir un couple</label><select id="drinkCouple"></select>
   <label for="drinkName">Nouvelle boisson</label><input id="drinkName" maxlength="100" placeholder="Ex. Eau, Coca-Cola, jus d'ananas, bière sans alcool…">
   <button id="addDrink">Ajouter cette boisson</button>
@@ -37,7 +29,7 @@
 <section><h2>6. Calendrier et rappels</h2><label for="vCouple">Couple concerné</label><select id="vCouple"></select><label for="vTitle">Type d'événement</label><input id="vTitle" placeholder="Ex. Rendez-vous avec les mariés"><label for="vDate">Date</label><input id="vDate" type="date"><label for="vTime">Heure</label><input id="vTime" type="time"><label for="vPlace">Lieu</label><input id="vPlace"><label for="vReminder">Rappel souhaité</label><select id="vReminder"><option>La veille</option><option>Le jour même</option><option>Aucun</option></select><button id="addEvent">Ajouter au calendrier</button><div id="events"></div><p class="small">Le rappel est enregistré, mais les notifications automatiques sur téléphone seront ajoutées plus tard.</p></section>
 </div>
 <div id="client" class="hidden"><section><h2>Mon mariage</h2><div id="myCouple"></div></section><div class="grid"><section><h2>Mes invités</h2><label for="myGuestName">Nom de l'invité</label><input id="myGuestName"><label for="myGuestPhone">Téléphone</label><input id="myGuestPhone"><label for="myGuestRsvp">Réponse</label><select id="myGuestRsvp"><option>En attente</option><option>Présent</option><option>Absent</option></select><button id="myAddGuest">Ajouter un invité</button><div id="myGuests"></div></section><section><h2>Mon budget</h2><div id="myBudget"></div></section></div><section><h2>Mes boissons proposées aux invités</h2>
-  <p class="small">Ajoute les boissons que tes invités pourront choisir individuellement grâce à leur lien d'invitation.</p>
+  <p class="small">Ajoute les boissons que tes invités pourront cocher directement dans la liste des invités. Les choix enregistrés apparaissent sur chaque fiche.</p>
   <label for="myDrinkName">Nouvelle boisson</label><input id="myDrinkName" maxlength="100" placeholder="Ex. Eau, jus d'orange, soda…">
   <button id="myAddDrink">Ajouter cette boisson</button>
   <div id="myDrinkOptions"></div>
@@ -63,12 +55,10 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_7Rqg0CbTxWqiglYUPFMzcA_KAD4jnUr";
 const configured=SUPABASE_URL.startsWith("https://")&&SUPABASE_URL.endsWith(".supabase.co")&&SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_");
 let sb,user,role,couples=[],currentClientCouple=null,currentBudget=null;
 let pendingEditorSave=null;
-let activeInvitationToken=null;
-let activeInvitationOptions=[];
 const $=id=>document.getElementById(id);
 function say(target,text,type="ok"){const x=$(target);x.textContent=text;x.className="message "+type;}
 function clear(target){$(target).textContent="";$(target).className="message";}
-function page(id){["auth","loading","app","guestInvite"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
+function page(id){["auth","loading","app"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
 function view(id){["owner","client","employee"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
 function opt(s,v,t){const o=document.createElement("option");o.value=v;o.textContent=t;s.appendChild(o);}
 function nameOf(id){return couples.find(c=>c.id===id)?.couple_name||"Mariage";}
@@ -115,8 +105,6 @@ async function start(){
  if(!configured){page("auth");say("authMsg","Le fichier doit être configuré avec ton Project URL et ta Publishable key avant la connexion.","error");$("login").disabled=true;return;}
  if(!window.supabase?.createClient){page("auth");say("authMsg","La bibliothèque Supabase ne s'est pas chargée. Vérifie ta connexion Internet.","error");return;}
  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
- const inviteToken=new URLSearchParams(window.location.search).get("invitation");
- if(inviteToken){activeInvitationToken=inviteToken;page("guestInvite");await loadGuestInvitation(inviteToken);return;}
  sb.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){page("auth");$("loginForm").classList.add("hidden");$("newPassForm").classList.remove("hidden");say("authMsg","Choisis maintenant ton nouveau mot de passe.");}else if(event==="SIGNED_OUT"){page("auth");$("loginForm").classList.remove("hidden");$("newPassForm").classList.add("hidden");}});
  const {data,error}=await sb.auth.getSession();if(error){page("auth");say("authMsg",error.message,"error");return;}if(data.session)await enter(data.session.user);else page("auth");
 }
@@ -137,16 +125,55 @@ function editCouple(c){openEditor("Modifier le couple",[
 ],async v=>{const {error}=await sb.from("couples").update({couple_name:v.couple_name.trim(),wedding_date:v.wedding_date||null,phone:v.phone.trim()||null,email:v.email.trim()||null,venue:v.venue.trim()||null}).eq("id",c.id);if(error){say("appMsg","Modification du couple impossible : "+error.message,"error");return false;}say("appMsg","Couple modifié.");await loadOwner();return true;});}
 async function deleteCouple(c){if(!confirm("Supprimer « "+c.couple_name+" » ?\n\nCette action supprimera aussi ses invités, son budget, ses dépenses, ses tâches et ses rendez-vous. Elle est définitive."))return;const {error}=await sb.from("couples").delete().eq("id",c.id);if(error){say("appMsg","Suppression du couple impossible : "+error.message,"error");return;}say("appMsg","Couple et données associées supprimés.");await loadOwner();}
 async function addCouple(){const couple_name=$("cName").value.trim();if(!couple_name){say("appMsg","Saisis le nom du couple.","error");return;}const {error}=await sb.from("couples").insert({created_by:user.id,couple_name,wedding_date:$("cDate").value||null,phone:$("cPhone").value.trim()||null,email:$("cEmail").value.trim()||null,venue:$("cVenue").value.trim()||null});if(error){say("appMsg","Ajout impossible : "+error.message,"error");return;}["cName","cDate","cPhone","cEmail","cVenue"].forEach(id=>$(id).value="");say("appMsg","Couple ajouté dans la base de données.");await loadOwner();}
-async function attachDrinkNames(guestRows,coupleId){
- const {data:options,error}=await sb.from("beverage_options").select("id,name").eq("couple_id",coupleId);
- if(error){say("appMsg","Chargement des boissons impossible : "+error.message,"error");return guestRows;}
- const labels=new Map((options||[]).map(o=>[o.id,o.name]));
- return guestRows.map(g=>({...g,beverage_name:labels.get(g.beverage_option_id)||"Pas encore choisie"}));
+async function attachDrinkOptions(guestRows,coupleId){
+ const {data:options,error}=await sb.from("beverage_options").select("id,name").eq("couple_id",coupleId).order("name");
+ if(error){say("appMsg","Chargement des boissons impossible : "+error.message,"error");return guestRows.map(g=>({...g,drink_options:[]}));}
+ return guestRows.map(g=>({...g,drink_options:options||[]}));
 }
-async function loadGuests(){const id=$("gCouple").value,z=$("guests");z.innerHTML="";if(!id){listMessage("guests","Choisis un couple pour voir ses invités.");$("nGuests").textContent="0";return;}const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,invitation_token,beverage_option_id").eq("couple_id",id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}$("nGuests").textContent=data.length;renderGuests(z,await attachDrinkNames(data,id),true);}
-function invitationUrl(token){const url=new URL(window.location.href);url.search="";url.hash="";url.searchParams.set("invitation",token);return url.toString();}
-async function copyInvitationLink(g){if(!g.invitation_token){say("appMsg","Lien indisponible : exécute d'abord la mise à jour SQL des invitations.","error");return;}const link=invitationUrl(g.invitation_token);try{await navigator.clipboard.writeText(link);say("appMsg","Lien personnel copié. Tu peux l'envoyer à "+g.full_name+" par WhatsApp ou e-mail.");}catch(e){window.prompt("Copie ce lien personnel et envoie-le à l'invité :",link);}}
-function renderGuests(z,data,canManage,clientMode=false){z.innerHTML="";if(!data.length){const p=document.createElement("p");p.className="empty";p.textContent="Aucun invité enregistré.";z.appendChild(p);return;}data.forEach(g=>{const d=document.createElement("div");d.className="item";const p=document.createElement("p");p.textContent=g.full_name+" — "+g.rsvp+(g.phone?" — "+g.phone:"")+" — Boisson : "+(g.beverage_name||"Pas encore choisie");d.appendChild(p);if(canManage){const actions=document.createElement("div");actions.className="actions";actions.appendChild(actionButton("Copier le lien de choix","copy-link",()=>copyInvitationLink(g)));actions.appendChild(actionButton("Modifier","edit",()=>editGuest(g,clientMode)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteGuest(g,clientMode)));d.appendChild(actions);}z.appendChild(d);});}
+async function loadGuests(){const id=$("gCouple").value,z=$("guests");z.innerHTML="";if(!id){listMessage("guests","Choisis un couple pour voir ses invités.");$("nGuests").textContent="0";return;}const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,invitation_token,beverage_option_id").eq("couple_id",id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}$("nGuests").textContent=data.length;renderGuests(z,await attachDrinkOptions(data,id),true);}
+function renderGuests(z,data,canManage,clientMode=false){
+ z.innerHTML="";
+ if(!data.length){const p=document.createElement("p");p.className="empty";p.textContent="Aucun invité enregistré.";z.appendChild(p);return;}
+ data.forEach(g=>{
+  const d=document.createElement("div");d.className="item";
+  const p=document.createElement("p");p.textContent=g.full_name+" — "+g.rsvp+(g.phone?" — "+g.phone:"");d.appendChild(p);
+  const drinkWrap=document.createElement("div");drinkWrap.className="guest-drink-list";
+  const status=document.createElement("p");status.className="drink-status";
+  const selectedOption=(g.drink_options||[]).find(o=>o.id===g.beverage_option_id);
+  status.textContent=selectedOption?"Boisson cochée : "+selectedOption.name:"Aucune boisson choisie pour le moment.";
+  drinkWrap.appendChild(status);
+  if(!(g.drink_options||[]).length){
+   const empty=document.createElement("p");empty.className="small";empty.textContent="Aucune boisson proposée. Ajoute d'abord les boissons dans la rubrique Boissons proposées.";drinkWrap.appendChild(empty);
+  }else{
+   const help=document.createElement("p");help.className="small";help.textContent="Coche une seule boisson pour cet invité. Le choix est enregistré automatiquement.";drinkWrap.appendChild(help);
+   const optionsHost=document.createElement("div");
+   g.drink_options.forEach(option=>{
+    const label=document.createElement("label");label.className="drink-choice";
+    const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.checked=g.beverage_option_id===option.id;checkbox.setAttribute("aria-label",option.name);
+    checkbox.addEventListener("change",async()=>{
+     if(!checkbox.checked){checkbox.checked=true;say("appMsg","Un seul choix est conservé par invité. Pour changer, coche simplement une autre boisson.");return;}
+     if(!g.invitation_token){say("appMsg","Jeton de choix manquant pour cet invité. Vérifie que la migration Boissons a bien été exécutée dans Supabase.","error");checkbox.checked=false;return;}
+     optionsHost.querySelectorAll('input[type="checkbox"]').forEach(control=>control.disabled=true);
+     const {data,error}=await sb.rpc("submit_guest_beverage",{p_token:g.invitation_token,p_beverage_option_id:option.id});
+     const result=Array.isArray(data)?data[0]:data;
+     if(error||!result?.ok){say("appMsg","Enregistrement du choix impossible : "+(error?.message||result?.message||"Vérifie la connexion à Supabase."),"error");}
+     else{say("appMsg","Choix de boisson enregistré pour "+g.full_name+".");}
+     if(clientMode)await loadMyGuests();else await loadGuests();
+    });
+    const text=document.createElement("span");text.textContent=option.name;label.append(checkbox,text);optionsHost.appendChild(label);
+   });
+   drinkWrap.appendChild(optionsHost);
+  }
+  d.appendChild(drinkWrap);
+  if(canManage){
+   const actions=document.createElement("div");actions.className="actions";
+   actions.appendChild(actionButton("Modifier","edit",()=>editGuest(g,clientMode)));
+   actions.appendChild(actionButton("Supprimer","danger",()=>deleteGuest(g,clientMode)));
+   d.appendChild(actions);
+  }
+  z.appendChild(d);
+ });
+}
 function editGuest(g,clientMode=false){openEditor("Modifier un invité",[
   {key:"full_name",label:"Nom de l'invité",value:g.full_name,required:true},
   {key:"phone",label:"Téléphone",type:"tel",value:g.phone||""},
@@ -170,7 +197,7 @@ async function addDrinkOption(clientMode=false){
  if(name.length>100){say("appMsg","Le nom de la boisson doit contenir 100 caractères maximum.","error");return;}
  const {error}=await sb.from("beverage_options").insert({couple_id:coupleId,name});
  if(error){say("appMsg","Ajout de la boisson impossible : "+error.message,"error");return;}
- input.value="";say("appMsg","Boisson ajoutée aux choix proposés.");await loadDrinkOptions(coupleId,target,clientMode);
+ input.value="";say("appMsg","Boisson ajoutée aux choix proposés.");await loadDrinkOptions(coupleId,target,clientMode);if(clientMode)await loadMyGuests();else await loadGuests();
 }
 async function deleteDrinkOption(option,coupleId,targetId,clientMode){
  if(!confirm("Retirer « "+option.name+" » des boissons proposées ? Les invités ayant déjà choisi cette boisson devront en sélectionner une autre."))return;
@@ -178,34 +205,6 @@ async function deleteDrinkOption(option,coupleId,targetId,clientMode){
  if(error){say("appMsg","Suppression de la boisson impossible : "+error.message,"error");return;}
  say("appMsg","Boisson retirée.");await loadDrinkOptions(coupleId,targetId,clientMode);
  if(clientMode)await loadMyGuests();else await loadGuests();
-}
-async function loadGuestInvitation(token){
- const {data,error}=await sb.rpc("get_guest_invitation",{p_token:token});
- if(error){say("guestInviteMsg","Cette invitation n'est pas accessible : "+error.message,"error");$("saveGuestDrink").disabled=true;return;}
- const result=Array.isArray(data)?data[0]:data;
- if(!result||!result.ok){say("guestInviteMsg",result?.message||"Cette invitation est introuvable ou n'est plus valide.","error");$("saveGuestDrink").disabled=true;return;}
- activeInvitationOptions=result.options||[];
- $("guestInviteWelcome").textContent="Bonjour "+result.guest_name+" ! Les mariés "+result.couple_name+" vous invitent à choisir votre boisson.";
- const host=$("guestInviteChoices");host.innerHTML="";
- if(!activeInvitationOptions.length){say("guestInviteMsg","Les mariés n'ont pas encore ajouté de boissons. Revenez plus tard.","error");$("saveGuestDrink").disabled=true;return;}
- activeInvitationOptions.forEach(option=>{
-  const label=document.createElement("label");label.className="drink-choice";
-  const radio=document.createElement("input");radio.type="radio";radio.name="guestBeverage";radio.value=option.id;radio.required=true;
-  if(result.selected_beverage_option_id===option.id)radio.checked=true;
-  const text=document.createElement("span");text.textContent=option.name;label.append(radio,text);host.appendChild(label);
- });
- if(result.selected_beverage_option_id)say("guestInviteMsg","Votre choix actuel est déjà enregistré. Vous pouvez le modifier puis enregistrer à nouveau.");
-}
-async function saveGuestBeverage(){
- const selected=document.querySelector('input[name="guestBeverage"]:checked');
- if(!selected){say("guestInviteMsg","Cochez une boisson avant d'enregistrer.","error");return;}
- $("saveGuestDrink").disabled=true;
- const {data,error}=await sb.rpc("submit_guest_beverage",{p_token:activeInvitationToken,p_beverage_option_id:selected.value});
- $("saveGuestDrink").disabled=false;
- if(error){say("guestInviteMsg","Enregistrement impossible : "+error.message,"error");return;}
- const result=Array.isArray(data)?data[0]:data;
- if(!result?.ok){say("guestInviteMsg",result?.message||"Votre choix n'a pas pu être enregistré.","error");return;}
- say("guestInviteMsg","Merci ! Votre choix de boisson a bien été enregistré.");
 }
 async function loadBudget(){const couple_id=$("bCouple").value,z=$("budget");z.innerHTML="";currentBudget=null;if(!couple_id){listMessage("budget","Choisis un couple pour voir son budget.");return;}const {data:b,error}=await sb.from("budgets").select("*").eq("couple_id",couple_id).maybeSingle();if(error){say("appMsg","Budget : "+error.message,"error");return;}if(!b){listMessage("budget","Aucun budget enregistré.");$("bAmount").value="";return;}currentBudget=b;$("bAmount").value=b.planned_amount;$("bCurrency").value=b.currency;const {data:x,error:ee}=await sb.from("expenses").select("id,description,amount").eq("budget_id",b.id);if(ee){say("appMsg","Dépenses : "+ee.message,"error");return;}const total=x.reduce((s,a)=>s+Number(a.amount),0),p=document.createElement("p");p.innerHTML="<strong>Budget prévu :</strong> "+cash(b.planned_amount,b.currency)+"<br><strong>Dépenses :</strong> "+cash(total,b.currency)+"<br><strong>Solde :</strong> "+cash(Number(b.planned_amount)-total,b.currency);z.appendChild(p);const budgetActions=document.createElement("div");budgetActions.className="actions";budgetActions.appendChild(actionButton("Modifier le budget","edit",()=>editBudget(b)));budgetActions.appendChild(actionButton("Supprimer le budget","danger",()=>deleteBudget(b)));z.appendChild(budgetActions);x.forEach(a=>{const d=document.createElement("div");d.className="item";const t=document.createElement("p");t.textContent=a.description+" : "+cash(a.amount,b.currency);d.appendChild(t);const actions=document.createElement("div");actions.className="actions";actions.appendChild(actionButton("Modifier","edit",()=>editExpense(a,b)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteExpense(a)));d.appendChild(actions);z.appendChild(d);});}
 function editBudget(b){openEditor("Modifier le budget",[
@@ -238,11 +237,11 @@ function editEvent(e){openEditor("Modifier un événement",[
 async function deleteEvent(e){if(!confirm("Supprimer le rendez-vous « "+e.title+" » ?"))return;const {error}=await sb.from("calendar_events").delete().eq("id",e.id);if(error){say("appMsg","Suppression de l'événement impossible : "+error.message,"error");return;}say("appMsg","Événement supprimé.");await loadEvents();}
 async function addEvent(){const couple_id=$("vCouple").value,title=$("vTitle").value.trim(),event_date=$("vDate").value;if(!couple_id||!title||!event_date){say("appMsg","Choisis un couple, un type d'événement et une date.","error");return;}const {error}=await sb.from("calendar_events").insert({couple_id,title,event_date,event_time:$("vTime").value||null,location:$("vPlace").value.trim()||null,reminder:$("vReminder").value});if(error){say("appMsg","Événement impossible : "+error.message,"error");return;}["vTitle","vDate","vTime","vPlace"].forEach(id=>$(id).value="");say("appMsg","Événement enregistré.");await loadEvents();}
 async function loadClient(){const {data,error}=await sb.from("couples").select("id,couple_name,wedding_date,venue");if(error){say("appMsg","Ton espace n'a pas pu être chargé : "+error.message,"error");return;}if(!data.length){$("myCouple").textContent="Aucun mariage n'est associé à ce compte. Contacte Flems Center.";return;}currentClientCouple=data[0];$("myCouple").textContent=currentClientCouple.couple_name+" · Date : "+(currentClientCouple.wedding_date||"à définir")+" · Lieu : "+(currentClientCouple.venue||"à définir");await Promise.all([loadMyGuests(),loadMyBudget(),loadMyEvents(),loadDrinkOptions(currentClientCouple.id,"myDrinkOptions",true)]);}
-async function loadMyGuests(){const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,invitation_token,beverage_option_id").eq("couple_id",currentClientCouple.id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}renderGuests($("myGuests"),await attachDrinkNames(data,currentClientCouple.id),true,true);}
+async function loadMyGuests(){const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,invitation_token,beverage_option_id").eq("couple_id",currentClientCouple.id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}renderGuests($("myGuests"),await attachDrinkOptions(data,currentClientCouple.id),true,true);}
 async function addMyGuest(){const full_name=$("myGuestName").value.trim();if(!full_name){say("appMsg","Saisis le nom de l'invité.","error");return;}const {error}=await sb.from("guests").insert({couple_id:currentClientCouple.id,full_name,phone:$("myGuestPhone").value.trim()||null,rsvp:$("myGuestRsvp").value});if(error){say("appMsg","Ajout impossible : "+error.message,"error");return;}$("myGuestName").value="";$("myGuestPhone").value="";await loadMyGuests();}
 async function loadMyBudget(){const z=$("myBudget");z.innerHTML="";const {data:b,error}=await sb.from("budgets").select("*").eq("couple_id",currentClientCouple.id).maybeSingle();if(error){z.textContent=error.message;return;}if(!b){z.textContent="Le budget n'a pas encore été communiqué.";return;}const {data:x,error:ee}=await sb.from("expenses").select("amount").eq("budget_id",b.id);if(ee){z.textContent=ee.message;return;}const total=x.reduce((s,a)=>s+Number(a.amount),0);z.textContent="Budget : "+cash(b.planned_amount,b.currency)+" · Dépenses : "+cash(total,b.currency)+" · Solde : "+cash(Number(b.planned_amount)-total,b.currency);}
 async function loadMyEvents(){const z=$("myEvents");z.innerHTML="";const {data,error}=await sb.from("calendar_events").select("title,event_date,event_time,location,reminder").eq("couple_id",currentClientCouple.id).order("event_date");if(error){z.textContent=error.message;return;}if(!data.length){listMessage("myEvents","Aucun événement communiqué.");return;}data.forEach(e=>{const p=document.createElement("p");p.textContent=e.title+" — "+e.event_date+(e.event_time?" à "+e.event_time:"")+(e.location?" — "+e.location:"")+" — Rappel : "+e.reminder;z.appendChild(p);});}
 async function loadEmployee(){const {data,error}=await sb.from("tasks").select("id,title,due_date,is_done,couple_id").eq("assigned_to",user.id).order("due_date");if(error){say("appMsg","Tâches : "+error.message,"error");return;}const ids=[...new Set(data.map(t=>t.couple_id))];let names={};if(ids.length){const {data:c}=await sb.from("couples").select("id,couple_name").in("id",ids);(c||[]).forEach(x=>names[x.id]=x.couple_name);}const z=$("myTasks");z.innerHTML="";if(!data.length){listMessage("myTasks","Aucune tâche attribuée pour le moment.");return;}data.forEach(t=>{const d=document.createElement("div");d.className="item";const p=document.createElement("p");p.textContent=(t.is_done?"✓ ":"○ ")+t.title+" — "+(names[t.couple_id]||"Mariage")+(t.due_date?" — Échéance : "+t.due_date:"");d.appendChild(p);const b=document.createElement("button");b.textContent=t.is_done?"Réouvrir":"Terminer";b.onclick=async()=>{const {error}=await sb.from("tasks").update({is_done:!t.is_done}).eq("id",t.id);if(error)say("appMsg",error.message,"error");else await loadEmployee();};d.appendChild(b);z.appendChild(d);});}
-$("login").addEventListener("click",login);$("forgot").addEventListener("click",forgot);$("savePass").addEventListener("click",savePassword);$("logout").addEventListener("click",logout);$("addCouple").addEventListener("click",addCouple);$("gCouple").addEventListener("change",loadGuests);$("drinkCouple").addEventListener("change",()=>loadDrinkOptions($("drinkCouple").value,"drinkOptions",false));$("addGuest").addEventListener("click",addGuest);$("bCouple").addEventListener("change",loadBudget);$("saveBudget").addEventListener("click",saveBudget);$("addExpense").addEventListener("click",addExpense);$("addTask").addEventListener("click",addTask);$("addEvent").addEventListener("click",addEvent);$("myAddGuest").addEventListener("click",addMyGuest);$("addDrink").addEventListener("click",()=>addDrinkOption(false));$("myAddDrink").addEventListener("click",()=>addDrinkOption(true));$("saveGuestDrink").addEventListener("click",saveGuestBeverage);
+$("login").addEventListener("click",login);$("forgot").addEventListener("click",forgot);$("savePass").addEventListener("click",savePassword);$("logout").addEventListener("click",logout);$("addCouple").addEventListener("click",addCouple);$("gCouple").addEventListener("change",loadGuests);$("drinkCouple").addEventListener("change",()=>loadDrinkOptions($("drinkCouple").value,"drinkOptions",false));$("addGuest").addEventListener("click",addGuest);$("bCouple").addEventListener("change",loadBudget);$("saveBudget").addEventListener("click",saveBudget);$("addExpense").addEventListener("click",addExpense);$("addTask").addEventListener("click",addTask);$("addEvent").addEventListener("click",addEvent);$("myAddGuest").addEventListener("click",addMyGuest);$("addDrink").addEventListener("click",()=>addDrinkOption(false));$("myAddDrink").addEventListener("click",()=>addDrinkOption(true));
 start();
 </script></body></html>
