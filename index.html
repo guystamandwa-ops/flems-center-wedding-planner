@@ -780,7 +780,7 @@ async function loadPublicInvitation(token){
  let offlineCopy=false;
  if(error||!result?.ok){
   try{result=JSON.parse(localStorage.getItem("flems_invitation_"+token)||"null");offlineCopy=!!result?.ok;}catch{}
-  if(!offlineCopy||!result?.ok){$("invitationCoupleName").textContent="Invitation indisponible";msg.textContent=error?.message||result?.message||"Ce lien d’invitation est invalide.";msg.className="message error";$("invitationSave").disabled=true;return;}
+  if(!offlineCopy||!result?.ok){$("invitationCoupleName").textContent="Invitation indisponible";msg.textContent=error?.message||result?.message||"Ce lien d’invitation est invalide.";msg.className="message error";$("invitationSave").disabled=true;$("invitationEnableReminders").disabled=true;return;}
  }else{try{localStorage.setItem("flems_invitation_"+token,JSON.stringify(result));}catch{}}
  if(offlineCopy){msg.textContent="Mode hors connexion : voici la dernière version enregistrée de votre invitation. Les choix et messages seront disponibles au retour d’Internet.";msg.className="message";} 
  $("invitationCoupleName").textContent="Le mariage de "+(result.couple_name||"nos mariés");
