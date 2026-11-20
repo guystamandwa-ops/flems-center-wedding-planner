@@ -105,11 +105,25 @@ Deno.serve(async (request: Request) => {
 
   // L'invitation est envoyée par Supabase Auth. Le lien revient vers l'application officielle.
   let invited: any;
+  const legacyServiceRoleJwt = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  if (!legacyServiceRoleJwt) {
+    return reply({ error: "Le service d’invitation administrateur n’est pas configuré." }, 503);
+  }
   try {
-    invited = await adminFetch(`/auth/v1/invite?redirect_to=${encodeURIComponent(APP_URL)}`, {
-      method: "POST",
-      body: JSON.stringify({ email, data: { full_name: fullName } }),
-    });
+    // L’API Auth Admin exige un JWT service_role dans Authorization.
+    // La clé secrète moderne reste dans apikey pour les appels Data API.
+    invited = await readJson(await fetch(
+      `${supabaseUrl}/auth/v1/invite?redirect_to=${encodeURIComponent(APP_URL)}`,
+      {
+        method: "POST",
+        headers: {
+          apikey: serviceKey,
+          Authorization: `Bearer ${legacyServiceRoleJwt}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, data: { full_name: fullName } }),
+      },
+    ));
   } catch (error) {
     return reply({ error: "Invitation non envoyée : " + String(error) }, 400);
   }
