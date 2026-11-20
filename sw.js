@@ -11,7 +11,16 @@ const APP_SHELL = [
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
+      .then(async cache => {
+        await cache.addAll(APP_SHELL);
+        try {
+          const sdkUrl = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+          const sdkResponse = await fetch(sdkUrl, { mode: "cors" });
+          if (sdkResponse.ok) await cache.put(sdkUrl, sdkResponse);
+        } catch (error) {
+          // L'application peut toujours s'installer si le CDN est temporairement indisponible.
+        }
+      })
       .then(() => self.skipWaiting())
   );
 });
