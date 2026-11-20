@@ -32,7 +32,9 @@ self.addEventListener("fetch", event => {
   if (request.method !== "GET") return;
 
   const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
+  const supabaseSdk = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+  const isSupabaseSdk = request.url === supabaseSdk;
+  if (url.origin !== self.location.origin && !isSupabaseSdk) return;
 
   if (request.mode === "navigate") {
     event.respondWith(
@@ -55,12 +57,12 @@ self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(request).then(cached => {
       const refresh = fetch(request).then(response => {
-        if (response && response.ok && response.type === "basic") {
+        if (response && response.ok && (response.type === "basic" || isSupabaseSdk && response.type === "cors")) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
         }
         return response;
-      }).catch(() => cached);
+      }).catch(() => cached || Response.error());
       return cached || refresh;
     })
   );
