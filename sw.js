@@ -4,6 +4,7 @@ const APP_SHELL = [
   new URL("./icons/flems-icon-192.png", self.registration.scope).href,
   new URL("./icons/flems-icon-512.png", self.registration.scope).href,
   new URL("./qrcode.min.js", self.registration.scope).href,
+  new URL("./qr-scanner.legacy.min.js", self.registration.scope).href,
   new URL("./qr-scanner.umd.min.js", self.registration.scope).href
 ];
 
