@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#B58A45"><meta name="description" content="Flems Center Wedding Planner — L’élégance au cœur de chaque célébration."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" type="image/png" sizes="192x192" href="./icons/flems-icon-192.png"><link rel="apple-touch-icon" href="./icons/flems-icon-192.png">
+<title>FLEMS CENTER – WEDDING PLANNER</title>
+<style>
+:root{--bg:#f6f0e7;--brown:#49382d;--gold:#b58a45;--theme-deep:#49382d;--theme-soft:#f4ead9;--white:#fffdf9;--border:#e5d8c7;--muted:#806f60}*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--bg);color:var(--brown);font-family:Georgia,serif}header{max-width:1050px;margin:0 auto 18px;background:linear-gradient(135deg,var(--theme-deep),var(--gold));color:white;padding:25px 18px;text-align:center;border-radius:18px}header h1{margin:0 0 7px;font-size:clamp(22px,5vw,34px)}header p{margin:6px 0}main{max-width:1050px;margin:auto}section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 3px 12px #49382d0c}h2{font-size:20px;margin:0 0 14px;color:#765638}label{display:block;font-size:14px;margin:10px 0 5px}input,select{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:white;color:var(--brown);font:15px Arial}button{border:0;border-radius:8px;padding:11px 15px;background:var(--gold);color:white;font-weight:bold;cursor:pointer;margin-top:12px}button.secondary{background:#806f60}button.danger{background:#9b3d32}button.edit{background:#806f60}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{margin-top:6px}.item .actions{margin-top:4px}dialog{width:min(560px,calc(100% - 28px));border:1px solid var(--border);border-radius:14px;padding:20px;background:var(--white);color:var(--brown);box-shadow:0 18px 60px #21180f55}dialog::backdrop{background:#21180f88}dialog h2{margin-top:0}dialog .dialog-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:12px}dialog .dialog-actions button{margin-top:0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:15px}.stat{background:var(--white);border:1px solid var(--border);border-radius:12px;text-align:center;padding:13px}.stat strong{display:block;font-size:25px;color:#9a7135}.item{padding:10px 0;border-bottom:1px solid var(--border);overflow-wrap:anywhere}.item:last-child{border-bottom:0}.small{font-size:13px;color:var(--muted)}.empty{color:var(--muted);font-style:italic}.message{padding:11px;border-radius:9px;margin:10px 0;font:14px Arial;line-height:1.45;display:none}.message.ok{display:block;background:#e8f4eb;color:#205b37}.message.error{display:block;background:#fae9e6;color:#8a2e25}.hidden{display:none!important}.auth{max-width:460px;margin:22px auto}footer{text-align:center;color:var(--muted);padding:18px;font-size:13px}.drink-choice{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);padding:12px;border-radius:9px;margin:8px 0}.drink-choice input{width:auto;min-width:18px}.drink-help{background:#f4ead9;padding:12px;border-radius:9px;font-size:14px;line-height:1.5}.guest-drink-list{margin-top:8px}.guest-drink-list .drink-choice{margin:6px 0}.drink-status{font-size:13px;color:var(--muted);margin:8px 0}.drink-summary{margin-top:14px;padding:13px;background:#fbf7f0;border:1px solid var(--border);border-radius:10px}.drink-summary h3{margin:0 0 10px;font-size:17px;color:#765638}.drink-summary-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin:10px 0}.drink-summary-stat{background:white;border:1px solid var(--border);border-radius:9px;padding:9px;text-align:center;font:13px Arial}.drink-summary-stat strong{display:block;color:#9a7135;font-size:21px;margin-bottom:3px}.drink-summary-row{padding:9px 0;border-bottom:1px solid var(--border)}.drink-summary-row:last-child{border-bottom:0}.drink-summary-label{display:flex;justify-content:space-between;gap:10px;font:14px Arial;margin-bottom:6px}.drink-summary-track{height:9px;background:#eadfce;border-radius:999px;overflow:hidden}.drink-summary-fill{height:100%;background:#b58a45;border-radius:999px;min-width:0}.pdf-actions{margin:10px 0 14px}.pdf-actions button{line-height:1.35} @media(max-width:560px){.pdf-actions button{width:100%}}
+
+.theme-palette{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.theme-swatch{width:42px;height:42px;padding:0;border-radius:50%;border:3px solid white;outline:2px solid transparent;margin:3px;box-shadow:0 1px 5px #0002}.theme-swatch[aria-pressed="true"]{outline-color:var(--brown);transform:scale(1.08)}
+.design-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:12px}.photo-card{border:1px solid var(--border);border-radius:10px;padding:8px;background:#fff}.photo-card img{width:100%;height:130px;object-fit:cover;border-radius:7px}.photo-card button{width:100%;margin-top:6px}.guestbook-messages .item{padding:12px;border:1px solid var(--border);border-radius:9px;margin:9px 0;background:#fff}.guestbook-message-text{white-space:pre-wrap;overflow-wrap:anywhere}.public-book-hero{text-align:center;background:var(--theme-soft);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:15px}.public-book-hero h2{font-size:clamp(24px,5vw,34px)}.public-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}.public-gallery img{width:100%;height:180px;object-fit:cover;border-radius:12px}.public-message{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;margin:10px 0}.public-message strong{display:block;margin-bottom:6px}.voice-widget{position:fixed;right:14px;bottom:14px;z-index:9999;width:min(340px,calc(100vw - 28px));background:var(--white);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 35px #21180f33;padding:12px}.voice-widget h3{margin:0 0 6px;color:var(--gold);font-size:16px}.voice-widget p{font-size:13px;line-height:1.4;margin:5px 0 9px;color:var(--muted)}.voice-widget .actions button{flex:1;min-width:110px;margin-top:4px}.voice-status{font:12px Arial;color:var(--muted);min-height:18px}.guestbook-form textarea{width:100%;min-height:110px;padding:11px;border:1px solid var(--border);border-radius:8px;font:15px Arial;resize:vertical}.guestbook-form input{margin-bottom:6px}.guestbook-link{display:block;overflow-wrap:anywhere;font-size:12px;color:var(--muted);margin-top:8px}
+.brand-mark{width:68px;height:68px;object-fit:cover;border-radius:18px;background:#f8f0df;box-shadow:0 4px 18px #1c120b33;display:block;margin:0 auto 10px}.public-brand-mark{width:54px;height:54px;object-fit:cover;border-radius:14px;display:block;margin:0 auto 10px}.music-admin{padding:12px;background:#fbf7f0;border:1px solid var(--border);border-radius:10px;margin-top:12px}.music-admin audio,.public-music audio{width:100%;margin-top:8px}.public-music{background:#fffaf1;border:1px solid var(--border);border-radius:13px;padding:14px;margin:14px auto;max-width:700px;text-align:left}.public-music h3{margin:0 0 5px;color:#765638}.music-hint{font-size:13px;color:var(--muted);line-height:1.5}.app-install-hint{font-size:12px;color:var(--muted);margin-top:6px}@media(max-width:560px){.voice-widget{right:8px;bottom:8px}.theme-swatch{width:38px;height:38px}.brand-mark{width:60px;height:60px}}
+</style></head>
+<body>
+<header><img class="brand-mark" src="./icons/flems-icon-192.png" alt="Icône Flems Center"><h1>FLEMS CENTER</h1><p><strong>WEDDING PLANNER</strong></p><p><em>L'élégance au cœur de chaque célébration.</em></p><p>Bienvenue chez Flems Center, créons ensemble des souvenirs inoubliables.</p></header>
+<main>
+<section id="auth" class="auth"><h2>Connexion à Flems Center</h2><p class="small">Connecte-toi avec l'adresse e-mail et le mot de passe de ton compte.</p><div id="authMsg" class="message"></div><div id="loginForm"><label for="email">Adresse e-mail</label><input id="email" type="email" autocomplete="username" placeholder="Votre adresse e-mail"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" placeholder="Votre mot de passe"><button id="login" style="width:100%">Se connecter</button><button id="forgot" class="secondary" style="width:100%">J'ai oublié mon mot de passe</button></div><div id="newPassForm" class="hidden"><h3>Créer un nouveau mot de passe</h3><label for="newPass">Nouveau mot de passe (8 caractères minimum)</label><input id="newPass" type="password" autocomplete="new-password"><button id="savePass" style="width:100%">Enregistrer le mot de passe</button></div></section>
+<section id="loading" class="hidden">Chargement de ton espace…</section>
+<div id="app" class="hidden">
+<section><div class="row"><div><h2 id="welcome">Mon espace Flems Center</h2><p class="small" id="roleText"></p></div><button class="secondary" id="logout">Se déconnecter</button></div><div id="appMsg" class="message"></div></section>
+<div id="owner" class="hidden">
+<div class="stats"><div class="stat"><strong id="nCouples">0</strong>Couples</div><div class="stat"><strong id="nGuests">0</strong>Invités affichés</div><div class="stat"><strong id="nTasks">0</strong>Tâches à faire</div><div class="stat"><strong id="nEvents">0</strong>Événements</div></div>
+<section><h2>1. Nos couples</h2><label for="cName">Nom du couple</label><input id="cName" placeholder="Ex. Marie et Jean"><label for="cDate">Date du mariage</label><input id="cDate" type="date"><label for="cPhone">Téléphone</label><input id="cPhone" type="tel" placeholder="+243..."><label for="cEmail">E-mail</label><input id="cEmail" type="email"><label for="cVenue">Lieu du mariage</label><input id="cVenue" placeholder="Lieu de la cérémonie"><button id="addCouple">Ajouter un couple</button><div id="couples"></div></section>
+<div class="grid"><section><h2>2. Liste des invités</h2><label for="gCouple">Choisir un couple</label><select id="gCouple"></select><label for="gName">Nom de l'invité</label><input id="gName" placeholder="Nom et prénom"><label for="gPhone">Téléphone</label><input id="gPhone" type="tel"><label for="gRsvp">Réponse</label><select id="gRsvp"><option>En attente</option><option>Présent</option><option>Absent</option></select><button id="addGuest">Ajouter l'invité</button><div class="actions pdf-actions"><button type="button" class="secondary" id="exportGuestPdf">Télécharger la liste des invités en PDF</button><button type="button" id="exportDrinksPdf">Télécharger le récapitulatif des boissons en PDF</button></div><div id="guests"></div><div class="drink-summary"><h3>Récapitulatif des boissons</h3><div id="drinkSummary"><p class="small">Choisis un couple pour afficher les quantités.</p></div></div></section>
+<section><h2>3. Budget du mariage</h2><label for="bCouple">Choisir un couple</label><select id="bCouple"></select><label for="bCurrency">Devise</label><select id="bCurrency"><option value="USD">Dollar américain (USD)</option><option value="CDF">Franc congolais (CDF)</option></select><label for="bAmount">Budget prévu</label><input id="bAmount" type="number" min="0"><button id="saveBudget">Enregistrer le budget</button><hr><label for="eName">Nom de la dépense</label><input id="eName" placeholder="Ex. Décoration"><label for="eAmount">Montant</label><input id="eAmount" type="number" min="0"><button id="addExpense">Ajouter une dépense</button><div id="budget"></div></section></div>
+<section><h2>4. Boissons proposées aux invités</h2>
+  <p class="small">Choisis un mariage puis ajoute les boissons que les mariés souhaitent proposer. Les choix se cochent directement sur la fiche de chaque invité. Le choix est enregistré sur la fiche de l’invité et visible directement dans la liste.</p>
+  <label for="drinkCouple">Choisir un couple</label><select id="drinkCouple"></select>
+  <label for="drinkName">Nouvelle boisson</label><input id="drinkName" maxlength="100" placeholder="Ex. Eau, Coca-Cola, jus d'ananas, bière sans alcool…">
+  <button id="addDrink">Ajouter cette boisson</button>
+  <div id="drinkOptions"></div>
+</section>
+
+<section><h2>7. Couleurs du mariage et livre d’or</h2>
+  <p class="small">Choisis le mariage à personnaliser, sa couleur et les photos qui seront visibles dans le livre d’or partagé avec les invités.</p>
+  <label for="designCouple">Choisir un couple</label><select id="designCouple"></select>
+  <h3>Couleur de l’espace des mariés</h3><div id="ownerThemePalette" class="theme-palette"></div>
+  <div class="design-grid">
+    <div><h3>Photos du couple</h3><label for="ownerPhotoUpload">Ajouter des photos (JPG, PNG ou WEBP, 5 Mo maximum par photo)</label><input id="ownerPhotoUpload" type="file" accept="image/jpeg,image/png,image/webp" multiple><div id="ownerGallery" class="photo-grid"></div><div class="music-admin"><h3>Musique de la galerie des invités</h3><p class="music-hint">L’administrateur choisit ici le morceau qui accompagnera les photos du livre d’or. MP3 recommandé, 15 Mo maximum. Utilise un fichier que Flems Center est autorisé à diffuser.</p><label for="ownerMusicUpload">Choisir un fichier audio</label><input id="ownerMusicUpload" type="file" accept="audio/mpeg,audio/mp4,audio/aac,audio/ogg,audio/wav,audio/webm,.mp3,.m4a,.aac,.ogg,.wav,.webm"><div id="ownerMusicStatus" class="small">Aucune musique définie pour ce mariage.</div></div></div>
+    <div><h3>Livre d’or des invités</h3><p class="small">Partage un seul lien commun avec les invités. Ils pourront voir les photos et laisser un message de félicitations sans créer de compte.</p><button id="ownerCopyGuestbook" type="button">Copier le lien du livre d’or</button><span id="ownerGuestbookLink" class="guestbook-link"></span><div id="ownerGuestbookMessages" class="guestbook-messages"></div></div>
+  </div>
+</section>
+<section><h2>5. Tâches des employés</h2><label for="tCouple">Couple concerné</label><select id="tCouple"></select><label for="tTitle">Nom de la tâche</label><input id="tTitle" placeholder="Ex. Réserver la salle"><label for="tDate">Date limite</label><input id="tDate" type="date"><button id="addTask">Ajouter la tâche</button><p class="small">L'attribution nominative d'une tâche à un employé sera activée après la création des comptes employés.</p><div id="tasks"></div></section>
+<section><h2>6. Calendrier et rappels</h2><label for="vCouple">Couple concerné</label><select id="vCouple"></select><label for="vTitle">Type d'événement</label><input id="vTitle" placeholder="Ex. Rendez-vous avec les mariés"><label for="vDate">Date</label><input id="vDate" type="date"><label for="vTime">Heure</label><input id="vTime" type="time"><label for="vPlace">Lieu</label><input id="vPlace"><label for="vReminder">Rappel souhaité</label><select id="vReminder"><option>La veille</option><option>Le jour même</option><option>Aucun</option></select><button id="addEvent">Ajouter au calendrier</button><div id="events"></div><p class="small">Le rappel est enregistré, mais les notifications automatiques sur téléphone seront ajoutées plus tard.</p></section>
+</div>
+<div id="client" class="hidden"><section><h2>Mon mariage</h2><div id="myCouple"></div></section><div class="grid"><section><h2>Mes invités</h2><label for="myGuestName">Nom de l'invité</label><input id="myGuestName"><label for="myGuestPhone">Téléphone</label><input id="myGuestPhone"><label for="myGuestRsvp">Réponse</label><select id="myGuestRsvp"><option>En attente</option><option>Présent</option><option>Absent</option></select><button id="myAddGuest">Ajouter un invité</button><div class="actions pdf-actions"><button type="button" class="secondary" id="exportMyGuestPdf">Télécharger la liste des invités en PDF</button><button type="button" id="exportMyDrinksPdf">Télécharger le récapitulatif des boissons en PDF</button></div><div id="myGuests"></div><div class="drink-summary"><h3>Récapitulatif des boissons</h3><div id="myDrinkSummary"><p class="small">Le récapitulatif apparaîtra ici.</p></div></div></section><section><h2>Mon budget</h2><div id="myBudget"></div></section></div><section><h2>Mes boissons proposées aux invités</h2>
+  <p class="small">Ajoute les boissons que tes invités pourront cocher directement dans la liste des invités. Les choix enregistrés apparaissent sur chaque fiche.</p>
+  <label for="myDrinkName">Nouvelle boisson</label><input id="myDrinkName" maxlength="100" placeholder="Ex. Eau, jus d'orange, soda…">
+  <button id="myAddDrink">Ajouter cette boisson</button>
+  <div id="myDrinkOptions"></div>
+</section><section><h2>Mon calendrier</h2><div id="myEvents"></div></section>
+<section><h2>Personnaliser mon mariage et mon livre d’or</h2>
+  <p class="small">Choisis la couleur de ton espace et ajoute les photos du couple qui seront visibles par les invités.</p>
+  <h3>Choisir ma couleur</h3><div id="clientThemePalette" class="theme-palette"></div>
+  <div class="design-grid">
+    <div><h3>Photos des mariés</h3><label for="clientPhotoUpload">Ajouter des photos (JPG, PNG ou WEBP, 5 Mo maximum par photo)</label><input id="clientPhotoUpload" type="file" accept="image/jpeg,image/png,image/webp" multiple><div id="clientGallery" class="photo-grid"></div><p id="clientMusicInfo" class="music-hint">La musique qui accompagne la galerie des invités est choisie par l’administrateur Flems Center.</p></div>
+    <div><h3>Partager le livre d’or</h3><p class="small">Copie ce lien commun et envoie-le à tes invités par WhatsApp ou e-mail. Ils n’auront pas besoin de compte.</p><button id="clientCopyGuestbook" type="button">Copier le lien du livre d’or</button><span id="clientGuestbookLink" class="guestbook-link"></span><div id="clientGuestbookMessages" class="guestbook-messages"></div></div>
+  </div>
+</section>
+</div>
+<div id="employee" class="hidden"><section><h2>Mes tâches</h2><div id="myTasks"></div></section></div>
+</div>
+<div id="publicGuestbookView" class="hidden">
+  <section class="public-book-hero">
+    <img class="public-brand-mark" src="./icons/flems-icon-192.png" alt="Flems Center"><p><strong>FLEMS CENTER · LIVRE D’OR</strong></p>
+    <h2 id="publicCoupleName">Livre d’or des mariés</h2>
+    <p id="publicCoupleMeta" class="small"></p>
+    <div id="publicGuestbookMusicSection" class="public-music hidden"><h3 id="publicGuestbookMusicTitle">Musique des mariés</h3><p class="music-hint">La musique accompagne votre visite des photos. Appuyez sur Lecture pour l’écouter.</p><audio id="publicGuestbookAudio" controls loop preload="none"></audio></div>
+    <div id="publicPhotoGallery" class="public-gallery"></div>
+  </section>
+  <div class="grid">
+    <section><h2>Laisser un message de félicitations</h2>
+      <p class="small">Écris quelques mots gentils aux mariés. Ton message leur sera transmis pour validation avant son affichage dans le livre d’or.</p>
+      <div id="publicGuestbookMsg" class="message" aria-live="polite"></div>
+      <form id="publicGuestbookForm" class="guestbook-form">
+        <label for="publicGuestName">Ton nom</label><input id="publicGuestName" maxlength="80" required placeholder="Ex. Sarah et famille">
+        <label for="publicGuestMessage">Ton message</label><textarea id="publicGuestMessage" maxlength="1200" required placeholder="Félicitations aux mariés…"></textarea>
+        <button type="submit" id="publicGuestbookSubmit">Envoyer mon message</button>
+      </form>
+    </section>
+    <section><h2>Messages de félicitations</h2><div id="publicGuestbookMessages"></div></section>
+  </div>
+</div>
+</main>
+<aside id="voiceAssistant" class="voice-widget" aria-label="Assistant vocal Flems Center">
+  <h3>🎙️ Assistant vocal Flems Center</h3>
+  <p id="voiceIntro">Je peux expliquer les différentes rubriques et guider les invités dans le livre d’or.</p>
+  <div class="actions"><button type="button" id="voiceGuide">Écouter le guide</button><button type="button" class="secondary" id="voiceAsk">Me poser une question</button><button type="button" class="danger" id="voiceStop">Arrêter</button></div>
+  <div id="voiceStatus" class="voice-status" aria-live="polite">Appuie sur « Écouter le guide » pour démarrer la voix.</div>
+</aside>
+<footer>Flems Center – L'élégance au cœur de chaque célébration.</footer>
+<dialog id="editDialog" aria-labelledby="editTitle">
+  <form id="editForm">
+    <h2 id="editTitle">Modifier</h2>
+    <div id="editFields"></div>
+    <div class="dialog-actions">
+      <button type="button" class="secondary" id="cancelEdit">Annuler</button>
+      <button type="submit" id="saveEdit">Enregistrer</button>
+    </div>
+  </form>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+// REMPLACE CES DEUX VALEURS AVEC TON PROJECT URL ET TA PUBLISHABLE KEY SUPABASE.
+const SUPABASE_URL="https://wbqymhkugvsyfbpblhed.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="COLLE_ICI_TA_PUBLISHABLE_KEY";
+const configured=SUPABASE_URL.startsWith("https://")&&SUPABASE_URL.endsWith(".supabase.co")&&SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_");
+let sb,user,role,couples=[],currentClientCouple=null,currentBudget=null,publicGuestbookToken=null;
+let pendingEditorSave=null;
+const $=id=>document.getElementById(id);
+function say(target,text,type="ok"){const x=$(target);x.textContent=text;x.className="message "+type;}
+function clear(target){$(target).textContent="";$(target).className="message";}
+function page(id){["auth","loading","app","publicGuestbookView"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
+function view(id){["owner","client","employee"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
+function opt(s,v,t){const o=document.createElement("option");o.value=v;o.textContent=t;s.appendChild(o);}
+function nameOf(id){return couples.find(c=>c.id===id)?.couple_name||"Mariage";}
+function cash(n,cur){return Number(n||0).toLocaleString("fr-FR")+" "+cur;}
+function dateForPdf(value){
+ if(!value)return "Non renseignée";
+ const parts=String(value).slice(0,10).split("-");
+ if(parts.length!==3)return String(value);
+ return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+function safeFilePart(value){
+ return String(value||"mariage").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9_-]+/g,"-").replace(/^-+|-+$/g,"").toLowerCase()||"mariage";
+}
+function winAnsiBytes(value){
+ const extra={0x20AC:0x80,0x201A:0x82,0x0192:0x83,0x201E:0x84,0x2026:0x85,0x2020:0x86,0x2021:0x87,0x02C6:0x88,0x2030:0x89,0x0160:0x8A,0x2039:0x8B,0x0152:0x8C,0x017D:0x8E,0x2018:0x91,0x2019:0x92,0x201C:0x93,0x201D:0x94,0x2022:0x95,0x2013:0x96,0x2014:0x97,0x02DC:0x98,0x2122:0x99,0x0161:0x9A,0x203A:0x9B,0x0153:0x9C,0x017E:0x9E,0x0178:0x9F};
+ const bytes=[];
+ for(const char of String(value??"")){
+  const cp=char.codePointAt(0);
+  if(cp===9||cp===10||cp===13){bytes.push(32);}
+  else if(cp<=0x7F||(cp>=0xA0&&cp<=0xFF)){bytes.push(cp);}
+  else if(extra[cp]!==undefined){bytes.push(extra[cp]);}
+  else{bytes.push(0x3F);}
+ }
+ return bytes;
+}
+function pdfHex(value){return winAnsiBytes(value).map(byte=>byte.toString(16).padStart(2,"0")).join("").toUpperCase();}
+function wrapPdfText(value,maxChars){
+ const text=String(value??"").replace(/\s+/g," ").trim();
+ if(!text)return [""];
+ const words=text.split(" ");const lines=[];let current="";
+ for(let word of words){
+  while(word.length>maxChars){
+   if(current){lines.push(current);current="";}
+   lines.push(word.slice(0,maxChars));word=word.slice(maxChars);
+  }
+  if(!word)continue;
+  const candidate=current?current+" "+word:word;
+  if(candidate.length>maxChars){if(current)lines.push(current);current=word;}else current=candidate;
+ }
+ if(current)lines.push(current);
+ return lines.length?lines:[""];
+}
+function makePdfBytes(pageStreams){
+ const objects=[];
+ const pageIds=pageStreams.map((_,index)=>5+index*2);
+ objects[1]='<< /Type /Catalog /Pages 2 0 R >>';
+ objects[2]=`<< /Type /Pages /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] /Count ${pageIds.length} >>`;
+ objects[3]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
+ objects[4]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>';
+ pageStreams.forEach((stream,index)=>{
+  const pageId=pageIds[index],contentId=pageId+1;
+  objects[pageId]=`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${contentId} 0 R >>`;
+  objects[contentId]=`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`;
+ });
+ let pdf="%PDF-1.4\n% Flems Center PDF\n";const offsets=[0];
+ for(let id=1;id<objects.length;id++){
+  offsets[id]=pdf.length;
+  pdf+=`${id} 0 obj\n${objects[id]}\nendobj\n`;
+ }
+ const xrefOffset=pdf.length;
+ pdf+=`xref\n0 ${objects.length}\n0000000000 65535 f \n`;
+ for(let id=1;id<objects.length;id++)pdf+=`${String(offsets[id]).padStart(10,"0")} 00000 n \n`;
+ pdf+=`trailer\n<< /Size ${objects.length} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+ return new TextEncoder().encode(pdf);
+}
+function buildReportPdf({filename,title,couple,metaLines=[],sections=[]}){
+ const pageHeight=841.89,margin=40,usableWidth=515.28,bottomLimit=790;
+ const pages=[];let commands="",y=0,pageNumber=0;
+ const text=(x,top,value,size=9,bold=false)=>{
+  commands+=`BT /${bold?"F2":"F1"} ${size} Tf 1 0 0 1 ${x.toFixed(2)} ${(pageHeight-top).toFixed(2)} Tm <${pdfHex(value)}> Tj ET\n`;
+ };
+ const line=(x1,top,x2)=>{commands+=`q 0.78 0.70 0.59 RG 0.6 w ${x1.toFixed(2)} ${(pageHeight-top).toFixed(2)} m ${x2.toFixed(2)} ${(pageHeight-top).toFixed(2)} l S Q\n`;};
+ const rect=(x,top,width,height,shade)=>{
+  commands+=`q ${shade} rg ${x.toFixed(2)} ${(pageHeight-top-height).toFixed(2)} ${width.toFixed(2)} ${height.toFixed(2)} re f Q\n`;
+  commands+=`q 0.88 0.83 0.76 RG 0.35 w ${x.toFixed(2)} ${(pageHeight-top-height).toFixed(2)} ${width.toFixed(2)} ${height.toFixed(2)} re S Q\n`;
+ };
+ function beginPage(continuation=false){
+  if(commands)pages.push(commands);
+  commands="";pageNumber++;
+  text(margin,34,"FLEMS CENTER  |  WEDDING PLANNER",9,true);
+  text(margin,62,continuation?title+" (suite)":title,17,true);
+  text(margin,84,"Couple : "+(couple?.couple_name||"Mariage"),10,true);
+  text(margin,101,"Date du mariage : "+dateForPdf(couple?.wedding_date)+"   |   Lieu : "+(couple?.venue||"Non renseigné"),9,false);
+  text(margin,118,"Document généré le : "+new Date().toLocaleDateString("fr-FR"),8,false);
+  line(margin,130,margin+usableWidth);
+  y=148;
+ }
+ function drawColumnHeader(columns){
+  const h=25;rect(margin,y,usableWidth,h,"0.91 0.86 0.78");
+  let x=margin;
+  columns.forEach(column=>{text(x+6,y+17,column.title,8.5,true);x+=column.width;});
+  y+=h;
+ }
+ function addSection(section){
+  if(y+42>bottomLimit)beginPage(true);
+  text(margin,y+13,section.heading,11,true);y+=22;
+  drawColumnHeader(section.columns);
+  if(!section.rows.length){
+   const h=28;rect(margin,y,usableWidth,h,"0.99 0.98 0.96");text(margin+6,y+18,section.emptyText||"Aucune donnée enregistrée.",9,false);y+=h+9;return;
+  }
+  section.rows.forEach((row,rowIndex)=>{
+   const cells=row.map((value,index)=>{
+    const col=section.columns[index];const maxChars=Math.max(8,Math.floor((col.width-12)/5.0));return wrapPdfText(value,maxChars);
+   });
+   const maxLines=Math.max(...cells.map(cell=>cell.length));
+   const rowHeight=Math.max(24,maxLines*11+10);
+   if(y+rowHeight>bottomLimit){beginPage(true);text(margin,y+13,section.heading+" (suite)",11,true);y+=22;drawColumnHeader(section.columns);}
+   rect(margin,y,usableWidth,rowHeight,rowIndex%2===0?"0.99 0.98 0.96":"1 1 1");
+   let x=margin;
+   cells.forEach((cell,index)=>{
+    cell.forEach((value,lineIndex)=>text(x+6,y+16+lineIndex*11,value,8.5,false));
+    x+=section.columns[index].width;
+   });
+   y+=rowHeight;
+  });
+  y+=12;
+ }
+ beginPage(false);
+ metaLines.forEach(lineText=>{if(y+16>bottomLimit)beginPage(true);text(margin,y,lineText,9,false);y+=15;});
+ if(metaLines.length)y+=5;
+ sections.forEach(addSection);
+ text(margin,813,"Flems Center - L'elegance au coeur de chaque celebration.",7,false);
+ if(commands)pages.push(commands);
+ const bytes=makePdfBytes(pages);
+ const blob=new Blob([bytes],{type:"application/pdf"});
+ const url=URL.createObjectURL(blob);const link=document.createElement("a");
+ link.href=url;link.download=filename;document.body.appendChild(link);link.click();link.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+async function getPdfExportData(clientMode=false){
+ const coupleId=clientMode?currentClientCouple?.id:$("gCouple").value;
+ if(!coupleId)throw new Error("Choisis d'abord un couple dans la liste des invités.");
+ const couple=clientMode?currentClientCouple:couples.find(item=>item.id===coupleId);
+ if(!couple)throw new Error("Le couple sélectionné est introuvable. Actualise la page et réessaie.");
+ const [{data:guests,error:guestError},{data:options,error:optionsError}]=await Promise.all([
+  sb.from("guests").select("full_name,phone,rsvp,beverage_option_id").eq("couple_id",coupleId).order("created_at"),
+  sb.from("beverage_options").select("id,name,active").eq("couple_id",coupleId).eq("active",true).order("name")
+ ]);
+ if(guestError)throw new Error("Impossible de charger la liste des invités : "+guestError.message);
+ if(optionsError)throw new Error("Impossible de charger les boissons : "+optionsError.message);
+ const beverageMap=new Map((options||[]).map(option=>[option.id,option.name]));
+ return {couple,guests:guests||[],options:options||[],beverageMap};
+}
+async function exportGuestListPdf(clientMode=false){
+ try{
+  const {couple,guests,beverageMap}=await getPdfExportData(clientMode);
+  const rows=guests.map(guest=>[guest.full_name||"",guest.phone||"Non renseigné",guest.rsvp||"En attente",beverageMap.get(guest.beverage_option_id)||"Aucun choix"]);
+  buildReportPdf({
+   filename:"liste-invites-"+safeFilePart(couple.couple_name)+".pdf",
+   title:"LISTE DES INVITÉS",
+   couple,
+   metaLines:["Nombre total d'invités : "+guests.length,"La colonne Boisson choisie indique le choix enregistré pour chaque invité."],
+   sections:[{heading:"Liste des invités",columns:[{title:"Nom de l'invité",width:190},{title:"Téléphone",width:110},{title:"Réponse",width:85},{title:"Boisson choisie",width:130}],rows,emptyText:"Aucun invité n'est encore enregistré pour ce mariage."}]
+  });
+  say("appMsg","La liste des invités a été téléchargée en PDF.");
+ }catch(error){say("appMsg",error.message||"Le téléchargement du PDF a échoué.","error");}
+}
+async function exportDrinkSummaryPdf(clientMode=false){
+ try{
+  const {couple,guests,options,beverageMap}=await getPdfExportData(clientMode);
+  const counts=new Map(options.map(option=>[option.id,0]));let selected=0;
+  guests.forEach(guest=>{if(guest.beverage_option_id&&counts.has(guest.beverage_option_id)){counts.set(guest.beverage_option_id,counts.get(guest.beverage_option_id)+1);selected++;}});
+  const summaryRows=options.map(option=>[option.name,String(counts.get(option.id)||0)]);
+  const detailRows=guests.map(guest=>[guest.full_name||"",guest.rsvp||"En attente",beverageMap.get(guest.beverage_option_id)||"Aucun choix"]);
+  buildReportPdf({
+   filename:"recapitulatif-boissons-"+safeFilePart(couple.couple_name)+".pdf",
+   title:"RÉCAPITULATIF DES BOISSONS",
+   couple,
+   metaLines:["Invités inscrits : "+guests.length,"Choix enregistrés : "+selected,"Invités sans choix : "+Math.max(guests.length-selected,0)],
+   sections:[
+    {heading:"Quantités à prévoir par boisson",columns:[{title:"Boisson proposée",width:365},{title:"Nombre de choix",width:150}],rows:summaryRows,emptyText:"Aucune boisson n'est proposée pour ce mariage."},
+    {heading:"Détail des choix par invité",columns:[{title:"Nom de l'invité",width:205},{title:"Réponse",width:105},{title:"Boisson choisie",width:205}],rows:detailRows,emptyText:"Aucun invité n'est encore enregistré pour ce mariage."}
+   ]
+  });
+  say("appMsg","Le récapitulatif des boissons a été téléchargé en PDF.");
+ }catch(error){say("appMsg",error.message||"Le téléchargement du PDF a échoué.","error");}
+}
+function listMessage(target,text){$(target).innerHTML="";const p=document.createElement("p");p.className="empty";p.textContent=text;$(target).appendChild(p);}
+function actionButton(text,kind,handler){const b=document.createElement("button");b.type="button";b.textContent=text;b.className=kind||"edit";b.addEventListener("click",handler);return b;}
+function openEditor(title,fields,onSave){
+  $("editTitle").textContent=title;
+  const host=$("editFields");host.innerHTML="";
+  fields.forEach(field=>{
+    const label=document.createElement("label");label.textContent=field.label;label.htmlFor="edit_"+field.key;host.appendChild(label);
+    let control;
+    if(field.options){
+      control=document.createElement("select");
+      field.options.forEach(option=>opt(control,option.value,option.label));
+    }else{
+      control=document.createElement("input");control.type=field.type||"text";
+      if(field.min!==undefined)control.min=String(field.min);
+      if(field.step!==undefined)control.step=String(field.step);
+      if(field.placeholder)control.placeholder=field.placeholder;
+    }
+    control.id="edit_"+field.key;control.value=field.value??"";
+    if(field.required)control.required=true;
+    host.appendChild(control);
+  });
+  pendingEditorSave=onSave;
+  $("editDialog").showModal();
+  const first=host.querySelector("input,select");if(first)first.focus();
+}
+$("cancelEdit").addEventListener("click",()=>{$("editDialog").close();pendingEditorSave=null;});
+$("editForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  if(!pendingEditorSave)return;
+  const values={};
+  $("editFields").querySelectorAll("input,select").forEach(control=>{values[control.id.slice(5)]=control.value;});
+  const save=$("saveEdit");save.disabled=true;save.textContent="Enregistrement…";
+  try{
+    const result=await pendingEditorSave(values);
+    if(result!==false){$("editDialog").close();pendingEditorSave=null;}
+  }catch(error){say("appMsg","Erreur : "+(error?.message||error),"error");}
+  finally{save.disabled=false;save.textContent="Enregistrer";}
+});
+async function start(){
+ if(!configured){page("auth");say("authMsg","Le fichier doit être configuré avec ton Project URL et ta Publishable key avant la connexion.","error");$("login").disabled=true;return;}
+ if(!window.supabase?.createClient){page("auth");say("authMsg","La bibliothèque Supabase ne s'est pas chargée. Vérifie ta connexion Internet.","error");return;}
+ sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ const publicToken=new URLSearchParams(location.search).get("livre");
+ if(publicToken){publicGuestbookToken=publicToken;page("publicGuestbookView");await loadPublicGuestbook(publicToken);return;}
+ sb.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){page("auth");$("loginForm").classList.add("hidden");$("newPassForm").classList.remove("hidden");say("authMsg","Choisis maintenant ton nouveau mot de passe.");}else if(event==="SIGNED_OUT"){page("auth");$("loginForm").classList.remove("hidden");$("newPassForm").classList.add("hidden");}});
+ const {data,error}=await sb.auth.getSession();if(error){page("auth");say("authMsg",error.message,"error");return;}if(data.session)await enter(data.session.user);else page("auth");
+}
+async function login(){clear("authMsg");const email=$("email").value.trim(),password=$("password").value;if(!email||!password){say("authMsg","Saisis ton adresse e-mail et ton mot de passe.","error");return;}const {data,error}=await sb.auth.signInWithPassword({email,password});if(error){say("authMsg","Connexion impossible : "+error.message+". Tu peux utiliser le bouton de réinitialisation du mot de passe.","error");return;}await enter(data.user);}
+async function forgot(){const email=$("email").value.trim();if(!email){say("authMsg","Saisis d'abord ton adresse e-mail.","error");return;}const redirectTo=location.origin+location.pathname;const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});if(error)say("authMsg","Envoi impossible : "+error.message,"error");else say("authMsg","Un lien de réinitialisation a été envoyé. Vérifie ta boîte e-mail et les courriers indésirables.");}
+async function savePassword(){const password=$("newPass").value;if(password.length<8){say("authMsg","Le mot de passe doit contenir au moins 8 caractères.","error");return;}const {error}=await sb.auth.updateUser({password});if(error)say("authMsg",error.message,"error");else{say("authMsg","Mot de passe enregistré. Tu peux te connecter.");$("newPassForm").classList.add("hidden");$("loginForm").classList.remove("hidden");}}
+async function enter(u){user=u;page("loading");const {data:p,error}=await sb.from("profiles").select("role,full_name").eq("id",u.id).single();if(error){page("auth");say("authMsg","Profil non accessible : "+error.message,"error");return;}role=p.role;$("welcome").textContent="Bienvenue "+(p.full_name||u.email);$("roleText").textContent="Espace "+(role==="owner"?"administrateur":role==="employee"?"employé":"client");page("app");if(role==="owner"){view("owner");await loadOwner();}else if(role==="client"){view("client");await loadClient();}else if(role==="employee"){view("employee");await loadEmployee();}else{page("auth");say("authMsg","Rôle du compte non reconnu.","error");}}
+async function logout(){const {error}=await sb.auth.signOut();if(error)say("appMsg",error.message,"error");}
+function fillCoupleMenus(){["gCouple","bCouple","drinkCouple","tCouple","vCouple","designCouple"].forEach(id=>{const s=$(id),old=s.value;s.innerHTML="";opt(s,"","Choisir un couple");couples.forEach(c=>opt(s,c.id,c.couple_name));if(couples.some(c=>c.id===old))s.value=old;});}
+async function loadOwner(){clear("appMsg");const {data,error}=await sb.from("couples").select("id,couple_name,wedding_date,phone,email,venue,theme_color,guestbook_token").order("created_at",{ascending:false});if(error){say("appMsg","Chargement des couples impossible : "+error.message,"error");return;}couples=data||[];fillCoupleMenus();renderCouples();await Promise.all([loadGuests(),loadBudget(),loadTasks(),loadEvents(),loadDrinkOptions($("drinkCouple").value,"drinkOptions",false)]);if($("designCouple").value)await loadDesignPanel($("designCouple").value,"owner");}
+function renderCouples(){const z=$("couples");z.innerHTML="";if(!couples.length)listMessage("couples","Aucun couple enregistré.");couples.forEach(c=>{const d=document.createElement("div");d.className="item";const b=document.createElement("strong");b.textContent=c.couple_name;d.appendChild(b);const p=document.createElement("p");p.className="small";p.textContent=[c.wedding_date?"Mariage : "+c.wedding_date:"",c.phone,c.email,c.venue].filter(Boolean).join(" · ");d.appendChild(p);const actions=document.createElement("div");actions.className="actions";actions.appendChild(actionButton("Modifier","edit",()=>editCouple(c)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteCouple(c)));d.appendChild(actions);z.appendChild(d);});$("nCouples").textContent=couples.length;}
+function editCouple(c){openEditor("Modifier le couple",[
+  {key:"couple_name",label:"Nom du couple",value:c.couple_name,required:true},
+  {key:"wedding_date",label:"Date du mariage",type:"date",value:c.wedding_date||""},
+  {key:"phone",label:"Téléphone",type:"tel",value:c.phone||""},
+  {key:"email",label:"Adresse e-mail",type:"email",value:c.email||""},
+  {key:"venue",label:"Lieu du mariage",value:c.venue||""}
+],async v=>{const {error}=await sb.from("couples").update({couple_name:v.couple_name.trim(),wedding_date:v.wedding_date||null,phone:v.phone.trim()||null,email:v.email.trim()||null,venue:v.venue.trim()||null}).eq("id",c.id);if(error){say("appMsg","Modification du couple impossible : "+error.message,"error");return false;}say("appMsg","Couple modifié.");await loadOwner();return true;});}
+async function deleteCouple(c){if(!confirm("Supprimer « "+c.couple_name+" » ?\n\nCette action supprimera aussi ses invités, son budget, ses dépenses, ses tâches et ses rendez-vous. Elle est définitive."))return;const {error}=await sb.from("couples").delete().eq("id",c.id);if(error){say("appMsg","Suppression du couple impossible : "+error.message,"error");return;}say("appMsg","Couple et données associées supprimés.");await loadOwner();}
+async function addCouple(){const couple_name=$("cName").value.trim();if(!couple_name){say("appMsg","Saisis le nom du couple.","error");return;}const {error}=await sb.from("couples").insert({created_by:user.id,couple_name,wedding_date:$("cDate").value||null,phone:$("cPhone").value.trim()||null,email:$("cEmail").value.trim()||null,venue:$("cVenue").value.trim()||null});if(error){say("appMsg","Ajout impossible : "+error.message,"error");return;}["cName","cDate","cPhone","cEmail","cVenue"].forEach(id=>$(id).value="");say("appMsg","Couple ajouté dans la base de données.");await loadOwner();}
+async function attachDrinkOptions(guestRows,coupleId){
+ const {data:options,error}=await sb.from("beverage_options").select("id,name").eq("couple_id",coupleId).order("name");
+ if(error){say("appMsg","Chargement des boissons impossible : "+error.message,"error");return guestRows.map(g=>({...g,drink_options:[]}));}
+ return guestRows.map(g=>({...g,drink_options:options||[]}));
+}
+async function loadDrinkSummary(coupleId,targetId){
+ const host=$(targetId);
+ host.innerHTML="";
+ if(!coupleId){listMessage(targetId,"Choisis un couple pour afficher le récapitulatif.");return;}
+ const [{data:options,error:optionsError},{data:guests,error:guestsError}]=await Promise.all([
+  sb.from("beverage_options").select("id,name,active").eq("couple_id",coupleId).eq("active",true).order("name"),
+  sb.from("guests").select("id,beverage_option_id").eq("couple_id",coupleId)
+ ]);
+ if(optionsError||guestsError){
+  const message=optionsError?.message||guestsError?.message||"Erreur inconnue";
+  listMessage(targetId,"Récapitulatif indisponible : "+message);
+  return;
+ }
+ const guestRows=guests||[];
+ const beverageRows=options||[];
+ const counts=new Map(beverageRows.map(option=>[option.id,0]));
+ let selected=0;
+ guestRows.forEach(guest=>{
+  if(guest.beverage_option_id){
+   selected++;
+   if(counts.has(guest.beverage_option_id))counts.set(guest.beverage_option_id,counts.get(guest.beverage_option_id)+1);
+  }
+ });
+ const pending=Math.max(guestRows.length-selected,0);
+ const stats=document.createElement("div");stats.className="drink-summary-stats";
+ [[guestRows.length,"Invités"],[selected,"Choix enregistrés"],[pending,"Sans choix"]].forEach(([value,label])=>{
+  const card=document.createElement("div");card.className="drink-summary-stat";
+  const strong=document.createElement("strong");strong.textContent=String(value);
+  const caption=document.createElement("span");caption.textContent=label;
+  card.append(strong,caption);stats.appendChild(card);
+ });
+ host.appendChild(stats);
+ if(!beverageRows.length){
+  const p=document.createElement("p");p.className="small";p.textContent="Aucune boisson active n'est proposée pour ce mariage.";host.appendChild(p);return;
+ }
+ beverageRows.forEach(option=>{
+  const count=counts.get(option.id)||0;
+  const row=document.createElement("div");row.className="drink-summary-row";
+  const label=document.createElement("div");label.className="drink-summary-label";
+  const name=document.createElement("strong");name.textContent=option.name;
+  const number=document.createElement("span");number.textContent=count+" / "+guestRows.length+" invité(s)";
+  label.append(name,number);
+  const track=document.createElement("div");track.className="drink-summary-track";
+  track.setAttribute("role","progressbar");track.setAttribute("aria-valuemin","0");track.setAttribute("aria-valuemax",String(Math.max(guestRows.length,1)));track.setAttribute("aria-valuenow",String(count));track.setAttribute("aria-label",option.name+" : "+count+" choix");
+  const fill=document.createElement("div");fill.className="drink-summary-fill";fill.style.width=(guestRows.length?Math.min(100,count/guestRows.length*100):0)+"%";
+  track.appendChild(fill);row.append(label,track);host.appendChild(row);
+ });
+}
+async function loadGuests(){const id=$("gCouple").value,z=$("guests");z.innerHTML="";if(!id){listMessage("guests","Choisis un couple pour voir ses invités.");listMessage("drinkSummary","Choisis un couple pour afficher le récapitulatif.");$("nGuests").textContent="0";return;}const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,beverage_option_id").eq("couple_id",id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}$("nGuests").textContent=data.length;renderGuests(z,await attachDrinkOptions(data,id),true);await loadDrinkSummary(id,"drinkSummary");}
+function renderGuests(z,data,canManage,clientMode=false){
+ z.innerHTML="";
+ if(!data.length){const p=document.createElement("p");p.className="empty";p.textContent="Aucun invité enregistré.";z.appendChild(p);return;}
+ data.forEach(g=>{
+  const d=document.createElement("div");d.className="item";
+  const p=document.createElement("p");p.textContent=g.full_name+" — "+g.rsvp+(g.phone?" — "+g.phone:"");d.appendChild(p);
+  const drinkWrap=document.createElement("div");drinkWrap.className="guest-drink-list";
+  const status=document.createElement("p");status.className="drink-status";
+  const selectedOption=(g.drink_options||[]).find(o=>o.id===g.beverage_option_id);
+  status.textContent=selectedOption?"Boisson cochée : "+selectedOption.name:"Aucune boisson choisie pour le moment.";
+  drinkWrap.appendChild(status);
+  if(!(g.drink_options||[]).length){
+   const empty=document.createElement("p");empty.className="small";empty.textContent="Aucune boisson proposée. Ajoute d'abord les boissons dans la rubrique Boissons proposées.";drinkWrap.appendChild(empty);
+  }else{
+   const help=document.createElement("p");help.className="small";help.textContent="Coche une seule boisson pour cet invité. Le choix est enregistré automatiquement.";drinkWrap.appendChild(help);
+   const optionsHost=document.createElement("div");
+   g.drink_options.forEach(option=>{
+    const label=document.createElement("label");label.className="drink-choice";
+    const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.checked=g.beverage_option_id===option.id;checkbox.setAttribute("aria-label",option.name);
+    checkbox.addEventListener("change",async()=>{
+     if(!checkbox.checked){checkbox.checked=true;say("appMsg","Un seul choix est conservé par invité. Pour changer, coche simplement une autre boisson.");return;}
+     optionsHost.querySelectorAll('input[type="checkbox"]').forEach(control=>control.disabled=true);
+     const {data,error}=await sb.rpc("set_guest_beverage_choice",{p_guest_id:g.id,p_beverage_option_id:option.id});
+     const result=Array.isArray(data)?data[0]:data;
+     if(error||!result?.ok){say("appMsg","Enregistrement du choix impossible : "+(error?.message||result?.message||"Vérifie la connexion à Supabase."),"error");}
+     else{say("appMsg","Choix de boisson enregistré pour "+g.full_name+".");}
+     if(clientMode)await loadMyGuests();else await loadGuests();
+    });
+    const text=document.createElement("span");text.textContent=option.name;label.append(checkbox,text);optionsHost.appendChild(label);
+   });
+   drinkWrap.appendChild(optionsHost);
+  }
+  d.appendChild(drinkWrap);
+  if(canManage){
+   const actions=document.createElement("div");actions.className="actions";
+   actions.appendChild(actionButton("Modifier","edit",()=>editGuest(g,clientMode)));
+   actions.appendChild(actionButton("Supprimer","danger",()=>deleteGuest(g,clientMode)));
+   d.appendChild(actions);
+  }
+  z.appendChild(d);
+ });
+}
+function editGuest(g,clientMode=false){openEditor("Modifier un invité",[
+  {key:"full_name",label:"Nom de l'invité",value:g.full_name,required:true},
+  {key:"phone",label:"Téléphone",type:"tel",value:g.phone||""},
+  {key:"rsvp",label:"Réponse",value:g.rsvp||"En attente",options:[{value:"En attente",label:"En attente"},{value:"Présent",label:"Présent"},{value:"Absent",label:"Absent"}]}
+],async v=>{const {error}=await sb.from("guests").update({full_name:v.full_name.trim(),phone:v.phone.trim()||null,rsvp:v.rsvp}).eq("id",g.id);if(error){say("appMsg","Modification de l'invité impossible : "+error.message,"error");return false;}say("appMsg","Invité modifié.");if(clientMode)await loadMyGuests();else await loadGuests();return true;});}
+async function deleteGuest(g,clientMode=false){if(!confirm("Supprimer l'invité « "+g.full_name+" » ?"))return;const {error}=await sb.from("guests").delete().eq("id",g.id);if(error){say("appMsg","Suppression de l'invité impossible : "+error.message,"error");return;}say("appMsg","Invité supprimé.");if(clientMode)await loadMyGuests();else await loadGuests();}
+async function addGuest(){const couple_id=$("gCouple").value,full_name=$("gName").value.trim();if(!couple_id||!full_name){say("appMsg","Choisis un couple et saisis le nom de l'invité.","error");return;}const {error}=await sb.from("guests").insert({couple_id,full_name,phone:$("gPhone").value.trim()||null,rsvp:$("gRsvp").value});if(error){say("appMsg","Ajout invité impossible : "+error.message,"error");return;}$("gName").value="";$("gPhone").value="";say("appMsg","Invité enregistré.");await loadGuests();}
+async function loadDrinkOptions(coupleId,targetId,clientMode=false){
+ const z=$(targetId);z.innerHTML="";
+ if(!coupleId){listMessage(targetId,"Choisis un couple pour gérer les boissons proposées.");return;}
+ const {data,error}=await sb.from("beverage_options").select("id,name").eq("couple_id",coupleId).order("name");
+ if(error){listMessage(targetId,"Impossible de charger les boissons : "+error.message);say("appMsg","Boissons : "+error.message,"error");return;}
+ if(!data.length){listMessage(targetId,"Aucune boisson proposée pour le moment. Ajoute les choix souhaités par les mariés.");return;}
+ data.forEach(option=>{const row=document.createElement("div");row.className="item";const label=document.createElement("p");label.textContent=option.name;row.appendChild(label);row.appendChild(actionButton("Retirer cette boisson","danger",()=>deleteDrinkOption(option,coupleId,targetId,clientMode)));z.appendChild(row);});
+}
+async function addDrinkOption(clientMode=false){
+ const coupleId=clientMode?currentClientCouple?.id:$("drinkCouple").value;
+ const input=$(clientMode?"myDrinkName":"drinkName");const target=clientMode?"myDrinkOptions":"drinkOptions";
+ const name=input.value.trim();
+ if(!coupleId||!name){say("appMsg","Saisis le nom d'une boisson.","error");return;}
+ if(name.length>100){say("appMsg","Le nom de la boisson doit contenir 100 caractères maximum.","error");return;}
+ const {error}=await sb.from("beverage_options").insert({couple_id:coupleId,name});
+ if(error){say("appMsg","Ajout de la boisson impossible : "+error.message,"error");return;}
+ input.value="";say("appMsg","Boisson ajoutée aux choix proposés.");await loadDrinkOptions(coupleId,target,clientMode);if(clientMode)await loadMyGuests();else await loadGuests();
+}
+async function deleteDrinkOption(option,coupleId,targetId,clientMode){
+ if(!confirm("Retirer « "+option.name+" » des boissons proposées ? Les invités ayant déjà choisi cette boisson devront en sélectionner une autre."))return;
+ const {error}=await sb.from("beverage_options").delete().eq("id",option.id);
+ if(error){say("appMsg","Suppression de la boisson impossible : "+error.message,"error");return;}
+ say("appMsg","Boisson retirée.");await loadDrinkOptions(coupleId,targetId,clientMode);
+ if(clientMode)await loadMyGuests();else await loadGuests();
+}
+async function loadBudget(){const couple_id=$("bCouple").value,z=$("budget");z.innerHTML="";currentBudget=null;if(!couple_id){listMessage("budget","Choisis un couple pour voir son budget.");return;}const {data:b,error}=await sb.from("budgets").select("*").eq("couple_id",couple_id).maybeSingle();if(error){say("appMsg","Budget : "+error.message,"error");return;}if(!b){listMessage("budget","Aucun budget enregistré.");$("bAmount").value="";return;}currentBudget=b;$("bAmount").value=b.planned_amount;$("bCurrency").value=b.currency;const {data:x,error:ee}=await sb.from("expenses").select("id,description,amount").eq("budget_id",b.id);if(ee){say("appMsg","Dépenses : "+ee.message,"error");return;}const total=x.reduce((s,a)=>s+Number(a.amount),0),p=document.createElement("p");p.innerHTML="<strong>Budget prévu :</strong> "+cash(b.planned_amount,b.currency)+"<br><strong>Dépenses :</strong> "+cash(total,b.currency)+"<br><strong>Solde :</strong> "+cash(Number(b.planned_amount)-total,b.currency);z.appendChild(p);const budgetActions=document.createElement("div");budgetActions.className="actions";budgetActions.appendChild(actionButton("Modifier le budget","edit",()=>editBudget(b)));budgetActions.appendChild(actionButton("Supprimer le budget","danger",()=>deleteBudget(b)));z.appendChild(budgetActions);x.forEach(a=>{const d=document.createElement("div");d.className="item";const t=document.createElement("p");t.textContent=a.description+" : "+cash(a.amount,b.currency);d.appendChild(t);const actions=document.createElement("div");actions.className="actions";actions.appendChild(actionButton("Modifier","edit",()=>editExpense(a,b)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteExpense(a)));d.appendChild(actions);z.appendChild(d);});}
+function editBudget(b){openEditor("Modifier le budget",[
+  {key:"planned_amount",label:"Budget prévu",type:"number",min:0,step:"0.01",value:b.planned_amount,required:true},
+  {key:"currency",label:"Devise",value:b.currency,options:[{value:"USD",label:"Dollar américain (USD)"},{value:"CDF",label:"Franc congolais (CDF)"}]}
+],async v=>{const amount=Number(v.planned_amount);if(!Number.isFinite(amount)||amount<0){say("appMsg","Saisis un montant valide.","error");return false;}const {error}=await sb.from("budgets").update({planned_amount:amount,currency:v.currency}).eq("id",b.id);if(error){say("appMsg","Modification du budget impossible : "+error.message,"error");return false;}say("appMsg","Budget modifié.");await loadBudget();return true;});}
+async function deleteBudget(b){if(!confirm("Supprimer le budget de ce couple ?\n\nToutes les dépenses associées seront également supprimées. Cette action est définitive."))return;const {error}=await sb.from("budgets").delete().eq("id",b.id);if(error){say("appMsg","Suppression du budget impossible : "+error.message,"error");return;}say("appMsg","Budget et dépenses associées supprimés.");await loadBudget();}
+function editExpense(a,b){openEditor("Modifier une dépense",[
+  {key:"description",label:"Nom de la dépense",value:a.description,required:true},
+  {key:"amount",label:"Montant ("+b.currency+")",type:"number",min:0.01,step:"0.01",value:a.amount,required:true}
+],async v=>{const amount=Number(v.amount);if(!Number.isFinite(amount)||amount<=0){say("appMsg","Saisis un montant supérieur à zéro.","error");return false;}const {error}=await sb.from("expenses").update({description:v.description.trim(),amount}).eq("id",a.id);if(error){say("appMsg","Modification de la dépense impossible : "+error.message,"error");return false;}say("appMsg","Dépense modifiée.");await loadBudget();return true;});}
+async function deleteExpense(a){if(!confirm("Supprimer la dépense « "+a.description+" » ?"))return;const {error}=await sb.from("expenses").delete().eq("id",a.id);if(error){say("appMsg","Suppression de la dépense impossible : "+error.message,"error");return;}say("appMsg","Dépense supprimée.");await loadBudget();}
+async function saveBudget(){const couple_id=$("bCouple").value,planned_amount=Number($("bAmount").value);if(!couple_id||!Number.isFinite(planned_amount)||planned_amount<0){say("appMsg","Choisis un couple et un budget valide.","error");return;}const {error}=await sb.from("budgets").upsert({couple_id,planned_amount,currency:$("bCurrency").value},{onConflict:"couple_id"});if(error){say("appMsg","Budget impossible : "+error.message,"error");return;}say("appMsg","Budget enregistré.");await loadBudget();}
+async function addExpense(){const description=$("eName").value.trim(),amount=Number($("eAmount").value);if(!currentBudget||!description||!Number.isFinite(amount)||amount<=0){say("appMsg","Enregistre d'abord un budget puis saisis une dépense valide.","error");return;}const {error}=await sb.from("expenses").insert({budget_id:currentBudget.id,description,amount});if(error){say("appMsg","Dépense impossible : "+error.message,"error");return;}$("eName").value="";$("eAmount").value="";await loadBudget();}
+async function loadTasks(){const {data,error}=await sb.from("tasks").select("id,couple_id,title,due_date,is_done").order("due_date");if(error){say("appMsg","Tâches : "+error.message,"error");return;}$("nTasks").textContent=data.filter(t=>!t.is_done).length;const z=$("tasks");z.innerHTML="";if(!data.length){listMessage("tasks","Aucune tâche enregistrée.");return;}data.forEach(t=>{const d=document.createElement("div");d.className="item";const p=document.createElement("p");p.textContent=(t.is_done?"✓ ":"○ ")+t.title+" — "+nameOf(t.couple_id)+(t.due_date?" — Échéance : "+t.due_date:"");if(t.is_done)p.style.textDecoration="line-through";d.appendChild(p);const actions=document.createElement("div");actions.className="actions";actions.appendChild(actionButton(t.is_done?"Réouvrir":"Terminer","",async()=>{const {error}=await sb.from("tasks").update({is_done:!t.is_done}).eq("id",t.id);if(error)say("appMsg",error.message,"error");else await loadTasks();}));actions.appendChild(actionButton("Modifier","edit",()=>editTask(t)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteTask(t)));d.appendChild(actions);z.appendChild(d);});}
+function editTask(t){openEditor("Modifier une tâche",[
+  {key:"title",label:"Nom de la tâche",value:t.title,required:true},
+  {key:"due_date",label:"Date limite",type:"date",value:t.due_date||""}
+],async v=>{const {error}=await sb.from("tasks").update({title:v.title.trim(),due_date:v.due_date||null}).eq("id",t.id);if(error){say("appMsg","Modification de la tâche impossible : "+error.message,"error");return false;}say("appMsg","Tâche modifiée.");await loadTasks();return true;});}
+async function deleteTask(t){if(!confirm("Supprimer la tâche « "+t.title+" » ?"))return;const {error}=await sb.from("tasks").delete().eq("id",t.id);if(error){say("appMsg","Suppression de la tâche impossible : "+error.message,"error");return;}say("appMsg","Tâche supprimée.");await loadTasks();}
+async function addTask(){const couple_id=$("tCouple").value,title=$("tTitle").value.trim();if(!couple_id||!title){say("appMsg","Choisis un couple et saisis la tâche.","error");return;}const {error}=await sb.from("tasks").insert({couple_id,title,due_date:$("tDate").value||null});if(error){say("appMsg","Tâche impossible : "+error.message,"error");return;}$("tTitle").value="";$("tDate").value="";say("appMsg","Tâche enregistrée.");await loadTasks();}
+async function loadEvents(){const {data,error}=await sb.from("calendar_events").select("id,couple_id,title,event_date,event_time,location,reminder").order("event_date");if(error){say("appMsg","Calendrier : "+error.message,"error");return;}$("nEvents").textContent=data.length;const z=$("events");z.innerHTML="";if(!data.length){listMessage("events","Aucun événement enregistré.");return;}data.forEach(e=>{const d=document.createElement("div");d.className="item";const p=document.createElement("p");p.textContent=e.title+" — "+nameOf(e.couple_id)+" — "+e.event_date+(e.event_time?" à "+e.event_time:"")+(e.location?" — "+e.location:"")+" — Rappel : "+e.reminder;d.appendChild(p);const actions=document.createElement("div");actions.className="actions";actions.appendChild(actionButton("Modifier","edit",()=>editEvent(e)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteEvent(e)));d.appendChild(actions);z.appendChild(d);});}
+function editEvent(e){openEditor("Modifier un événement",[
+  {key:"title",label:"Type d'événement",value:e.title,required:true},
+  {key:"event_date",label:"Date",type:"date",value:e.event_date,required:true},
+  {key:"event_time",label:"Heure",type:"time",value:e.event_time||""},
+  {key:"location",label:"Lieu",value:e.location||""},
+  {key:"reminder",label:"Rappel",value:e.reminder,options:[{value:"La veille",label:"La veille"},{value:"Le jour même",label:"Le jour même"},{value:"Aucun",label:"Aucun"}]}
+],async v=>{const {error}=await sb.from("calendar_events").update({title:v.title.trim(),event_date:v.event_date,event_time:v.event_time||null,location:v.location.trim()||null,reminder:v.reminder}).eq("id",e.id);if(error){say("appMsg","Modification de l'événement impossible : "+error.message,"error");return false;}say("appMsg","Événement modifié.");await loadEvents();return true;});}
+async function deleteEvent(e){if(!confirm("Supprimer le rendez-vous « "+e.title+" » ?"))return;const {error}=await sb.from("calendar_events").delete().eq("id",e.id);if(error){say("appMsg","Suppression de l'événement impossible : "+error.message,"error");return;}say("appMsg","Événement supprimé.");await loadEvents();}
+async function addEvent(){const couple_id=$("vCouple").value,title=$("vTitle").value.trim(),event_date=$("vDate").value;if(!couple_id||!title||!event_date){say("appMsg","Choisis un couple, un type d'événement et une date.","error");return;}const {error}=await sb.from("calendar_events").insert({couple_id,title,event_date,event_time:$("vTime").value||null,location:$("vPlace").value.trim()||null,reminder:$("vReminder").value});if(error){say("appMsg","Événement impossible : "+error.message,"error");return;}["vTitle","vDate","vTime","vPlace"].forEach(id=>$(id).value="");say("appMsg","Événement enregistré.");await loadEvents();}
+async function loadClient(){const {data,error}=await sb.from("couples").select("id,couple_name,wedding_date,venue,theme_color,guestbook_token");if(error){say("appMsg","Ton espace n'a pas pu être chargé : "+error.message,"error");return;}if(!data.length){$("myCouple").textContent="Aucun mariage n'est associé à ce compte. Contacte Flems Center.";return;}currentClientCouple=data[0];$("myCouple").textContent=currentClientCouple.couple_name+" · Date : "+(currentClientCouple.wedding_date||"à définir")+" · Lieu : "+(currentClientCouple.venue||"à définir");applyTheme(currentClientCouple.theme_color);await Promise.all([loadMyGuests(),loadMyBudget(),loadMyEvents(),loadDrinkOptions(currentClientCouple.id,"myDrinkOptions",true),loadDesignPanel(currentClientCouple.id,"client")]);}
+async function loadMyGuests(){const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,beverage_option_id").eq("couple_id",currentClientCouple.id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}renderGuests($("myGuests"),await attachDrinkOptions(data,currentClientCouple.id),true,true);await loadDrinkSummary(currentClientCouple.id,"myDrinkSummary");}
+async function addMyGuest(){const full_name=$("myGuestName").value.trim();if(!full_name){say("appMsg","Saisis le nom de l'invité.","error");return;}const {error}=await sb.from("guests").insert({couple_id:currentClientCouple.id,full_name,phone:$("myGuestPhone").value.trim()||null,rsvp:$("myGuestRsvp").value});if(error){say("appMsg","Ajout impossible : "+error.message,"error");return;}$("myGuestName").value="";$("myGuestPhone").value="";await loadMyGuests();}
+async function loadMyBudget(){const z=$("myBudget");z.innerHTML="";const {data:b,error}=await sb.from("budgets").select("*").eq("couple_id",currentClientCouple.id).maybeSingle();if(error){z.textContent=error.message;return;}if(!b){z.textContent="Le budget n'a pas encore été communiqué.";return;}const {data:x,error:ee}=await sb.from("expenses").select("amount").eq("budget_id",b.id);if(ee){z.textContent=ee.message;return;}const total=x.reduce((s,a)=>s+Number(a.amount),0);z.textContent="Budget : "+cash(b.planned_amount,b.currency)+" · Dépenses : "+cash(total,b.currency)+" · Solde : "+cash(Number(b.planned_amount)-total,b.currency);}
+async function loadMyEvents(){const z=$("myEvents");z.innerHTML="";const {data,error}=await sb.from("calendar_events").select("title,event_date,event_time,location,reminder").eq("couple_id",currentClientCouple.id).order("event_date");if(error){z.textContent=error.message;return;}if(!data.length){listMessage("myEvents","Aucun événement communiqué.");return;}data.forEach(e=>{const p=document.createElement("p");p.textContent=e.title+" — "+e.event_date+(e.event_time?" à "+e.event_time:"")+(e.location?" — "+e.location:"")+" — Rappel : "+e.reminder;z.appendChild(p);});}
+async function loadEmployee(){const {data,error}=await sb.from("tasks").select("id,title,due_date,is_done,couple_id").eq("assigned_to",user.id).order("due_date");if(error){say("appMsg","Tâches : "+error.message,"error");return;}const ids=[...new Set(data.map(t=>t.couple_id))];let names={};if(ids.length){const {data:c}=await sb.from("couples").select("id,couple_name").in("id",ids);(c||[]).forEach(x=>names[x.id]=x.couple_name);}const z=$("myTasks");z.innerHTML="";if(!data.length){listMessage("myTasks","Aucune tâche attribuée pour le moment.");return;}data.forEach(t=>{const d=document.createElement("div");d.className="item";const p=document.createElement("p");p.textContent=(t.is_done?"✓ ":"○ ")+t.title+" — "+(names[t.couple_id]||"Mariage")+(t.due_date?" — Échéance : "+t.due_date:"");d.appendChild(p);const b=document.createElement("button");b.textContent=t.is_done?"Réouvrir":"Terminer";b.onclick=async()=>{const {error}=await sb.from("tasks").update({is_done:!t.is_done}).eq("id",t.id);if(error)say("appMsg",error.message,"error");else await loadEmployee();};d.appendChild(b);z.appendChild(d);});}
+
+// ===== Personnalisation, livre d'or public et assistant vocal =====
+const FLEMS_THEMES=[
+ {name:"Champagne",color:"#B58A45",deep:"#49382D",soft:"#F4EAD9"},
+ {name:"Bordeaux",color:"#963D50",deep:"#54202D",soft:"#F7E9EC"},
+ {name:"Rose poudré",color:"#C77F91",deep:"#70414F",soft:"#F9EDF0"},
+ {name:"Bleu nuit",color:"#426887",deep:"#243D55",soft:"#EAF0F6"},
+ {name:"Vert sauge",color:"#78927B",deep:"#3E5943",soft:"#EDF3ED"},
+ {name:"Lavande",color:"#9078A8",deep:"#514365",soft:"#F1EDF6"},
+ {name:"Terracotta",color:"#C16F50",deep:"#6D3C2B",soft:"#F8EDE8"},
+ {name:"Noir chic",color:"#625A55",deep:"#302C29",soft:"#F0EEEC"}
+];
+function applyTheme(color){const theme=FLEMS_THEMES.find(item=>item.color.toLowerCase()===(color||"").toLowerCase())||FLEMS_THEMES[0];document.documentElement.style.setProperty("--gold",theme.color);document.documentElement.style.setProperty("--theme-deep",theme.deep);document.documentElement.style.setProperty("--theme-soft",theme.soft);document.querySelector('meta[name="theme-color"]')?.setAttribute("content",theme.color);}
+function renderThemePalette(targetId,coupleId,currentColor){const host=$(targetId);if(!host)return;host.innerHTML="";FLEMS_THEMES.forEach(theme=>{const b=document.createElement("button");b.type="button";b.className="theme-swatch";b.style.background=theme.color;b.title=theme.name;b.setAttribute("aria-label","Choisir la couleur "+theme.name);b.setAttribute("aria-pressed",theme.color.toLowerCase()===(currentColor||FLEMS_THEMES[0].color).toLowerCase()?"true":"false");b.addEventListener("click",()=>saveTheme(coupleId,theme,targetId));host.appendChild(b);});}
+async function saveTheme(coupleId,theme,targetId){const {data,error}=await sb.rpc("save_flems_couple_theme",{p_couple_id:coupleId,p_theme_color:theme.color});const result=Array.isArray(data)?data[0]:data;if(error||!result?.ok){say("appMsg","Impossible d'enregistrer la couleur : "+(error?.message||result?.message||"Vérifie la migration SQL."),"error");return;}const item=couples.find(c=>c.id===coupleId);if(item)item.theme_color=theme.color;if(currentClientCouple?.id===coupleId)currentClientCouple.theme_color=theme.color;applyTheme(theme.color);renderThemePalette(targetId,coupleId,theme.color);say("appMsg","Couleur du mariage enregistrée : "+theme.name+".");}
+function guestbookLinkFor(couple){if(!couple?.guestbook_token)return "";return location.origin+location.pathname+"?livre="+encodeURIComponent(couple.guestbook_token);}
+async function copyGuestbookLink(couple,targetId){const link=guestbookLinkFor(couple);if(!link){say("appMsg","Le lien du livre d’or n’est pas encore disponible. Exécute d’abord la mise à jour SQL.","error");return;}try{await navigator.clipboard.writeText(link);$(targetId).textContent="Lien copié : "+link;say("appMsg","Lien commun du livre d’or copié. Tu peux l’envoyer à tous les invités.");}catch{window.prompt("Copie ce lien et partage-le avec tes invités :",link);}}
+async function loadManagerMusic(coupleId,mode){const host=$(mode==="owner"?"ownerMusicStatus":"clientMusicInfo");if(!host)return;let data=null,error=null;if(mode==="owner"){const result=await sb.from("guestbook_music").select("id,storage_path,public_url,title,mime_type,updated_at").eq("couple_id",coupleId).maybeSingle();data=result.data;error=result.error;}else{const result=await sb.rpc("get_public_flems_guestbook",{p_token:currentClientCouple?.guestbook_token});data=result.data?.music||null;error=result.error;}if(error){host.textContent="Musique non disponible : "+error.message;return;}if(!data){host.textContent=mode==="owner"?"Aucune musique définie pour ce mariage.":"Aucune musique n’a encore été sélectionnée par Flems Center.";return;}host.innerHTML="";const label=document.createElement("p");label.textContent="Musique sélectionnée : "+data.title;host.appendChild(label);if(mode==="owner"){const audio=document.createElement("audio");audio.controls=true;audio.preload="none";audio.src=data.public_url;audio.style.width="100%";host.appendChild(audio);host.appendChild(actionButton("Supprimer la musique","danger",()=>deleteGuestbookMusic(coupleId)));}else{const note=document.createElement("span");note.textContent="La musique choisie par l’administrateur sera proposée aux invités dans le livre d’or.";host.appendChild(note);}}
+async function uploadGuestbookMusic(){const couple=couples.find(c=>c.id===$("designCouple").value);const input=$("ownerMusicUpload");const file=input?.files?.[0];if(!couple||!file)return;const ext=(file.name.split(".").pop()||"").toLowerCase();const mimeByExt={mp3:"audio/mpeg",m4a:"audio/mp4",mp4:"audio/mp4",aac:"audio/aac",ogg:"audio/ogg",wav:"audio/wav",webm:"audio/webm"};const allowed=["audio/mpeg","audio/mp4","audio/aac","audio/ogg","audio/wav","audio/x-wav","audio/webm"];const mime=allowed.includes(file.type)?file.type:(mimeByExt[ext]||"");if(!allowed.includes(mime)){say("appMsg","Format audio refusé. Utilise de préférence un fichier MP3.","error");input.value="";return;}if(file.size>15*1024*1024){say("appMsg","Le fichier audio dépasse 15 Mo. Choisis un morceau plus léger.","error");input.value="";return;}const path=couple.id+"/"+crypto.randomUUID()+"."+(ext||"mp3");const {error:uploadError}=await sb.storage.from("wedding-audio").upload(path,file,{cacheControl:"3600",upsert:false,contentType:mime});if(uploadError){say("appMsg","Téléversement audio impossible : "+uploadError.message,"error");input.value="";return;}const publicUrl=sb.storage.from("wedding-audio").getPublicUrl(path).data.publicUrl;const {data:old}=await sb.from("guestbook_music").select("storage_path").eq("couple_id",couple.id).maybeSingle();const {error:saveError}=await sb.from("guestbook_music").upsert({couple_id:couple.id,storage_path:path,public_url:publicUrl,title:file.name,mime_type:mime,updated_at:new Date().toISOString()},{onConflict:"couple_id"});if(saveError){await sb.storage.from("wedding-audio").remove([path]);say("appMsg","Le fichier a été envoyé mais sa fiche n’a pas pu être enregistrée : "+saveError.message,"error");input.value="";return;}if(old?.storage_path)await sb.storage.from("wedding-audio").remove([old.storage_path]);input.value="";say("appMsg","Musique ajoutée au livre d’or. Les invités pourront appuyer sur Lecture.");await loadManagerMusic(couple.id,"owner");}
+async function deleteGuestbookMusic(coupleId){if(!confirm("Retirer la musique de la galerie de ce mariage ?"))return;const {data:old,error:readError}=await sb.from("guestbook_music").select("id,storage_path").eq("couple_id",coupleId).maybeSingle();if(readError){say("appMsg","Lecture de la configuration audio impossible : "+readError.message,"error");return;}if(!old)return;const {error:rowError}=await sb.from("guestbook_music").delete().eq("id",old.id);if(rowError){say("appMsg","Suppression de la musique impossible : "+rowError.message,"error");return;}const {error:storageError}=await sb.storage.from("wedding-audio").remove([old.storage_path]);if(storageError)say("appMsg","La musique a été retirée de la galerie, mais le fichier audio n’a pas pu être supprimé du stockage : "+storageError.message,"error");else say("appMsg","Musique retirée de la galerie.");await loadManagerMusic(coupleId,"owner");}
+async function loadDesignPanel(coupleId,mode){const isOwner=mode==="owner",couple=isOwner?couples.find(c=>c.id===coupleId):currentClientCouple;if(!coupleId||!couple)return;applyTheme(couple.theme_color);const paletteId=isOwner?"ownerThemePalette":"clientThemePalette";renderThemePalette(paletteId,coupleId,couple.theme_color);const linkId=isOwner?"ownerGuestbookLink":"clientGuestbookLink";$(linkId).textContent=guestbookLinkFor(couple)||"Lien disponible après la mise à jour SQL.";const {data:photos,error:photoError}=await sb.from("guestbook_photos").select("id,storage_path,public_url,caption,created_at").eq("couple_id",coupleId).order("created_at",{ascending:false});if(photoError){say("appMsg","Photos du livre d’or : "+photoError.message,"error");}renderManagerPhotos(isOwner?"ownerGallery":"clientGallery",photos||[],coupleId);await loadManagerGuestbookMessages(coupleId,isOwner?"ownerGuestbookMessages":"clientGuestbookMessages");await loadManagerMusic(coupleId,mode);}
+function renderManagerPhotos(targetId,photos,coupleId){const host=$(targetId);if(!host)return;host.innerHTML="";if(!photos.length){const p=document.createElement("p");p.className="small";p.textContent="Aucune photo ajoutée pour le moment.";host.appendChild(p);return;}photos.forEach(photo=>{const card=document.createElement("div");card.className="photo-card";const img=document.createElement("img");img.src=photo.public_url;img.alt=photo.caption||"Photo des mariés";img.loading="lazy";card.appendChild(img);const cap=document.createElement("p");cap.className="small";cap.textContent=photo.caption||"Photo des mariés";card.appendChild(cap);card.appendChild(actionButton("Supprimer la photo","danger",()=>deleteCouplePhoto(photo,coupleId,targetId)));host.appendChild(card);});}
+async function uploadCouplePhotos(inputId,mode){const couple=mode==="owner"?couples.find(c=>c.id===$("designCouple").value):currentClientCouple;if(!couple){say("appMsg","Choisis d’abord un couple.","error");return;}const input=$(inputId);const files=Array.from(input.files||[]);if(!files.length)return;for(const file of files){if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("appMsg","Format refusé pour "+file.name+". Utilise JPG, PNG ou WEBP.","error");continue;}if(file.size>5*1024*1024){say("appMsg",file.name+" dépasse 5 Mo.","error");continue;}const ext=file.type==="image/jpeg"?"jpg":file.type.split("/")[1];const path=couple.id+"/"+crypto.randomUUID()+"."+ext;const {error:uploadError}=await sb.storage.from("wedding-gallery").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});if(uploadError){say("appMsg","Téléversement impossible : "+uploadError.message,"error");continue;}const publicUrl=sb.storage.from("wedding-gallery").getPublicUrl(path).data.publicUrl;const {error:rowError}=await sb.from("guestbook_photos").insert({couple_id:couple.id,storage_path:path,public_url:publicUrl,caption:file.name.replace(/\.[^.]+$/," ") .trim()});if(rowError){await sb.storage.from("wedding-gallery").remove([path]);say("appMsg","Photo envoyée mais inscription impossible : "+rowError.message,"error");continue;}say("appMsg","Photo ajoutée au livre d’or : "+file.name+".");}input.value="";await loadDesignPanel(couple.id,mode);}
+async function deleteCouplePhoto(photo,coupleId,targetId){if(!confirm("Supprimer cette photo du livre d’or ?"))return;const {error:storageError}=await sb.storage.from("wedding-gallery").remove([photo.storage_path]);if(storageError){say("appMsg","Suppression du fichier impossible : "+storageError.message,"error");return;}const {error}=await sb.from("guestbook_photos").delete().eq("id",photo.id);if(error){say("appMsg","Photo retirée du stockage, mais la fiche n’a pas pu être supprimée : "+error.message,"error");return;}say("appMsg","Photo supprimée.");const mode=targetId==="ownerGallery"?"owner":"client";await loadDesignPanel(coupleId,mode);}
+async function loadManagerGuestbookMessages(coupleId,targetId){const host=$(targetId);if(!host)return;host.innerHTML="";const {data,error}=await sb.from("guestbook_messages").select("id,guest_name,message,approved,created_at").eq("couple_id",coupleId).order("created_at",{ascending:false}).limit(100);if(error){listMessage(targetId,"Messages indisponibles : "+error.message);return;}if(!data?.length){listMessage(targetId,"Aucun message reçu pour le moment.");return;}data.forEach(item=>{const card=document.createElement("div");card.className="item";const title=document.createElement("strong");title.textContent=item.guest_name+" · "+(item.approved?"Publié":"En attente de validation");card.appendChild(title);const msg=document.createElement("p");msg.className="guestbook-message-text";msg.textContent=item.message;card.appendChild(msg);const actions=document.createElement("div");actions.className="actions";if(!item.approved)actions.appendChild(actionButton("Publier dans le livre d’or","",()=>moderateGuestbookMessage(item,true,coupleId,targetId)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteGuestbookMessage(item,coupleId,targetId)));card.appendChild(actions);host.appendChild(card);});}
+async function moderateGuestbookMessage(item,approved,coupleId,targetId){const {error}=await sb.from("guestbook_messages").update({approved}).eq("id",item.id);if(error){say("appMsg","Validation impossible : "+error.message,"error");return;}say("appMsg","Message publié dans le livre d’or.");await loadManagerGuestbookMessages(coupleId,targetId);}
+async function deleteGuestbookMessage(item,coupleId,targetId){if(!confirm("Supprimer le message de "+item.guest_name+" ?"))return;const {error}=await sb.from("guestbook_messages").delete().eq("id",item.id);if(error){say("appMsg","Suppression impossible : "+error.message,"error");return;}say("appMsg","Message supprimé.");await loadManagerGuestbookMessages(coupleId,targetId);}
+async function loadPublicGuestbook(token){const {data,error}=await sb.rpc("get_public_flems_guestbook",{p_token:token});if(error||!data?.ok){$("publicCoupleName").textContent="Livre d’or indisponible";say("publicGuestbookMsg",error?.message||data?.message||"Lien invalide ou expiré.","error");return;}const couple=data.couple||{};$("publicCoupleName").textContent="Le mariage de "+(couple.couple_name||"nos mariés");$("publicCoupleMeta").textContent=[couple.wedding_date?"Date : "+dateForPdf(couple.wedding_date):"",couple.venue?"Lieu : "+couple.venue:""].filter(Boolean).join(" · ");applyTheme(couple.theme_color);const music=data.music||null;const musicSection=$("publicGuestbookMusicSection"),audio=$("publicGuestbookAudio");if(music?.public_url){$("publicGuestbookMusicTitle").textContent=music.title||"Musique des mariés";audio.src=music.public_url;audio.load();musicSection.classList.remove("hidden");}else{audio.pause();audio.removeAttribute("src");audio.load();musicSection.classList.add("hidden");}const gallery=$("publicPhotoGallery");gallery.innerHTML="";(data.photos||[]).forEach(photo=>{const img=document.createElement("img");img.src=photo.public_url;img.alt=photo.caption||"Photo des mariés";img.loading="lazy";gallery.appendChild(img);});if(!(data.photos||[]).length)listMessage("publicPhotoGallery","Les photos des mariés seront bientôt disponibles.");const messages=$("publicGuestbookMessages");messages.innerHTML="";if(!(data.messages||[]).length){listMessage("publicGuestbookMessages","Soyez les premiers à laisser un mot de félicitations !");}else{data.messages.forEach(item=>{const card=document.createElement("div");card.className="public-message";const author=document.createElement("strong");author.textContent=item.guest_name;const body=document.createElement("p");body.className="guestbook-message-text";body.textContent=item.message;const date=document.createElement("span");date.className="small";date.textContent=new Date(item.created_at).toLocaleDateString("fr-FR");card.append(author,body,date);messages.appendChild(card);});}}
+async function submitPublicGuestbookMessage(event){event.preventDefault();const guestName=$("publicGuestName").value.trim(),message=$("publicGuestMessage").value.trim();if(!guestName||message.length<3){say("publicGuestbookMsg","Écris ton nom et un message d’au moins 3 caractères.","error");return;}const button=$("publicGuestbookSubmit");button.disabled=true;button.textContent="Envoi…";try{const {data,error}=await sb.rpc("submit_public_flems_guestbook_message",{p_token:publicGuestbookToken,p_guest_name:guestName,p_message:message});const result=Array.isArray(data)?data[0]:data;if(error||!result?.ok){say("publicGuestbookMsg",error?.message||result?.message||"Envoi impossible. Réessaie.","error");return;}$("publicGuestbookForm").reset();say("publicGuestbookMsg",result.message||"Merci ! Ton message a été transmis aux mariés pour validation.");}finally{button.disabled=false;button.textContent="Envoyer mon message";}}
+
+// Assistant vocal en français : lecture du guide et, si le navigateur le permet, questions parlées.
+function assistantGuideText(){if(publicGuestbookToken){return "Bienvenue dans le livre d’or des mariés. Tu peux écouter la musique choisie par Flems Center en appuyant sur Lecture, regarder les photos du couple, lire les messages déjà publiés, puis écrire ton nom et un message de félicitations. Appuie sur Envoyer mon message. Le message sera transmis aux mariés pour validation avant publication. Merci de participer à leurs souvenirs.";}if(!user){return "Bienvenue chez Flems Center Wedding Planner. Pour accéder à ton espace, écris ton adresse e-mail et ton mot de passe, puis appuie sur Se connecter. Si tu as oublié ton mot de passe, utilise le bouton de réinitialisation.";}if(role==="client"){return "Bienvenue dans l’espace des mariés. Dans Mes invités, ajoute ou modifie les invités et leurs réponses. Dans les boissons, propose les boissons puis coche le choix de chaque invité. Le récapitulatif indique les quantités à prévoir. Dans Mon budget, consulte le budget et les dépenses. Dans Mon calendrier, consulte les rendez-vous. Dans Personnaliser mon mariage, choisis une couleur, ajoute les photos du couple et copie le lien commun du livre d’or à partager aux invités. Les messages reçus apparaissent dans le livre d’or et tu peux les publier ou les supprimer. Tu peux aussi télécharger la liste des invités et le récapitulatif des boissons en PDF.";}if(role==="owner"){return "Bienvenue dans l’espace administrateur de Flems Center. Tu peux gérer les couples, les invités, les budgets, les dépenses, les boissons, les tâches et le calendrier. Dans Couleurs du mariage et livre d’or, sélectionne un couple, choisis sa couleur, ajoute les photos des mariés, choisis le morceau audio autorisé qui accompagnera leur galerie, puis copie le lien commun à transmettre aux invités. Les messages envoyés apparaissent en attente : tu peux les publier ou les supprimer. Les deux boutons PDF permettent de télécharger la liste des invités et le récapitulatif des boissons.";}return "Bienvenue dans l’espace employé. Consulte la rubrique Mes tâches, regarde les dates limites et marque une tâche comme terminée lorsqu’elle est effectuée.";}
+function assistantAnswer(question){const q=question.toLowerCase();if(/musique|son|chanson|audio|lecture/.test(q))return "Dans le livre d’or, appuie sur Lecture dans le lecteur audio placé au-dessus des photos. La musique est choisie par l’administrateur Flems Center. Les navigateurs demandent généralement un clic avant de démarrer le son.";if(/boisson|coca|fanta|jus/.test(q))return "Pour les boissons, les mariés ajoutent leurs propositions dans la rubrique Mes boissons. Ensuite, dans la liste des invités, coche une seule boisson sur chaque fiche. Le récapitulatif affiche les quantités.";if(/photo|image|galerie/.test(q))return "Les mariés peuvent ajouter leurs photos dans la rubrique Personnaliser mon mariage et mon livre d’or. Les invités pourront les voir grâce au lien commun du livre d’or.";if(/message|félicit|livre|or/.test(q))return "Pour le livre d’or, ouvre le lien partagé par les mariés. Tu peux regarder les photos, écrire ton nom et ton message de félicitations, puis appuyer sur Envoyer mon message.";if(/couleur|rose|bleu|vert|thème/.test(q))return "Les mariés choisissent une couleur dans la palette de leur espace. Cette couleur s’applique à leur espace et au livre d’or public.";if(/pdf|imprim|télécharg/.test(q))return "Dans la rubrique des invités, les boutons PDF permettent de télécharger la liste des invités ou le récapitulatif des boissons.";if(/invité|liste/.test(q))return "Dans la liste des invités, saisis le nom, le téléphone et la réponse à l’invitation, puis appuie sur Ajouter un invité. Tu peux ensuite modifier ou supprimer sa fiche.";if(/budget|dépense/.test(q))return "La rubrique Budget du mariage permet d’enregistrer le budget prévu, d’ajouter les dépenses et de voir le solde disponible.";if(/calendrier|rendez-vous|date/.test(q))return "La rubrique Calendrier et rappels permet d’ajouter les événements, leurs dates, leurs heures et leurs lieux.";return assistantGuideText();}
+function speakAssistant(text){const status=$("voiceStatus");if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){status.textContent="La lecture vocale n’est pas prise en charge par ce navigateur. Consulte le guide écrit à l’écran.";return;}window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang="fr-FR";utterance.rate=0.96;utterance.pitch=1;const voices=window.speechSynthesis.getVoices();const french=voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith("fr"));if(french)utterance.voice=french;utterance.onstart=()=>status.textContent="L’assistant vocal parle…";utterance.onend=()=>status.textContent="Guide terminé. Tu peux poser une question ou réécouter.";utterance.onerror=()=>status.textContent="La lecture vocale n’a pas pu démarrer. Appuie de nouveau sur le bouton.";window.speechSynthesis.speak(utterance);}
+function askAssistantByVoice(){const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!Recognition){$("voiceStatus").textContent="La reconnaissance vocale n’est pas disponible dans ce navigateur. Tu peux écouter le guide.";return;}const recognition=new Recognition();recognition.lang="fr-FR";recognition.interimResults=false;recognition.maxAlternatives=1;$("voiceStatus").textContent="Je t’écoute. Pose ta question après le bip du navigateur.";recognition.onresult=event=>{const question=event.results[0][0].transcript;$("voiceStatus").textContent="Question entendue : "+question;speakAssistant(assistantAnswer(question));};recognition.onerror=()=>$("voiceStatus").textContent="Je n’ai pas compris. Réessaie ou écoute le guide.";recognition.onend=()=>{};try{recognition.start();}catch{$("voiceStatus").textContent="Le microphone est déjà en cours d’utilisation.";}}
+$("voiceGuide").addEventListener("click",()=>speakAssistant(assistantGuideText()));$("voiceAsk").addEventListener("click",askAssistantByVoice);$("voiceStop").addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();$("voiceStatus").textContent="Lecture arrêtée.";});
+if($("publicGuestbookForm"))$("publicGuestbookForm").addEventListener("submit",submitPublicGuestbookMessage);
+if($("designCouple"))$("designCouple").addEventListener("change",()=>loadDesignPanel($("designCouple").value,"owner"));
+if($("ownerCopyGuestbook"))$("ownerCopyGuestbook").addEventListener("click",()=>copyGuestbookLink(couples.find(c=>c.id===$("designCouple").value),"ownerGuestbookLink"));
+if($("clientCopyGuestbook"))$("clientCopyGuestbook").addEventListener("click",()=>copyGuestbookLink(currentClientCouple,"clientGuestbookLink"));
+if($("ownerPhotoUpload"))$("ownerPhotoUpload").addEventListener("change",()=>uploadCouplePhotos("ownerPhotoUpload","owner"));
+if($("clientPhotoUpload"))$("clientPhotoUpload").addEventListener("change",()=>uploadCouplePhotos("clientPhotoUpload","client"));if($("ownerMusicUpload"))$("ownerMusicUpload").addEventListener("change",uploadGuestbookMusic);
+
+$("login").addEventListener("click",login);$("forgot").addEventListener("click",forgot);$("savePass").addEventListener("click",savePassword);$("logout").addEventListener("click",logout);$("addCouple").addEventListener("click",addCouple);$("gCouple").addEventListener("change",loadGuests);$("drinkCouple").addEventListener("change",()=>loadDrinkOptions($("drinkCouple").value,"drinkOptions",false));$("addGuest").addEventListener("click",addGuest);$("bCouple").addEventListener("change",loadBudget);$("saveBudget").addEventListener("click",saveBudget);$("addExpense").addEventListener("click",addExpense);$("addTask").addEventListener("click",addTask);$("addEvent").addEventListener("click",addEvent);$("myAddGuest").addEventListener("click",addMyGuest);$("addDrink").addEventListener("click",()=>addDrinkOption(false));$("myAddDrink").addEventListener("click",()=>addDrinkOption(true));$("exportGuestPdf").addEventListener("click",()=>exportGuestListPdf(false));$("exportDrinksPdf").addEventListener("click",()=>exportDrinkSummaryPdf(false));$("exportMyGuestPdf").addEventListener("click",()=>exportGuestListPdf(true));$("exportMyDrinksPdf").addEventListener("click",()=>exportDrinkSummaryPdf(true));
+start();
+// L’icône et l’installation PWA fonctionnent sur les pages servies en HTTPS (GitHub Pages).
+if("serviceWorker" in navigator && location.protocol === "https:"){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(error=>console.warn("Service worker non enregistré :",error)));
+}
+</script></body></html>
