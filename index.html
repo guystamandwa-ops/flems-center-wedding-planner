@@ -580,6 +580,25 @@ async function loadDrinkSummary(coupleId,targetId){
  });
 }
 async function loadGuests(){const id=$("gCouple").value,z=$("guests");z.innerHTML="";if(!id){listMessage("guests","Choisis un couple pour voir ses invités.");listMessage("drinkSummary","Choisis un couple pour afficher le récapitulatif.");$("nGuests").textContent="0";return;}const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,beverage_option_id,invitation_token,table_number,checked_in_at").eq("couple_id",id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}cacheGuestsForOffline(id,data);$("nGuests").textContent=data.length;renderGuests(z,await attachDrinkOptions(data,id),true);await loadDrinkSummary(id,"drinkSummary");}
+function sendGuestInvitationWhatsApp(g){
+ const rawPhone=String(g.phone||"").trim();
+ let phone=rawPhone.replace(/\D/g,"");
+ if(phone.startsWith("00"))phone=phone.slice(2);
+ if(phone.startsWith("0"))phone="243"+phone.slice(1);
+ else if(phone.length===9)phone="243"+phone;
+ if(!phone||phone.length<10){say("appMsg","Ajoute un numéro WhatsApp valide à la fiche de "+g.full_name+" avant de partager son invitation.","error");return;}
+ const couple=clientModeForInvitation();
+ const inviteUrl=location.origin+location.pathname+"?invitation="+encodeURIComponent(g.invitation_token);
+ const date=couple?.wedding_date?dateForPdf(couple.wedding_date):"à confirmer";
+ const venue=couple?.venue||"communiqué prochainement";
+ const coupleName=couple?.couple_name||"les mariés";
+ const message="Bonjour "+g.full_name+" ! 💐\n\n"+coupleName+" ont le plaisir de vous inviter à leur mariage.\nDate : "+date+"\nLieu : "+venue+"\n\nVoici votre invitation personnelle : "+inviteUrl+"\n\nAu plaisir de vous compter parmi nous !\nFLEMS CENTER – WEDDING PLANNER";
+ const link=document.createElement("a");link.href="https://wa.me/"+phone+"?text="+encodeURIComponent(message);link.target="_blank";link.rel="noopener noreferrer";link.click();
+ say("appMsg","WhatsApp s’ouvre avec l’invitation personnelle de "+g.full_name+". Vérifie le message puis appuie sur Envoyer dans WhatsApp.");
+}
+function clientModeForInvitation(){
+ return role==="client"?currentClientCouple:couples.find(c=>c.id===$("gCouple").value);
+}
 function renderGuests(z,data,canManage,clientMode=false){
  z.innerHTML="";
  if(!data.length){const p=document.createElement("p");p.className="empty";p.textContent="Aucun invité enregistré.";z.appendChild(p);return;}
@@ -592,8 +611,9 @@ function renderGuests(z,data,canManage,clientMode=false){
    const inviteLabel=document.createElement("p");inviteLabel.className="small";inviteLabel.textContent="Invitation personnelle et QR code";
    const inviteLink=document.createElement("a");inviteLink.href=inviteUrl;inviteLink.textContent="Ouvrir l’invitation";inviteLink.target="_blank";inviteLink.rel="noopener";
    const copy=actionButton("Copier le lien","secondary",async()=>{try{await navigator.clipboard.writeText(inviteUrl);say("appMsg","Lien d’invitation copié pour "+g.full_name+".");}catch{say("appMsg","Copie impossible sur cet appareil. Ouvre le lien puis copie-le depuis la barre d’adresse.","error");}});
+   const whatsapp=actionButton("Envoyer par WhatsApp","",()=>sendGuestInvitationWhatsApp(g));
    const qr=document.createElement("div");qr.style.cssText="width:128px;min-height:128px;background:white;padding:8px;margin-top:8px";
-   inviteBox.append(inviteLabel,inviteLink,document.createElement("br"),copy,qr);d.appendChild(inviteBox);
+   inviteBox.append(inviteLabel,inviteLink,document.createElement("br"),copy,whatsapp,qr);d.appendChild(inviteBox);
    if(window.QRCode)new QRCode(qr,{text:inviteUrl,width:112,height:112});
    else qr.textContent="QR code indisponible : connexion Internet requise pour charger le générateur.";
   }
