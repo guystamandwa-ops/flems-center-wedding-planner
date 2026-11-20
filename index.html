@@ -131,13 +131,20 @@
     </section>
     <div id="invitationPhotos" class="public-gallery"></div>
   </section>
-  <section><h2>Choisir votre boisson</h2>
+  <section id="invitationGuide" class="item" aria-live="polite" style="margin:16px 0;padding:16px;border:1px solid var(--border);border-radius:14px;background:#fffaf1">
+    <h2>Votre guide personnel</h2>
+    <p id="invitationGuideProgress" class="small">Étape 1 sur 4</p>
+    <h3 id="invitationGuideTitle">Bienvenue !</h3>
+    <p id="invitationGuideText">Consultez les informations de votre invitation et découvrez les photos des mariés.</p>
+    <button type="button" id="invitationGuideNext">Commencer</button>
+  </section>
+  <section id="invitationDrinkSection"><h2>Choisir votre boisson</h2>
     <p class="small">Cette invitation est personnelle. Choisissez une seule boisson parmi celles proposées par les mariés.</p>
     <div id="invitationMessage" class="message" aria-live="polite"></div>
     <div id="invitationOptions"></div>
     <button id="invitationSave" type="button">Enregistrer mon choix</button>
   </section>
-  <section><h2>Votre message aux mariés</h2>
+  <section id="invitationMessageSection"><h2>Votre message aux mariés</h2>
     <p class="small">Laissez un mot de félicitations dans le livre d’or.</p>
     <div id="invitationGuestbookMessage" class="message" aria-live="polite"></div>
     <label for="invitationBookName">Votre nom</label>
@@ -865,6 +872,27 @@ async function disableGuestWeddingReminders(token){
  }catch(error){say("invitationReminderMessage",error.message||"Désactivation impossible.","error");}
  finally{button.disabled=false;}
 }
+const invitationGuideSteps=[
+ {title:"Découvrez votre invitation",text:"Vérifiez le nom des mariés, la date, le lieu et votre numéro de table. Vous pouvez aussi regarder les photos. Si vous le souhaitez, activez les rappels du mariage.",target:"invitationCoupleName",button:"Voir les informations"},
+ {title:"Choisissez votre boisson",text:"Faites défiler jusqu’à la rubrique Choisir votre boisson. Sélectionnez une seule boisson, puis appuyez sur Enregistrer mon choix.",target:"invitationDrinkSection",button:"Aller au choix de boisson"},
+ {title:"Écrivez un mot aux mariés",text:"Dans la rubrique Votre message aux mariés, vérifiez votre nom, écrivez un message de félicitations, puis appuyez sur Envoyer aux mariés.",target:"invitationMessageSection",button:"Écrire mon message"},
+ {title:"Votre invitation est prête",text:"Merci ! Vous pouvez revenir à tout moment sur ce lien personnel pour revoir les informations de votre invitation.",target:"invitationCoupleName",button:"Terminer"}
+];
+let invitationGuideIndex=0;
+function showInvitationGuideStep(index){
+ invitationGuideIndex=Math.max(0,Math.min(index,invitationGuideSteps.length-1));
+ const step=invitationGuideSteps[invitationGuideIndex];
+ $("invitationGuideProgress").textContent="Étape "+(invitationGuideIndex+1)+" sur "+invitationGuideSteps.length;
+ $("invitationGuideTitle").textContent=step.title;
+ $("invitationGuideText").textContent=step.text;
+ $("invitationGuideNext").textContent=step.button;
+ $("invitationGuideNext").onclick=()=>{
+  if(invitationGuideIndex===0){document.getElementById(step.target).scrollIntoView({behavior:"smooth",block:"center"});showInvitationGuideStep(1);}
+  else if(invitationGuideIndex===1){document.getElementById(step.target).scrollIntoView({behavior:"smooth",block:"start"});showInvitationGuideStep(2);}
+  else if(invitationGuideIndex===2){document.getElementById(step.target).scrollIntoView({behavior:"smooth",block:"start"});showInvitationGuideStep(3);}
+  else{document.getElementById("invitationGuide").scrollIntoView({behavior:"smooth",block:"center"});}
+ };
+}
 async function loadPublicInvitation(token){
  const msg=$("invitationMessage");msg.textContent="Chargement de votre invitation…";msg.className="message ok";
  const {data,error}=await sb.rpc("get_guest_invitation",{p_token:token});
@@ -875,6 +903,7 @@ async function loadPublicInvitation(token){
   if(!offlineCopy||!result?.ok){$("invitationCoupleName").textContent="Invitation indisponible";msg.textContent=error?.message||result?.message||"Ce lien d’invitation est invalide.";msg.className="message error";$("invitationSave").disabled=true;$("invitationEnableReminders").disabled=true;return;}
  }else{try{localStorage.setItem("flems_invitation_"+token,JSON.stringify(result));}catch{}}
  if(offlineCopy){msg.textContent="Mode hors connexion : voici la dernière version enregistrée de votre invitation. Les choix et messages seront disponibles au retour d’Internet.";msg.className="message";} 
+ showInvitationGuideStep(0);
  $("invitationCoupleName").textContent="Le mariage de "+(result.couple_name||"nos mariés");
  $("invitationGuestName").textContent="Bienvenue, "+(result.guest_name||"cher invité")+" !";
  $("invitationEnableReminders").disabled=offlineCopy;
