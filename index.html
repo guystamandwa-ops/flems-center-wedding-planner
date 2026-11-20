@@ -96,6 +96,15 @@
     <div id="invitationOptions"></div>
     <button id="invitationSave" type="button">Enregistrer mon choix</button>
   </section>
+  <section><h2>Votre message aux mariés</h2>
+    <p class="small">Laissez un mot de félicitations dans le livre d’or.</p>
+    <div id="invitationGuestbookMessage" class="message" aria-live="polite"></div>
+    <label for="invitationBookName">Votre nom</label>
+    <input id="invitationBookName" maxlength="80">
+    <label for="invitationBookText">Votre message</label>
+    <textarea id="invitationBookText" maxlength="1200" placeholder="Toutes nos félicitations…"></textarea>
+    <button id="invitationBookSend" type="button">Envoyer aux mariés</button>
+  </section>
 </div>
 </main>
 <div id="voiceAssistant" class="voice-assistant" aria-label="Assistant vocal Flems Center">
@@ -590,6 +599,17 @@ async function loadPublicInvitation(token){
  if(error||!result?.ok){$("invitationCoupleName").textContent="Invitation indisponible";msg.textContent=error?.message||result?.message||"Ce lien d’invitation est invalide.";msg.className="message error";$("invitationSave").disabled=true;return;}
  $("invitationCoupleName").textContent="Le mariage de "+(result.couple_name||"nos mariés");
  $("invitationGuestName").textContent="Bienvenue, "+(result.guest_name||"cher invité")+" !";
+ $("invitationBookName").value=result.guest_name||"";
+ $("invitationBookSend").onclick=async()=>{
+  const guestName=$("invitationBookName").value.trim(), message=$("invitationBookText").value.trim(), status=$("invitationGuestbookMessage");
+  if(!result.guestbook_token){status.textContent="Le livre d’or n’est pas encore configuré pour ce mariage.";status.className="message error";return;}
+  if(guestName.length<2||message.length<3){status.textContent="Indiquez votre nom et un message d’au moins 3 caractères.";status.className="message error";return;}
+  const button=$("invitationBookSend");button.disabled=true;button.textContent="Envoi…";
+  try{const {data,error}=await sb.rpc("submit_public_flems_guestbook_message",{p_token:result.guestbook_token,p_guest_name:guestName,p_message:message});const saved=Array.isArray(data)?data[0]:data;
+   if(error||!saved?.ok){status.textContent=error?.message||saved?.message||"Envoi impossible.";status.className="message error";}
+   else{$("invitationBookText").value="";status.textContent=saved.message||"Votre message a été transmis aux mariés.";status.className="message ok";}
+  }finally{button.disabled=false;button.textContent="Envoyer aux mariés";}
+ };
  $("invitationMeta").textContent=[result.wedding_date?"Date : "+dateForPdf(result.wedding_date):"Date à confirmer",result.venue?"Lieu : "+result.venue:""].filter(Boolean).join(" · ");
  if(result.theme_color)applyTheme(result.theme_color);
  const photoHost=$("invitationPhotos");photoHost.innerHTML="";
