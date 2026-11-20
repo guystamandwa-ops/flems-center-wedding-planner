@@ -519,15 +519,24 @@ async function loadClientAccounts(){
  const {data,error}=await sb.functions.invoke("manage-flems-users",{body:{action:"list_clients"}});
  if(error||!data?.ok){host.textContent="Impossible de charger les clients : "+(error?.message||data?.error||"Erreur inconnue.");return;}
  const clients=Array.isArray(data.clients)?data.clients:[];host.innerHTML="";
- if(!clients.length){listMessage("clientAccounts","Aucun compte client associé à un mariage pour le moment.");return;}
+ if(!clients.length){listMessage("clientAccounts","Aucun mariage enregistré pour le moment.");return;}
  clients.forEach(client=>{
   const row=document.createElement("div");row.className="item";
   const name=document.createElement("strong");name.textContent=client.full_name||client.couple_name||"Client";
   const details=document.createElement("p");details.className="small";details.textContent=[client.email,client.phone,client.couple_name,client.wedding_date?"Mariage : "+client.wedding_date:"",client.venue].filter(Boolean).join(" · ");
-  const status=document.createElement("p");status.className="small";status.textContent=client.access_active?"Accès actif":"Accès désactivé";
+  const status=document.createElement("p");status.className="small";status.textContent=client.has_account?(client.access_active?"Accès actif":"Accès désactivé"):"Compte client non créé";
   const actions=document.createElement("div");actions.className="actions";
-  actions.appendChild(actionButton("Modifier la fiche","edit",()=>editClientAccount(client)));
-  actions.appendChild(actionButton(client.access_active?"Désactiver l’accès":"Réactiver l’accès",client.access_active?"danger":"",()=>changeClientAccess(client)));
+  if(client.has_account){
+   actions.appendChild(actionButton("Modifier la fiche","edit",()=>editClientAccount(client)));
+   actions.appendChild(actionButton(client.access_active?"Désactiver l’accès":"Réactiver l’accès",client.access_active?"danger":"",()=>changeClientAccess(client)));
+  }else{
+   actions.appendChild(actionButton("Inviter le client","edit",()=>{
+    const coupleSelect=$("accessClientCouple");if(coupleSelect)coupleSelect.value=client.couple_id;
+    const clientName=$("accessClientName");if(clientName)clientName.value=client.couple_name||"";
+    const inviteSection=$("accessClientEmail");if(inviteSection){inviteSection.focus();inviteSection.scrollIntoView({behavior:"smooth",block:"center"});}
+    say("accessClientMessage","Mariage sélectionné. Ajoute l’adresse e-mail du client pour lui envoyer son invitation.");
+   }));
+  }
   row.append(name,details,status,actions);host.appendChild(row);
  });
 }
