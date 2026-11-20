@@ -1,2 +1,5 @@
 [functions.send-wedding-reminders]
 verify_jwt = false
+
+[functions.manage-flems-users]
+verify_jwt = true
