@@ -1,0 +1,2 @@
+[functions.send-wedding-reminders]
+verify_jwt = false
