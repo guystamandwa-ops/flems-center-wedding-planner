@@ -87,6 +87,8 @@
     <h2 id="invitationCoupleName">Votre invitation</h2>
     <p id="invitationGuestName"></p>
     <p id="invitationMeta" class="small"></p>
+    <div id="invitationCountdown" class="item" aria-live="polite">Compte à rebours en préparation…</div>
+    <div id="invitationPhotos" class="public-gallery"></div>
   </section>
   <section><h2>Choisir votre boisson</h2>
     <p class="small">Cette invitation est personnelle. Choisissez une seule boisson parmi celles proposées par les mariés.</p>
@@ -134,7 +136,7 @@ let pendingEditorSave=null;
 const $=id=>document.getElementById(id);
 function say(target,text,type="ok"){const x=$(target);x.textContent=text;x.className="message "+type;}
 function clear(target){$(target).textContent="";$(target).className="message";}
-function page(id){["auth","loading","app","publicGuestbookView"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
+function page(id){["auth","loading","app","publicGuestbookView","publicInvitationView"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
 function view(id){["owner","client","employee"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
 function opt(s,v,t){const o=document.createElement("option");o.value=v;o.textContent=t;s.appendChild(o);}
 function nameOf(id){return couples.find(c=>c.id===id)?.couple_name||"Mariage";}
@@ -588,6 +590,15 @@ async function loadPublicInvitation(token){
  if(error||!result?.ok){$("invitationCoupleName").textContent="Invitation indisponible";msg.textContent=error?.message||result?.message||"Ce lien d’invitation est invalide.";msg.className="message error";$("invitationSave").disabled=true;return;}
  $("invitationCoupleName").textContent="Le mariage de "+(result.couple_name||"nos mariés");
  $("invitationGuestName").textContent="Bienvenue, "+(result.guest_name||"cher invité")+" !";
+ $("invitationMeta").textContent=[result.wedding_date?"Date : "+dateForPdf(result.wedding_date):"Date à confirmer",result.venue?"Lieu : "+result.venue:""].filter(Boolean).join(" · ");
+ if(result.theme_color)applyTheme(result.theme_color);
+ const photoHost=$("invitationPhotos");photoHost.innerHTML="";
+ (result.photos||[]).forEach(photo=>{if(!photo.public_url)return;const img=document.createElement("img");img.src=photo.public_url;img.alt=photo.caption||"Photo des mariés";img.loading="lazy";photoHost.appendChild(img);});
+ if(!(result.photos||[]).length)listMessage("invitationPhotos","Les photos des mariés seront bientôt disponibles.");
+ const countdown=$("invitationCountdown");
+ const weddingDate=result.wedding_date?new Date(result.wedding_date+"T00:00:00"):null;
+ const updateCountdown=()=>{if(!weddingDate||Number.isNaN(weddingDate.getTime())){countdown.textContent="La date du mariage sera bientôt communiquée.";return;}const ms=weddingDate.getTime()-new Date().setHours(0,0,0,0);const days=Math.ceil(ms/86400000);countdown.textContent=days>1?"Plus que "+days+" jours avant le grand jour !":days===1?"Plus qu’un jour avant le grand jour !":days===0?"C’est aujourd’hui !":"Le mariage a déjà eu lieu.";};
+ updateCountdown();
  msg.textContent="Votre invitation personnelle est valide. Sélectionnez votre boisson si vous le souhaitez.";
  msg.className="message ok";
  const host=$("invitationOptions");host.innerHTML="";
