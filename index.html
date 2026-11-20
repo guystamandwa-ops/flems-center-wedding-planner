@@ -487,7 +487,7 @@ function renderGuests(z,data,canManage,clientMode=false){
  if(!data.length){const p=document.createElement("p");p.className="empty";p.textContent="Aucun invité enregistré.";z.appendChild(p);return;}
  data.forEach(g=>{
   const d=document.createElement("div");d.className="item";
-  const p=document.createElement("p");p.textContent=g.full_name+" — "+g.rsvp+(g.phone?" — "+g.phone:"");d.appendChild(p);
+  const p=document.createElement("p");p.textContent=g.full_name+" — "+g.rsvp+(g.phone?" — "+g.phone:"")+(g.table_number?" — Table "+g.table_number:"");d.appendChild(p);
   if(canManage&&g.invitation_token){
    const inviteUrl=location.origin+location.pathname+"?invitation="+encodeURIComponent(g.invitation_token);
    const inviteBox=document.createElement("div");inviteBox.className="drink-help";
