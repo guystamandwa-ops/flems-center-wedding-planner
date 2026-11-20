@@ -80,6 +80,21 @@
     <section><h2>Messages de félicitations</h2><div id="publicGuestbookMessages"></div></section>
   </div>
 </div>
+<div id="publicInvitationView" class="hidden">
+  <section class="public-book-hero">
+    <img class="public-brand-mark" src="./icons/flems-icon-192.png" alt="Flems Center">
+    <p><strong>FLEMS CENTER · INVITATION PERSONNELLE</strong></p>
+    <h2 id="invitationCoupleName">Votre invitation</h2>
+    <p id="invitationGuestName"></p>
+    <p id="invitationMeta" class="small"></p>
+  </section>
+  <section><h2>Choisir votre boisson</h2>
+    <p class="small">Cette invitation est personnelle. Choisissez une seule boisson parmi celles proposées par les mariés.</p>
+    <div id="invitationMessage" class="message" aria-live="polite"></div>
+    <div id="invitationOptions"></div>
+    <button id="invitationSave" type="button">Enregistrer mon choix</button>
+  </section>
+</div>
 </main>
 <div id="voiceAssistant" class="voice-assistant" aria-label="Assistant vocal Flems Center">
   <button type="button" id="voiceLauncher" class="voice-launcher" aria-expanded="false" aria-controls="voicePanel">
@@ -107,6 +122,7 @@
   </form>
 </dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
 "use strict";
 // REMPLACE CES DEUX VALEURS AVEC TON PROJECT URL ET TA PUBLISHABLE KEY SUPABASE.
@@ -338,7 +354,10 @@ async function start(){
  if(!configured){page("auth");say("authMsg","Le fichier doit être configuré avec ton Project URL et ta Publishable key avant la connexion.","error");$("login").disabled=true;return;}
  if(!window.supabase?.createClient){page("auth");say("authMsg","La bibliothèque Supabase ne s'est pas chargée. Vérifie ta connexion Internet.","error");return;}
  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
- const publicToken=new URLSearchParams(location.search).get("livre");
+ const params=new URLSearchParams(location.search);
+ const invitationToken=params.get("invitation");
+ if(invitationToken){page("publicInvitationView");await loadPublicInvitation(invitationToken);return;}
+ const publicToken=params.get("livre");
  if(publicToken){publicGuestbookToken=publicToken;page("publicGuestbookView");await loadPublicGuestbook(publicToken);return;}
  sb.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){page("auth");$("loginForm").classList.add("hidden");$("newPassForm").classList.remove("hidden");say("authMsg","Choisis maintenant ton nouveau mot de passe.");}else if(event==="SIGNED_OUT"){page("auth");$("loginForm").classList.remove("hidden");$("newPassForm").classList.add("hidden");}});
  const {data,error}=await sb.auth.getSession();if(error){page("auth");say("authMsg",error.message,"error");return;}if(data.session)await enter(data.session.user);else page("auth");
@@ -413,13 +432,24 @@ async function loadDrinkSummary(coupleId,targetId){
   track.appendChild(fill);row.append(label,track);host.appendChild(row);
  });
 }
-async function loadGuests(){const id=$("gCouple").value,z=$("guests");z.innerHTML="";if(!id){listMessage("guests","Choisis un couple pour voir ses invités.");listMessage("drinkSummary","Choisis un couple pour afficher le récapitulatif.");$("nGuests").textContent="0";return;}const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,beverage_option_id").eq("couple_id",id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}$("nGuests").textContent=data.length;renderGuests(z,await attachDrinkOptions(data,id),true);await loadDrinkSummary(id,"drinkSummary");}
+async function loadGuests(){const id=$("gCouple").value,z=$("guests");z.innerHTML="";if(!id){listMessage("guests","Choisis un couple pour voir ses invités.");listMessage("drinkSummary","Choisis un couple pour afficher le récapitulatif.");$("nGuests").textContent="0";return;}const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,beverage_option_id,invitation_token").eq("couple_id",id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}$("nGuests").textContent=data.length;renderGuests(z,await attachDrinkOptions(data,id),true);await loadDrinkSummary(id,"drinkSummary");}
 function renderGuests(z,data,canManage,clientMode=false){
  z.innerHTML="";
  if(!data.length){const p=document.createElement("p");p.className="empty";p.textContent="Aucun invité enregistré.";z.appendChild(p);return;}
  data.forEach(g=>{
   const d=document.createElement("div");d.className="item";
   const p=document.createElement("p");p.textContent=g.full_name+" — "+g.rsvp+(g.phone?" — "+g.phone:"");d.appendChild(p);
+  if(canManage&&g.invitation_token){
+   const inviteUrl=location.origin+location.pathname+"?invitation="+encodeURIComponent(g.invitation_token);
+   const inviteBox=document.createElement("div");inviteBox.className="drink-help";
+   const inviteLabel=document.createElement("p");inviteLabel.className="small";inviteLabel.textContent="Invitation personnelle et QR code";
+   const inviteLink=document.createElement("a");inviteLink.href=inviteUrl;inviteLink.textContent="Ouvrir l’invitation";inviteLink.target="_blank";inviteLink.rel="noopener";
+   const copy=actionButton("Copier le lien","secondary",async()=>{try{await navigator.clipboard.writeText(inviteUrl);say("appMsg","Lien d’invitation copié pour "+g.full_name+".");}catch{say("appMsg","Copie impossible sur cet appareil. Ouvre le lien puis copie-le depuis la barre d’adresse.","error");}});
+   const qr=document.createElement("div");qr.style.cssText="width:128px;min-height:128px;background:white;padding:8px;margin-top:8px";
+   inviteBox.append(inviteLabel,inviteLink,document.createElement("br"),copy,qr);d.appendChild(inviteBox);
+   if(window.QRCode)new QRCode(qr,{text:inviteUrl,width:112,height:112});
+   else qr.textContent="QR code indisponible : connexion Internet requise pour charger le générateur.";
+  }
   const drinkWrap=document.createElement("div");drinkWrap.className="guest-drink-list";
   const status=document.createElement("p");status.className="drink-status";
   const selectedOption=(g.drink_options||[]).find(o=>o.id===g.beverage_option_id);
@@ -519,7 +549,7 @@ function editEvent(e){openEditor("Modifier un événement",[
 async function deleteEvent(e){if(!confirm("Supprimer le rendez-vous « "+e.title+" » ?"))return;const {error}=await sb.from("calendar_events").delete().eq("id",e.id);if(error){say("appMsg","Suppression de l'événement impossible : "+error.message,"error");return;}say("appMsg","Événement supprimé.");await loadEvents();}
 async function addEvent(){const couple_id=$("vCouple").value,title=$("vTitle").value.trim(),event_date=$("vDate").value;if(!couple_id||!title||!event_date){say("appMsg","Choisis un couple, un type d'événement et une date.","error");return;}const {error}=await sb.from("calendar_events").insert({couple_id,title,event_date,event_time:$("vTime").value||null,location:$("vPlace").value.trim()||null,reminder:$("vReminder").value});if(error){say("appMsg","Événement impossible : "+error.message,"error");return;}["vTitle","vDate","vTime","vPlace"].forEach(id=>$(id).value="");say("appMsg","Événement enregistré.");await loadEvents();}
 async function loadClient(){const {data,error}=await sb.from("couples").select("id,couple_name,wedding_date,venue,theme_color,guestbook_token");if(error){say("appMsg","Ton espace n'a pas pu être chargé : "+error.message,"error");return;}if(!data.length){$("myCouple").textContent="Aucun mariage n'est associé à ce compte. Contacte Flems Center.";return;}currentClientCouple=data[0];$("myCouple").textContent=currentClientCouple.couple_name+" · Date : "+(currentClientCouple.wedding_date||"à définir")+" · Lieu : "+(currentClientCouple.venue||"à définir");applyTheme(currentClientCouple.theme_color);await Promise.all([loadMyGuests(),loadMyBudget(),loadMyEvents(),loadDrinkOptions(currentClientCouple.id,"myDrinkOptions",true),loadDesignPanel(currentClientCouple.id,"client")]);}
-async function loadMyGuests(){const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,beverage_option_id").eq("couple_id",currentClientCouple.id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}renderGuests($("myGuests"),await attachDrinkOptions(data,currentClientCouple.id),true,true);await loadDrinkSummary(currentClientCouple.id,"myDrinkSummary");}
+async function loadMyGuests(){const {data,error}=await sb.from("guests").select("id,full_name,phone,rsvp,beverage_option_id,invitation_token").eq("couple_id",currentClientCouple.id).order("created_at");if(error){say("appMsg","Invités : "+error.message,"error");return;}renderGuests($("myGuests"),await attachDrinkOptions(data,currentClientCouple.id),true,true);await loadDrinkSummary(currentClientCouple.id,"myDrinkSummary");}
 async function addMyGuest(){const full_name=$("myGuestName").value.trim();if(!full_name){say("appMsg","Saisis le nom de l'invité.","error");return;}const {error}=await sb.from("guests").insert({couple_id:currentClientCouple.id,full_name,phone:$("myGuestPhone").value.trim()||null,rsvp:$("myGuestRsvp").value});if(error){say("appMsg","Ajout impossible : "+error.message,"error");return;}$("myGuestName").value="";$("myGuestPhone").value="";await loadMyGuests();}
 async function loadMyBudget(){const z=$("myBudget");z.innerHTML="";const {data:b,error}=await sb.from("budgets").select("*").eq("couple_id",currentClientCouple.id).maybeSingle();if(error){z.textContent=error.message;return;}if(!b){z.textContent="Le budget n'a pas encore été communiqué.";return;}const {data:x,error:ee}=await sb.from("expenses").select("amount").eq("budget_id",b.id);if(ee){z.textContent=ee.message;return;}const total=x.reduce((s,a)=>s+Number(a.amount),0);z.textContent="Budget : "+cash(b.planned_amount,b.currency)+" · Dépenses : "+cash(total,b.currency)+" · Solde : "+cash(Number(b.planned_amount)-total,b.currency);}
 async function loadMyEvents(){const z=$("myEvents");z.innerHTML="";const {data,error}=await sb.from("calendar_events").select("title,event_date,event_time,location,reminder").eq("couple_id",currentClientCouple.id).order("event_date");if(error){z.textContent=error.message;return;}if(!data.length){listMessage("myEvents","Aucun événement communiqué.");return;}data.forEach(e=>{const p=document.createElement("p");p.textContent=e.title+" — "+e.event_date+(e.event_time?" à "+e.event_time:"")+(e.location?" — "+e.location:"")+" — Rappel : "+e.reminder;z.appendChild(p);});}
@@ -551,6 +581,33 @@ async function deleteCouplePhoto(photo,coupleId,targetId){if(!confirm("Supprimer
 async function loadManagerGuestbookMessages(coupleId,targetId){const host=$(targetId);if(!host)return;host.innerHTML="";const {data,error}=await sb.from("guestbook_messages").select("id,guest_name,message,approved,created_at").eq("couple_id",coupleId).order("created_at",{ascending:false}).limit(100);if(error){listMessage(targetId,"Messages indisponibles : "+error.message);return;}if(!data?.length){listMessage(targetId,"Aucun message reçu pour le moment.");return;}data.forEach(item=>{const card=document.createElement("div");card.className="item";const title=document.createElement("strong");title.textContent=item.guest_name+" · "+(item.approved?"Publié":"En attente de validation");card.appendChild(title);const msg=document.createElement("p");msg.className="guestbook-message-text";msg.textContent=item.message;card.appendChild(msg);const actions=document.createElement("div");actions.className="actions";if(!item.approved)actions.appendChild(actionButton("Publier dans le livre d’or","",()=>moderateGuestbookMessage(item,true,coupleId,targetId)));actions.appendChild(actionButton("Supprimer","danger",()=>deleteGuestbookMessage(item,coupleId,targetId)));card.appendChild(actions);host.appendChild(card);});}
 async function moderateGuestbookMessage(item,approved,coupleId,targetId){const {error}=await sb.from("guestbook_messages").update({approved}).eq("id",item.id);if(error){say("appMsg","Validation impossible : "+error.message,"error");return;}say("appMsg","Message publié dans le livre d’or.");await loadManagerGuestbookMessages(coupleId,targetId);}
 async function deleteGuestbookMessage(item,coupleId,targetId){if(!confirm("Supprimer le message de "+item.guest_name+" ?"))return;const {error}=await sb.from("guestbook_messages").delete().eq("id",item.id);if(error){say("appMsg","Suppression impossible : "+error.message,"error");return;}say("appMsg","Message supprimé.");await loadManagerGuestbookMessages(coupleId,targetId);}
+async function loadPublicInvitation(token){
+ const msg=$("invitationMessage");msg.textContent="Chargement de votre invitation…";msg.className="message ok";
+ const {data,error}=await sb.rpc("get_guest_invitation",{p_token:token});
+ const result=Array.isArray(data)?data[0]:data;
+ if(error||!result?.ok){$("invitationCoupleName").textContent="Invitation indisponible";msg.textContent=error?.message||result?.message||"Ce lien d’invitation est invalide.";msg.className="message error";$("invitationSave").disabled=true;return;}
+ $("invitationCoupleName").textContent="Le mariage de "+(result.couple_name||"nos mariés");
+ $("invitationGuestName").textContent="Bienvenue, "+(result.guest_name||"cher invité")+" !";
+ msg.textContent="Votre invitation personnelle est valide. Sélectionnez votre boisson si vous le souhaitez.";
+ msg.className="message ok";
+ const host=$("invitationOptions");host.innerHTML="";
+ if(!(result.options||[]).length){host.textContent="Les mariés n’ont pas encore proposé de boissons.";return;}
+ result.options.forEach(option=>{
+  const label=document.createElement("label");label.className="drink-choice";
+  const radio=document.createElement("input");radio.type="radio";radio.name="invitationDrink";radio.value=option.id;radio.checked=option.id===result.selected_beverage_option_id;
+  const text=document.createElement("span");text.textContent=option.name;label.append(radio,text);host.appendChild(label);
+ });
+ $("invitationSave").disabled=false;
+ $("invitationSave").onclick=async()=>{
+  const selected=host.querySelector('input[name="invitationDrink"]:checked');
+  if(!selected){msg.textContent="Choisissez une boisson avant d’enregistrer.";msg.className="message error";return;}
+  const button=$("invitationSave");button.disabled=true;button.textContent="Enregistrement…";
+  try{const {data,error}=await sb.rpc("submit_guest_beverage",{p_token:token,p_beverage_option_id:selected.value});const saved=Array.isArray(data)?data[0]:data;
+   if(error||!saved?.ok){msg.textContent=error?.message||saved?.message||"Enregistrement impossible.";msg.className="message error";}
+   else{msg.textContent=saved.message||"Votre choix a bien été enregistré. Merci !";msg.className="message ok";}
+  }finally{button.disabled=false;button.textContent="Enregistrer mon choix";}
+ };
+}
 async function loadPublicGuestbook(token){const {data,error}=await sb.rpc("get_public_flems_guestbook",{p_token:token});if(error||!data?.ok){$("publicCoupleName").textContent="Livre d’or indisponible";say("publicGuestbookMsg",error?.message||data?.message||"Lien invalide ou expiré.","error");return;}const couple=data.couple||{};$("publicCoupleName").textContent="Le mariage de "+(couple.couple_name||"nos mariés");$("publicCoupleMeta").textContent=[couple.wedding_date?"Date : "+dateForPdf(couple.wedding_date):"",couple.venue?"Lieu : "+couple.venue:""].filter(Boolean).join(" · ");applyTheme(couple.theme_color);const music=data.music||null;const musicSection=$("publicGuestbookMusicSection"),audio=$("publicGuestbookAudio");if(music?.public_url){$("publicGuestbookMusicTitle").textContent=music.title||"Musique des mariés";audio.src=music.public_url;audio.load();musicSection.classList.remove("hidden");}else{audio.pause();audio.removeAttribute("src");audio.load();musicSection.classList.add("hidden");}const gallery=$("publicPhotoGallery");gallery.innerHTML="";(data.photos||[]).forEach(photo=>{const img=document.createElement("img");img.src=photo.public_url;img.alt=photo.caption||"Photo des mariés";img.loading="lazy";gallery.appendChild(img);});if(!(data.photos||[]).length)listMessage("publicPhotoGallery","Les photos des mariés seront bientôt disponibles.");const messages=$("publicGuestbookMessages");messages.innerHTML="";if(!(data.messages||[]).length){listMessage("publicGuestbookMessages","Soyez les premiers à laisser un mot de félicitations !");}else{data.messages.forEach(item=>{const card=document.createElement("div");card.className="public-message";const author=document.createElement("strong");author.textContent=item.guest_name;const body=document.createElement("p");body.className="guestbook-message-text";body.textContent=item.message;const date=document.createElement("span");date.className="small";date.textContent=new Date(item.created_at).toLocaleDateString("fr-FR");card.append(author,body,date);messages.appendChild(card);});}}
 async function submitPublicGuestbookMessage(event){event.preventDefault();const guestName=$("publicGuestName").value.trim(),message=$("publicGuestMessage").value.trim();if(!guestName||message.length<3){say("publicGuestbookMsg","Écris ton nom et un message d’au moins 3 caractères.","error");return;}const button=$("publicGuestbookSubmit");button.disabled=true;button.textContent="Envoi…";try{const {data,error}=await sb.rpc("submit_public_flems_guestbook_message",{p_token:publicGuestbookToken,p_guest_name:guestName,p_message:message});const result=Array.isArray(data)?data[0]:data;if(error||!result?.ok){say("publicGuestbookMsg",error?.message||result?.message||"Envoi impossible. Réessaie.","error");return;}$("publicGuestbookForm").reset();say("publicGuestbookMsg",result.message||"Merci ! Ton message a été transmis aux mariés pour validation.");}finally{button.disabled=false;button.textContent="Envoyer mon message";}}
 
