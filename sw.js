@@ -2,7 +2,8 @@ const CACHE_NAME = "flems-center-v4";
 const APP_SHELL = [
   new URL("./index.html", self.registration.scope).href,
   new URL("./icons/flems-icon-192.png", self.registration.scope).href,
-  new URL("./icons/flems-icon-512.png", self.registration.scope).href
+  new URL("./icons/flems-icon-512.png", self.registration.scope).href,
+  new URL("./qrcode.min.js", self.registration.scope).href
 ];
 
 self.addEventListener("install", event => {
