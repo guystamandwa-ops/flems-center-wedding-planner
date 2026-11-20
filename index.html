@@ -69,7 +69,8 @@
   </div>
 </section>
 </div>
-<div id="employee" class="hidden"><section><h2>Mes tâches</h2><div id="myTasks"></div></section></div>
+<div id="employee" class="hidden"><section><h2>Mes tâches</h2><div id="myTasks"></div></section>
+<section><h2>Informations de mes mariages affectés</h2><div id="employeeWeddingInfo"></div></section></div>
 </div>
 <div id="publicGuestbookView" class="hidden">
   <section class="public-book-hero">
@@ -159,6 +160,24 @@ let activeQrScanner=null;
 const $=id=>document.getElementById(id);
 function say(target,text,type="ok"){const x=$(target);x.textContent=text;x.className="message "+type;}
 function clear(target){$(target).textContent="";$(target).className="message";}
+function renderEmployeeWeddingInfo(items){
+ const host=$("employeeWeddingInfo");if(!host)return;host.innerHTML="";
+ if(!Array.isArray(items)||!items.length){listMessage("employeeWeddingInfo","Aucun mariage ne t’est actuellement affecté.");return;}
+ items.forEach(item=>{
+  const c=item.couple||{},card=document.createElement("div");card.className="item";
+  const title=document.createElement("h3");title.textContent=c.couple_name||"Mariage";card.appendChild(title);
+  const meta=document.createElement("p");meta.textContent="Date : "+(c.wedding_date||"à définir")+" · Lieu : "+(c.venue||"à définir");card.appendChild(meta);
+  const guest=document.createElement("p");guest.textContent="Invités : "+(item.guests||[]).length;card.appendChild(guest);
+  const task=document.createElement("p");task.textContent="Tâches affectées : "+(item.tasks||[]).length+" · Terminées : "+(item.tasks||[]).filter(t=>t.is_done).length;card.appendChild(task);
+  if(item.budget){const expenses=(item.expenses||[]).reduce((sum,e)=>sum+Number(e.amount||0),0);const budget=document.createElement("p");budget.textContent="Budget : "+cash(item.budget.planned_amount,item.budget.currency)+" · Dépenses : "+cash(expenses,item.budget.currency);card.appendChild(budget);}
+  const events=document.createElement("p");events.textContent="Événements au calendrier : "+(item.events||[]).length;card.appendChild(events);
+  const drinks=document.createElement("p");drinks.textContent="Boissons proposées : "+(item.beverages||[]).map(b=>b.name).join(", ");card.appendChild(drinks);
+  const list=document.createElement("details");const summary=document.createElement("summary");summary.textContent="Voir les invités et les tâches";list.appendChild(summary);
+  (item.guests||[]).forEach(g=>{const p=document.createElement("p");p.textContent=g.name+" — "+(g.rsvp||"En attente")+(g.tableNumber?" — Table "+g.tableNumber:"");list.appendChild(p);});
+  (item.tasks||[]).forEach(t=>{const p=document.createElement("p");p.textContent=(t.is_done?"✓ ":"○ ")+t.title+(t.due_date?" — "+t.due_date:"");list.appendChild(p);});
+  card.appendChild(list);host.appendChild(card);
+ });
+}
 function cacheGuestsForOffline(coupleId,guests){
  try{const safe=(guests||[]).filter(g=>g.invitation_token).map(g=>({token:g.invitation_token,name:g.full_name,rsvp:g.rsvp,tableNumber:g.table_number,coupleId,coupleName:(couples.find(c=>c.id===coupleId)?.couple_name||(currentClientCouple?.id===coupleId?currentClientCouple.couple_name:""))}));localStorage.setItem("flems_qr_guests_"+coupleId,JSON.stringify({savedAt:new Date().toISOString(),guests:safe}));}
  catch(e){console.warn("Cache local des invités indisponible",e);}
@@ -608,6 +627,11 @@ async function loadEmployee(){const {data,error}=await sb.from("tasks").select("
   const byCouple={};guestRows.forEach(g=>{if(!byCouple[g.coupleId])byCouple[g.coupleId]=[];byCouple[g.coupleId].push({token:g.token,name:g.name,rsvp:g.rsvp,tableNumber:g.tableNumber,coupleId:g.coupleId,coupleName:g.coupleName});});
   Object.entries(byCouple).forEach(([id,guests])=>{try{localStorage.setItem("flems_qr_guests_"+id,JSON.stringify({savedAt:new Date().toISOString(),guests}));}catch(e){console.warn("Cache invités employé indisponible",e);}});
  }else if(guestError){say("appMsg","Liste des invités non disponible pour le contrôle QR : "+guestError.message,"error");}
+ const {data:weddingInfo,error:infoError}=await sb.rpc("get_employee_assigned_wedding_info");
+ let infoItems=Array.isArray(weddingInfo)?weddingInfo:null;
+ if(infoError||!infoItems){try{infoItems=JSON.parse(localStorage.getItem("flems_employee_wedding_info_"+user.id)||"null");}catch{}}
+ else{try{localStorage.setItem("flems_employee_wedding_info_"+user.id,JSON.stringify(infoItems));}catch{}}
+ if(infoItems)renderEmployeeWeddingInfo(infoItems);
  const z=$("myTasks");z.innerHTML="";if(!data.length){listMessage("myTasks","Aucune tâche attribuée pour le moment.");return;}data.forEach(t=>{const d=document.createElement("div");d.className="item";const p=document.createElement("p");p.textContent=(t.is_done?"✓ ":"○ ")+t.title+" — "+(names[t.couple_id]||"Mariage")+(t.due_date?" — Échéance : "+t.due_date:"");d.appendChild(p);const b=document.createElement("button");b.textContent=t.is_done?"Réouvrir":"Terminer";b.onclick=async()=>{const {error}=await sb.from("tasks").update({is_done:!t.is_done}).eq("id",t.id);if(error)say("appMsg",error.message,"error");else await loadEmployee();};d.appendChild(b);z.appendChild(d);});}
 
 // ===== Personnalisation, livre d'or public et assistant vocal =====
