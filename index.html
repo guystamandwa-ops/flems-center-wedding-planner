@@ -295,7 +295,7 @@ async function startQrScanner(videoId,resultId){
   if(!match){say(resultId,navigator.onLine?"QR code reconnu, mais invitation introuvable. Vérifie que ce QR appartient à un invité de ce mariage.":"QR code lu, mais invité absent de la liste locale. Reconnecte-toi et recharge les invités avant le contrôle hors connexion.","error");stopQrScanner();return;}
   const details="\nNom : "+(match.name||"Invité")+"\nCouple : "+(match.coupleName||"")+"\nRéponse : "+(match.rsvp||"En attente")+"\nTable : "+(match.tableNumber||"Non attribuée");
   if(match.checkedInAt){say(resultId,"INVITÉ IDENTIFIÉ · DÉJÀ ENREGISTRÉ"+details+"\nArrivée : "+new Date(match.checkedInAt).toLocaleString("fr-FR"));appendQrCouplePhoto(resultId,match);stopQrScanner();return;}
-  if(!user){say(resultId,"INVITÉ IDENTIFIÉ"+details+"\\nConnecte-toi pour enregistrer son arrivée.","error");appendQrCouplePhoto(resultId,match);stopQrScanner();return;}
+  if(!user){say(resultId,"INVITÉ IDENTIFIÉ"+details+"\nConnecte-toi pour enregistrer son arrivée.","error");appendQrCouplePhoto(resultId,match);stopQrScanner();return;}
   if(navigator.onLine){
    try{
     const {data,error}=await sb.rpc("record_guest_qr_checkin",{p_invitation_token:token});
