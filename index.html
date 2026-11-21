@@ -287,11 +287,15 @@ async function startQrScanner(videoId,resultId){
   try{const url=new URL(raw);token=url.searchParams.get("invitation")||raw;}catch{}
   let match=null;
   try{for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(!key||!key.startsWith("flems_qr_guests_"))continue;const saved=JSON.parse(localStorage.getItem(key)||"{}");match=(saved.guests||[]).find(g=>g.token===token);if(match)break;}}catch{}
-  if(!match){say(resultId,navigator.onLine?"QR code lu, mais cet invité n’est pas dans la liste préchargée de cet appareil.":"QR code lu, mais invité absent de la liste locale. Reconnecte-toi et recharge les invités.","error");stopQrScanner();return;}
-  const details="\n"+match.name+"\nCouple : "+(match.coupleName||"")+
-   "\nRéponse : "+(match.rsvp||"En attente")+"\nTable : "+(match.tableNumber||"Non attribuée");
-  if(match.checkedInAt){say(resultId,"INVITÉ IDENTIFIÉ · DÉJÀ ENREGISTRÉ"+details+"\nArrivée : "+new Date(match.checkedInAt).toLocaleString("fr-FR"));appendQrCouplePhoto(resultId,match);stopQrScanner();return;}
-  if(!user){say(resultId,"Connecte-toi pour enregistrer l’arrivée de cet invité."+details,"error");stopQrScanner();return;}
+  if(!match&&navigator.onLine){
+   try{const {data,error}=await sb.rpc("get_guest_invitation",{p_token:token});const guest=Array.isArray(data)?data[0]:data;
+    if(!error&&guest?.ok)match={token,name:guest.guest_name,coupleName:guest.couple_name,rsvp:guest.rsvp,tableNumber:guest.table_number,checkedInAt:null,couplePhotoUrl:guest.photos?.[0]?.public_url||null};
+   }catch(e){console.warn("Recherche de l’identité QR impossible",e);}
+  }
+  if(!match){say(resultId,navigator.onLine?"QR code reconnu, mais invitation introuvable. Vérifie que ce QR appartient à un invité de ce mariage.":"QR code lu, mais invité absent de la liste locale. Reconnecte-toi et recharge les invités avant le contrôle hors connexion.","error");stopQrScanner();return;}
+  const details="\\nNom : "+(match.name||"Invité")+"\\nCouple : "+(match.coupleName||"")+"\\nRéponse : "+(match.rsvp||"En attente")+"\\nTable : "+(match.tableNumber||"Non attribuée");
+  if(match.checkedInAt){say(resultId,"INVITÉ IDENTIFIÉ · DÉJÀ ENREGISTRÉ"+details+"\\nArrivée : "+new Date(match.checkedInAt).toLocaleString("fr-FR"));appendQrCouplePhoto(resultId,match);stopQrScanner();return;}
+  if(!user){say(resultId,"INVITÉ IDENTIFIÉ"+details+"\\nConnecte-toi pour enregistrer son arrivée.","error");appendQrCouplePhoto(resultId,match);stopQrScanner();return;}
   if(navigator.onLine){
    try{
     const {data,error}=await sb.rpc("record_guest_qr_checkin",{p_invitation_token:token});
@@ -948,10 +952,11 @@ async function loadPublicInvitation(token){
  let result=Array.isArray(data)?data[0]:data;
  let offlineCopy=false;
  if(error||!result?.ok){
-  try{result=JSON.parse(localStorage.getItem("flems_invitation_"+token)||"null");offlineCopy=!!result?.ok;}catch{}
-  if(!offlineCopy||!result?.ok){$("invitationCoupleName").textContent="Invitation indisponible";msg.textContent=error?.message||result?.message||"Ce lien d’invitation est invalide.";msg.className="message error";$("invitationSave").disabled=true;$("invitationEnableReminders").disabled=true;return;}
+  try{result=JSON.parse(localStorage.getItem("flems_invitation_"+token)||"null");offlineCopy=!!result?.ok&&!navigator.onLine;}catch{}
+  if(!result?.ok){$("invitationCoupleName").textContent="Invitation indisponible";msg.textContent=error?.message||result?.message||"Ce lien d’invitation est invalide.";msg.className="message error";$("invitationSave").disabled=true;$("invitationEnableReminders").disabled=true;return;}
+  if(!offlineCopy){msg.textContent="Les informations enregistrées sont affichées, mais la connexion au serveur a échoué. Les actions seront tentées et un message indiquera le résultat.";msg.className="message error";}
  }else{try{localStorage.setItem("flems_invitation_"+token,JSON.stringify(result));}catch{}}
- if(offlineCopy){msg.textContent="Mode hors connexion : voici la dernière version enregistrée de votre invitation. Les choix et messages seront disponibles au retour d’Internet.";msg.className="message";} 
+ if(offlineCopy){msg.textContent="Mode hors connexion : voici la dernière version enregistrée de votre invitation. Les réponses et messages seront disponibles au retour d’Internet.";msg.className="message";}
  showInvitationGuideStep(0);
  $("invitationCoupleName").textContent="Le mariage de "+(result.couple_name||"nos mariés");
  $("invitationGuestName").textContent="Bienvenue, "+(result.guest_name||"cher invité")+" !";
@@ -974,9 +979,18 @@ async function loadPublicInvitation(token){
  const rsvpStatus=$("invitationRsvpStatus"),rsvpMessage=$("invitationRsvpMessage");
  const setRsvpDisplay=value=>{rsvpStatus.textContent="Votre réponse : "+(value||"En attente");["Present","Absent","Pending"].forEach(key=>{const button=$("invitationRsvp"+key);button.classList.toggle("secondary",({Present:"Présent",Absent:"Absent",Pending:"En attente"}[key])!==value);});};
  setRsvpDisplay(result.rsvp||"En attente");
- const saveRsvp=async value=>{if(offlineCopy){rsvpMessage.textContent="Connexion Internet requise pour enregistrer votre réponse.";rsvpMessage.className="message error";return;}const buttons=["Present","Absent","Pending"].map(key=>$("invitationRsvp"+key));buttons.forEach(button=>button.disabled=true);rsvpMessage.textContent="Enregistrement de votre réponse…";rsvpMessage.className="message";try{const {data,error}=await sb.rpc("submit_guest_rsvp",{p_token:token,p_rsvp:value});const saved=Array.isArray(data)?data[0]:data;if(error||!saved?.ok){rsvpMessage.textContent=error?.message||saved?.message||"Enregistrement impossible.";rsvpMessage.className="message error";}else{result.rsvp=value;setRsvpDisplay(value);try{localStorage.setItem("flems_invitation_"+token,JSON.stringify(result));}catch{}rsvpMessage.textContent=saved.message||"Réponse enregistrée.";rsvpMessage.className="message ok";}}finally{buttons.forEach(button=>button.disabled=offlineCopy);}};
+ const rsvpButtons=["invitationRsvpPresent","invitationRsvpAbsent","invitationRsvpPending"].map(id=>$(id));
+ const saveRsvp=async value=>{
+  if(offlineCopy||!navigator.onLine){rsvpMessage.textContent="Connexion Internet requise pour enregistrer votre réponse. Réessayez dès que le réseau revient.";rsvpMessage.className="message error";return;}
+  rsvpButtons.forEach(button=>button.disabled=true);rsvpMessage.textContent="Enregistrement de votre réponse…";rsvpMessage.className="message";
+  try{const {data,error}=await sb.rpc("submit_guest_rsvp",{p_token:token,p_rsvp:value});const saved=Array.isArray(data)?data[0]:data;
+   if(error||!saved?.ok){rsvpMessage.textContent=error?.message||saved?.message||"Enregistrement impossible. Réessayez.";rsvpMessage.className="message error";}
+   else{result.rsvp=value;setRsvpDisplay(value);try{localStorage.setItem("flems_invitation_"+token,JSON.stringify(result));}catch{}rsvpMessage.textContent=saved.message||"Votre réponse a bien été enregistrée.";rsvpMessage.className="message ok";}
+  }catch(e){rsvpMessage.textContent="Erreur de connexion : "+(e.message||"réessayez dans un instant.");rsvpMessage.className="message error";}
+  finally{rsvpButtons.forEach(button=>button.disabled=false);}
+ };
  $("invitationRsvpPresent").onclick=()=>saveRsvp("Présent");$("invitationRsvpAbsent").onclick=()=>saveRsvp("Absent");$("invitationRsvpPending").onclick=()=>saveRsvp("En attente");
- ["invitationRsvpPresent","invitationRsvpAbsent","invitationRsvpPending"].forEach(id=>$(id).disabled=offlineCopy);
+ rsvpButtons.forEach(button=>button.disabled=false);
  const qrHost=$("invitationQrCode");qrHost.innerHTML="";const inviteUrl=location.origin+location.pathname+"?invitation="+encodeURIComponent(token);
  if(window.QRCode){new QRCode(qrHost,{text:inviteUrl,width:220,height:220,colorDark:"#2f241c",colorLight:"#ffffff"});$("invitationQrDownload").disabled=false; $("invitationQrDownload").onclick=()=>{const img=qrHost.querySelector("img"),canvas=qrHost.querySelector("canvas");const dataUrl=img?.src?.startsWith("data:")?img.src:(canvas?canvas.toDataURL("image/png"):null);if(!dataUrl){say("invitationQrMessage","Le QR code n’est pas encore prêt. Réessaie dans un instant.","error");return;}const link=document.createElement("a");link.href=dataUrl;link.download="QR-Flems-"+safeFilePart(result.guest_name)+".png";document.body.appendChild(link);link.click();link.remove();say("invitationQrMessage","Ton QR code est prêt à être enregistré dans tes fichiers ou tes photos.","ok");};}
  else{qrHost.textContent="Le générateur de QR code n’est pas disponible."; $("invitationQrDownload").disabled=true;}
@@ -985,7 +999,7 @@ async function loadPublicInvitation(token){
  if(result.theme_color)applyTheme(result.theme_color);
  const photoHost=$("invitationPhotos");photoHost.innerHTML="";
  const invitationPhotos=(result.photos||[]).filter(photo=>photo.public_url);const cover=$("invitationCoverPhoto");
- $("invitationViewPhotos").disabled=!invitationPhotos.length;$("invitationViewPhotos").classList.toggle("hidden",false);$("invitationViewPhotos").textContent=invitationPhotos.length?"Voir toutes les photos des mariés ("+invitationPhotos.length+")":"Photos des mariés bientôt disponibles";$("invitationViewPhotos").onclick=()=>{if(invitationPhotos.length)openPhotoViewer(invitationPhotos,0);else{const msg=$("invitationPhotos");msg.scrollIntoView({behavior:"smooth",block:"center"});}};
+ const galleryButton=$("invitationViewPhotos");galleryButton.disabled=false;galleryButton.classList.toggle("hidden",false);galleryButton.textContent=invitationPhotos.length?"Voir toutes les photos des mariés ("+invitationPhotos.length+")":"Photos des mariés bientôt disponibles";galleryButton.onclick=()=>{if(invitationPhotos.length){openPhotoViewer(invitationPhotos,0);}else{$("invitationPhotos").scrollIntoView({behavior:"smooth",block:"center"});$("invitationPhotos").textContent="Aucune photo des mariés n’est encore publiée. L’administrateur pourra en ajouter dans la galerie.";}};
  if(invitationPhotos.length){const firstPhoto=invitationPhotos[0];cover.src=firstPhoto.public_url;cover.alt=firstPhoto.caption||"Photo des mariés qui vous invitent";cover.classList.remove("hidden");cover.onclick=()=>openPhotoViewer(invitationPhotos,0);cover.style.cursor="zoom-in";invitationPhotos.slice(1).forEach((photo,index)=>{const preview=document.createElement("button");preview.type="button";preview.className="gallery-photo-button";preview.setAttribute("aria-label","Ouvrir la photo en entier");const img=document.createElement("img");img.src=photo.public_url;img.alt=photo.caption||"Photo des mariés";img.loading="lazy";preview.appendChild(img);preview.addEventListener("click",()=>openPhotoViewer(invitationPhotos,index+1));photoHost.appendChild(preview);});}
  else{cover.removeAttribute("src");cover.classList.add("hidden");listMessage("invitationPhotos","Les photos des mariés seront bientôt disponibles. Elles apparaîtront ici dès que l’administrateur en aura ajouté.");}
  const countdown=$("invitationCountdown");
