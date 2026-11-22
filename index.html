@@ -495,7 +495,15 @@ async function exportDrinkSummaryPdf(clientMode=false){
 }
 function listMessage(target,text){$(target).innerHTML="";const p=document.createElement("p");p.className="empty";p.textContent=text;$(target).appendChild(p);}
 function actionButton(text,kind,handler){const b=document.createElement("button");b.type="button";b.textContent=text;b.className=kind||"edit";b.addEventListener("click",handler);return b;}
-function downloadGuestQr(qr,name){const canvas=qr.querySelector("canvas");const img=qr.querySelector("img");let url="";try{if(canvas)url=canvas.toDataURL("image/png");else if(img?.src)url=img.src;}catch(e){console.warn("Téléchargement du QR impossible",e);}if(!url||url==="about:blank"){say("appMsg","Le QR code n’est pas encore prêt. Attends son affichage puis réessaie.","error");return;}const link=document.createElement("a");link.href=url;link.download="QR-"+String(name||"invite").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").replace(/[^a-zA-Z0-9_-]+/g,"-")+".png";document.body.appendChild(link);link.click();link.remove();say("appMsg","QR code de "+name+" téléchargé.");}\nfunction openEditor(title,fields,onSave){
+function downloadGuestQr(qr,name){
+ const canvas=qr.querySelector("canvas"),img=qr.querySelector("img");let url="";
+ try{if(canvas)url=canvas.toDataURL("image/png");else if(img?.src)url=img.src;}catch(e){console.warn("Téléchargement du QR impossible",e);}
+ if(!url||url==="about:blank"){say("appMsg","Le QR code n’est pas encore prêt. Attends son affichage puis réessaie.","error");return;}
+ const safeName=String(name||"invite").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9_-]+/g,"-");
+ const link=document.createElement("a");link.href=url;link.download="QR-"+safeName+".png";document.body.appendChild(link);link.click();link.remove();
+ say("appMsg","QR code de "+name+" téléchargé.");
+}
+function openEditor(title,fields,onSave){
   $("editTitle").textContent=title;
   const host=$("editFields");host.innerHTML="";
   fields.forEach(field=>{
